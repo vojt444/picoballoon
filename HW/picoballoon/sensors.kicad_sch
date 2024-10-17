@@ -1179,6 +1179,16 @@
 	)
 	(wire
 		(pts
+			(xy 151.13 181.61) (xy 161.29 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b647927-3ec7-4f35-90c7-89995fe1222b")
+	)
+	(wire
+		(pts
 			(xy 57.15 153.67) (xy 62.23 153.67)
 		)
 		(stroke
@@ -1209,7 +1219,7 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 49.53) (xy 50.8 49.53)
+			(xy 40.64 49.53) (xy 50.8 49.53)
 		)
 		(stroke
 			(width 0)
@@ -1219,7 +1229,7 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 52.07) (xy 50.8 52.07)
+			(xy 40.64 52.07) (xy 50.8 52.07)
 		)
 		(stroke
 			(width 0)
@@ -1279,7 +1289,7 @@
 	)
 	(wire
 		(pts
-			(xy 154.94 179.07) (xy 161.29 179.07)
+			(xy 151.13 175.26) (xy 161.29 175.26)
 		)
 		(stroke
 			(width 0)
@@ -1339,7 +1349,7 @@
 	)
 	(wire
 		(pts
-			(xy 154.94 181.61) (xy 161.29 181.61)
+			(xy 151.13 177.8) (xy 161.29 177.8)
 		)
 		(stroke
 			(width 0)
@@ -1417,6 +1427,16 @@
 		)
 		(uuid "f5a48a50-48f7-496f-bbc1-1ae92d04e10f")
 	)
+	(wire
+		(pts
+			(xy 151.13 184.15) (xy 161.29 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fb8ee7c7-2992-42a5-ba35-06940c8c6a91")
+	)
 	(rectangle
 		(start 38.1 25.4)
 		(end 105.41 83.82)
@@ -1486,8 +1506,19 @@
 		)
 		(uuid "d0381d9a-d810-4bcf-84f6-f1338e4b5880")
 	)
-	(label "SDA"
-		(at 45.72 49.53 0)
+	(label "SCL"
+		(at 151.13 184.15 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "38b12ff4-2c25-47f5-98ca-7f0a6600d144")
+	)
+	(label "SDA_TEMP"
+		(at 40.64 49.53 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1497,8 +1528,8 @@
 		)
 		(uuid "66043acf-6ee0-4136-812a-0d4cb7e2bb80")
 	)
-	(label "SDA"
-		(at 154.94 179.07 0)
+	(label "SDA_TEMP"
+		(at 151.13 175.26 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1508,8 +1539,8 @@
 		)
 		(uuid "6f7fbb44-6a6b-4aeb-b511-30f0ff6183fa")
 	)
-	(label "SCL"
-		(at 154.94 181.61 0)
+	(label "SCL_TEMP"
+		(at 151.13 177.8 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1519,8 +1550,8 @@
 		)
 		(uuid "8557e797-8992-4cb4-8081-83f2bdbf98cd")
 	)
-	(label "SCL"
-		(at 45.72 52.07 0)
+	(label "SCL_TEMP"
+		(at 40.64 52.07 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1553,6 +1584,17 @@
 		(uuid "a58f74b2-8a76-421b-aff9-8387b0878717")
 	)
 	(label "SDA"
+		(at 151.13 181.61 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d52ed7de-9af6-403e-b5be-c022b0d8b209")
+	)
+	(label "SDA"
 		(at 190.5 52.07 0)
 		(fields_autoplaced yes)
 		(effects
@@ -1574,9 +1616,9 @@
 		)
 		(uuid "fa0c5265-2ce9-4212-92e1-9cbea4db8347")
 	)
-	(hierarchical_label "SDA"
+	(hierarchical_label "SDA_TEMP"
 		(shape bidirectional)
-		(at 161.29 179.07 0)
+		(at 161.29 175.26 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1586,8 +1628,8 @@
 		)
 		(uuid "1af58fb2-8e82-45db-b51b-da17ec58532f")
 	)
-	(hierarchical_label "SCL"
-		(shape input)
+	(hierarchical_label "SDA"
+		(shape bidirectional)
 		(at 161.29 181.61 0)
 		(fields_autoplaced yes)
 		(effects
@@ -1596,7 +1638,31 @@
 			)
 			(justify left)
 		)
+		(uuid "2b95870e-f71a-46a8-9890-b56b250c41d5")
+	)
+	(hierarchical_label "SCL_TEMP"
+		(shape input)
+		(at 161.29 177.8 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
 		(uuid "3a53756a-ff6b-4e8e-aedf-e135ef995e01")
+	)
+	(hierarchical_label "SCL"
+		(shape input)
+		(at 161.29 184.15 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "aff26daf-b9f9-487c-88e8-c7188e730a88")
 	)
 	(symbol
 		(lib_id "power:+3.3V")

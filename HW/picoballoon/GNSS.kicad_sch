@@ -1391,13 +1391,13 @@
 	)
 	(wire
 		(pts
-			(xy 119.38 101.6) (xy 124.46 101.6)
+			(xy 119.38 96.52) (xy 124.46 96.52)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2f61559d-9c84-42c2-9a88-5cbe4f1ddbcc")
+		(uuid "2e7af876-bd63-4394-861a-4d27d61d0d0b")
 	)
 	(wire
 		(pts
@@ -1448,6 +1448,16 @@
 			(type default)
 		)
 		(uuid "7d31943d-917c-4afb-82c3-30221c0168ed")
+	)
+	(wire
+		(pts
+			(xy 119.38 101.6) (xy 124.46 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f958cee-86ff-4ec7-910f-e0ce97a4bd96")
 	)
 	(wire
 		(pts
@@ -1599,19 +1609,17 @@
 		)
 		(uuid "f79fa45a-69b8-4bcf-ad69-3d932a99a274")
 	)
-	(hierarchical_label "SDA"
-		(shape bidirectional)
-		(at 119.38 101.6 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
+	(wire
+		(pts
+			(xy 119.38 93.98) (xy 124.46 93.98)
 		)
-		(uuid "1d2e7ede-a246-4ac5-a002-bbc14e7718cd")
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f9946ea3-bfd1-42ba-8342-112ead1ef2fa")
 	)
-	(hierarchical_label "GNSS_EN"
+	(hierarchical_label "EN"
 		(shape input)
 		(at 113.03 72.39 180)
 		(fields_autoplaced yes)
@@ -1623,7 +1631,7 @@
 		)
 		(uuid "2f5b9d63-c299-4ebb-8007-da6f97b4086c")
 	)
-	(hierarchical_label "GNSS_RESET"
+	(hierarchical_label "RESET"
 		(shape input)
 		(at 119.38 114.3 180)
 		(fields_autoplaced yes)
@@ -1635,7 +1643,7 @@
 		)
 		(uuid "6683acbc-5ad4-48d9-927f-afc408e9417f")
 	)
-	(hierarchical_label "GNSS_EXTINT"
+	(hierarchical_label "EXTINT"
 		(shape input)
 		(at 119.38 109.22 180)
 		(fields_autoplaced yes)
@@ -1658,6 +1666,42 @@
 			(justify right)
 		)
 		(uuid "7ea0a3d3-6bdc-440b-bfc2-10a5a9befb49")
+	)
+	(hierarchical_label "RX"
+		(shape input)
+		(at 119.38 93.98 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8911ddc5-be1d-4daf-832a-53f222f47ce5")
+	)
+	(hierarchical_label "SDA"
+		(shape bidirectional)
+		(at 119.38 101.6 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "a6ca134b-2713-42fd-86e2-03e7d1ea313e")
+	)
+	(hierarchical_label "TX"
+		(shape output)
+		(at 119.38 96.52 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c61e15b8-e695-4166-82c1-706de358dd5a")
 	)
 	(symbol
 		(lib_id "power:GND")
