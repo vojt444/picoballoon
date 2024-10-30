@@ -3187,16 +3187,6 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 135.89) (xy 58.42 135.89)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "283ad975-eb16-47aa-a6d3-b3e346b21469")
-	)
-	(wire
-		(pts
 			(xy 120.65 170.18) (xy 120.65 168.91)
 		)
 		(stroke
@@ -4077,6 +4067,16 @@
 	)
 	(wire
 		(pts
+			(xy 45.72 130.81) (xy 58.42 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9cec9536-f581-4ba2-a7a7-a29566565f81")
+	)
+	(wire
+		(pts
 			(xy 177.8 40.64) (xy 190.5 40.64)
 		)
 		(stroke
@@ -4264,16 +4264,6 @@
 			(type default)
 		)
 		(uuid "b790a0b7-0081-4ecf-9cc0-ec98affe14c5")
-	)
-	(wire
-		(pts
-			(xy 45.72 130.81) (xy 58.42 130.81)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ba0ba46e-cf38-4b2b-bdeb-dd59a7094b8b")
 	)
 	(wire
 		(pts
@@ -4617,6 +4607,16 @@
 	)
 	(wire
 		(pts
+			(xy 45.72 135.89) (xy 58.42 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed3b4259-a483-4bd4-b810-b92f44cc8fcb")
+	)
+	(wire
+		(pts
 			(xy 144.78 68.58) (xy 163.83 68.58)
 		)
 		(stroke
@@ -4748,7 +4748,7 @@
 		)
 		(uuid "1485a549-ad9c-4930-b806-da76ea319d4b")
 	)
-	(label "MO"
+	(label "MOSI"
 		(at 58.42 130.81 180)
 		(fields_autoplaced yes)
 		(effects
@@ -4825,7 +4825,7 @@
 		)
 		(uuid "30e8cf62-d2e1-498f-9c3f-729ba56fa142")
 	)
-	(label "MI"
+	(label "MISO"
 		(at 58.42 135.89 180)
 		(fields_autoplaced yes)
 		(effects
@@ -4847,7 +4847,7 @@
 		)
 		(uuid "37a81d84-a844-4815-8359-48d28c54d29b")
 	)
-	(label "MO"
+	(label "MOSI"
 		(at 144.78 91.44 0)
 		(fields_autoplaced yes)
 		(effects
@@ -5034,7 +5034,7 @@
 		)
 		(uuid "b768de75-e560-41e7-ae2d-065d5f9595ec")
 	)
-	(label "MI"
+	(label "MISO"
 		(at 177.8 88.9 0)
 		(fields_autoplaced yes)
 		(effects
@@ -8576,7 +8576,7 @@
 			)
 			(uuid "b1ab237f-b230-43e7-9e0a-ea21ddaf1e74")
 		)
-		(pin "SO" output
+		(pin "SO" input
 			(at 45.72 135.89 0)
 			(effects
 				(font
@@ -8584,7 +8584,7 @@
 				)
 				(justify right)
 			)
-			(uuid "0fedd13a-15a0-43aa-b241-d977e4a00a0d")
+			(uuid "2a6d3711-7863-4b2a-9ccb-bc6a82decdbf")
 		)
 		(pin "SI" input
 			(at 45.72 130.81 0)
@@ -8594,7 +8594,7 @@
 				)
 				(justify right)
 			)
-			(uuid "541fd41c-e8d9-4611-be02-56f055a4b262")
+			(uuid "3212836a-778c-454f-8b18-b452354bb682")
 		)
 		(instances
 			(project "picoballoon"
