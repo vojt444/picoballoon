@@ -2879,7 +2879,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Crystal:Crystal_SMD_5032-4Pin_5.0x3.2mm"
+		(property "Footprint" "Library:ECS3002030BDUTR"
 			(at 101.6 87.63 0)
 			(effects
 				(font
