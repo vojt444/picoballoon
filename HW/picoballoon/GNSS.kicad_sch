@@ -1391,7 +1391,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Library:RECE20369001E01"
 			(at 165.1 83.82 0)
 			(effects
 				(font

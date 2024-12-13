@@ -2075,7 +2075,7 @@
 	)
 	(symbol
 		(lib_id "Device:L")
-		(at 175.26 74.93 90)
+		(at 165.1 74.93 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2084,7 +2084,7 @@
 		(fields_autoplaced yes)
 		(uuid "20a674da-34d6-4890-b6f1-b5fa635f2ae3")
 		(property "Reference" "L2"
-			(at 175.26 69.85 90)
+			(at 165.1 69.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2092,7 +2092,7 @@
 			)
 		)
 		(property "Value" "12n"
-			(at 175.26 72.39 90)
+			(at 165.1 72.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2100,7 +2100,7 @@
 			)
 		)
 		(property "Footprint" "Inductor_SMD:L_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
-			(at 175.26 74.93 0)
+			(at 165.1 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2109,7 +2109,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 175.26 74.93 0)
+			(at 165.1 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2118,7 +2118,7 @@
 			)
 		)
 		(property "Description" "Inductor"
-			(at 175.26 74.93 0)
+			(at 165.1 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2239,7 +2239,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Library:RECE20369001E01"
 			(at 223.52 67.31 0)
 			(effects
 				(font
@@ -3291,7 +3291,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 165.1 74.93 90)
+		(at 175.26 74.93 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3300,7 +3300,7 @@
 		(fields_autoplaced yes)
 		(uuid "edb97e3c-962c-4da6-9359-5db25f6a7e12")
 		(property "Reference" "C31"
-			(at 165.1 67.31 90)
+			(at 175.26 67.31 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3308,7 +3308,7 @@
 			)
 		)
 		(property "Value" "100p"
-			(at 165.1 69.85 90)
+			(at 175.26 69.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3316,7 +3316,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 168.91 73.9648 0)
+			(at 179.07 73.9648 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3325,7 +3325,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 165.1 74.93 0)
+			(at 175.26 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3334,7 +3334,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 165.1 74.93 0)
+			(at 175.26 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)

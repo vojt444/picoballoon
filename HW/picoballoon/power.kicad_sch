@@ -2799,7 +2799,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XX"
+		(property "Value" "10 F"
 			(at 87.63 66.4209 0)
 			(effects
 				(font

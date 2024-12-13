@@ -75,6 +75,17 @@
 			(type default)
 		)
 		(fill none)
+		(layer "F.SilkS")
+		(uuid "9112a872-cbf6-43f4-91a8-516a65c332f4")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 8 0)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill none)
 		(layer "F.Fab")
 		(uuid "a3b729d2-ee6a-4efa-875e-ebbf6f457231")
 	)
