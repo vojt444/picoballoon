@@ -2622,7 +2622,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "07203f6d-444a-40fb-ba8c-e24f9cc872c7")
-		(property "Reference" "R7"
+		(property "Reference" "R12"
 			(at 63.5 137.16 0)
 			(effects
 				(font
@@ -2676,7 +2676,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/4642c74f-a21d-4819-82a4-3921732966b9"
-					(reference "R7")
+					(reference "R12")
 					(unit 1)
 				)
 			)
@@ -2892,7 +2892,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1d2ab858-47a6-4dd6-bfcd-1c1773b121d7")
-		(property "Reference" "C14"
+		(property "Reference" "C1"
 			(at 87.63 63.8809 0)
 			(effects
 				(font
@@ -2946,7 +2946,7 @@
 		(instances
 			(project ""
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/4642c74f-a21d-4819-82a4-3921732966b9"
-					(reference "C14")
+					(reference "C1")
 					(unit 1)
 				)
 			)
@@ -3029,7 +3029,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2ad8c823-6b22-4e03-b717-e76ba02eb874")
-		(property "Reference" "R8"
+		(property "Reference" "R13"
 			(at 63.5 149.86 0)
 			(effects
 				(font
@@ -3083,7 +3083,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/4642c74f-a21d-4819-82a4-3921732966b9"
-					(reference "R8")
+					(reference "R13")
 					(unit 1)
 				)
 			)
@@ -3231,7 +3231,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3e8839c6-7afd-48bc-8900-62bc35179df3")
-		(property "Reference" "C7"
+		(property "Reference" "C2"
 			(at 127 64.77 0)
 			(effects
 				(font
@@ -3285,7 +3285,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/4642c74f-a21d-4819-82a4-3921732966b9"
-					(reference "C7")
+					(reference "C2")
 					(unit 1)
 				)
 			)
@@ -3502,7 +3502,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6d360e9f-5e01-4b53-89e8-8b32b413507a")
-		(property "Reference" "R2"
+		(property "Reference" "R1"
 			(at 219.71 68.58 0)
 			(effects
 				(font
@@ -3556,7 +3556,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/4642c74f-a21d-4819-82a4-3921732966b9"
-					(reference "R2")
+					(reference "R1")
 					(unit 1)
 				)
 			)
@@ -4096,7 +4096,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b5cf6c1b-7e9c-41b0-96e6-9f74fd0f51a0")
-		(property "Reference" "C9"
+		(property "Reference" "C3"
 			(at 175.26 66.04 0)
 			(effects
 				(font
@@ -4150,7 +4150,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/4642c74f-a21d-4819-82a4-3921732966b9"
-					(reference "C9")
+					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -4366,7 +4366,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d4ad6075-ef41-4e74-9285-fd6033f21387")
-		(property "Reference" "C11"
+		(property "Reference" "C4"
 			(at 198.12 66.04 0)
 			(effects
 				(font
@@ -4420,7 +4420,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/4642c74f-a21d-4819-82a4-3921732966b9"
-					(reference "C11")
+					(reference "C4")
 					(unit 1)
 				)
 			)
@@ -4501,7 +4501,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "da166be2-c541-4731-b1ba-10b4d81b79d9")
-		(property "Reference" "C15"
+		(property "Reference" "C18"
 			(at 125.73 144.78 0)
 			(effects
 				(font
@@ -4555,7 +4555,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/4642c74f-a21d-4819-82a4-3921732966b9"
-					(reference "C15")
+					(reference "C18")
 					(unit 1)
 				)
 			)

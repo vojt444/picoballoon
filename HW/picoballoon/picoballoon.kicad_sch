@@ -2976,7 +2976,7 @@
 		(uuid "bec6ae77-3cbc-40d2-b549-d5e792333200")
 	)
 	(junction
-		(at 158.75 134.62)
+		(at 148.59 127)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c0aff2c1-31e5-4459-b430-d04a489ca6b1")
@@ -3215,7 +3215,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 129.54) (xy 179.07 129.54)
+			(xy 163.83 121.92) (xy 190.5 121.92)
 		)
 		(stroke
 			(width 0)
@@ -3365,7 +3365,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 134.62) (xy 158.75 147.32)
+			(xy 148.59 127) (xy 148.59 139.7)
 		)
 		(stroke
 			(width 0)
@@ -3415,7 +3415,7 @@
 	)
 	(wire
 		(pts
-			(xy 153.67 137.16) (xy 161.29 137.16)
+			(xy 143.51 129.54) (xy 151.13 129.54)
 		)
 		(stroke
 			(width 0)
@@ -3445,17 +3445,7 @@
 	)
 	(wire
 		(pts
-			(xy 181.61 132.08) (xy 181.61 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "39282119-2935-4f35-bb8a-49c247b37b42")
-	)
-	(wire
-		(pts
-			(xy 158.75 129.54) (xy 161.29 129.54)
+			(xy 148.59 121.92) (xy 151.13 121.92)
 		)
 		(stroke
 			(width 0)
@@ -3635,16 +3625,6 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 121.92) (xy 179.07 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "59cdcd81-402f-4f5e-bedc-a86f3e467371")
-	)
-	(wire
-		(pts
 			(xy 240.03 132.08) (xy 240.03 137.16)
 		)
 		(stroke
@@ -3665,7 +3645,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 132.08) (xy 158.75 134.62)
+			(xy 148.59 124.46) (xy 148.59 127)
 		)
 		(stroke
 			(width 0)
@@ -3712,6 +3692,16 @@
 			(type default)
 		)
 		(uuid "604c0049-2358-4b83-aa2d-20c6ae7a681d")
+	)
+	(wire
+		(pts
+			(xy 45.72 140.97) (xy 58.42 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6124d92e-795f-4df0-bef6-8edab92f86b2")
 	)
 	(wire
 		(pts
@@ -3825,7 +3815,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 132.08) (xy 158.75 132.08)
+			(xy 151.13 124.46) (xy 148.59 124.46)
 		)
 		(stroke
 			(width 0)
@@ -3875,7 +3865,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 134.62) (xy 184.15 134.62)
+			(xy 163.83 127) (xy 190.5 127)
 		)
 		(stroke
 			(width 0)
@@ -3962,6 +3952,16 @@
 			(type default)
 		)
 		(uuid "81f35fac-cf79-42b2-9fef-b683943b30d3")
+	)
+	(wire
+		(pts
+			(xy 177.8 132.08) (xy 190.5 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "81fac6a9-548b-4b30-b97f-3447cf4f88aa")
 	)
 	(wire
 		(pts
@@ -4095,7 +4095,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 139.7) (xy 180.34 139.7)
+			(xy 163.83 132.08) (xy 170.18 132.08)
 		)
 		(stroke
 			(width 0)
@@ -4185,16 +4185,6 @@
 	)
 	(wire
 		(pts
-			(xy 190.5 121.92) (xy 179.07 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9a055749-6d69-460d-a3ba-bf45e8945ebf")
-	)
-	(wire
-		(pts
 			(xy 177.8 53.34) (xy 190.5 53.34)
 		)
 		(stroke
@@ -4275,7 +4265,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 132.08) (xy 181.61 132.08)
+			(xy 163.83 124.46) (xy 190.5 124.46)
 		)
 		(stroke
 			(width 0)
@@ -4545,16 +4535,6 @@
 	)
 	(wire
 		(pts
-			(xy 190.5 127) (xy 184.15 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c9b847c6-b89c-4b9e-9302-c6680075465f")
-	)
-	(wire
-		(pts
 			(xy 45.72 115.57) (xy 58.42 115.57)
 		)
 		(stroke
@@ -4582,16 +4562,6 @@
 			(type default)
 		)
 		(uuid "cebedf18-5056-43fc-86d0-99995d241e0d")
-	)
-	(wire
-		(pts
-			(xy 186.69 129.54) (xy 190.5 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cf28beee-b704-4312-8b93-19dcc9861655")
 	)
 	(wire
 		(pts
@@ -4705,7 +4675,7 @@
 	)
 	(wire
 		(pts
-			(xy 161.29 134.62) (xy 158.75 134.62)
+			(xy 151.13 127) (xy 148.59 127)
 		)
 		(stroke
 			(width 0)
@@ -4725,7 +4695,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 124.46) (xy 158.75 129.54)
+			(xy 148.59 116.84) (xy 148.59 121.92)
 		)
 		(stroke
 			(width 0)
@@ -4765,16 +4735,6 @@
 	)
 	(wire
 		(pts
-			(xy 181.61 124.46) (xy 190.5 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e8e3dc87-8d62-4bda-9c1b-b5026459fb4d")
-	)
-	(wire
-		(pts
 			(xy 165.1 114.3) (xy 185.42 114.3)
 		)
 		(stroke
@@ -4782,16 +4742,6 @@
 			(type default)
 		)
 		(uuid "ea0bba67-e849-42ae-9e29-d6e89ae97bd8")
-	)
-	(wire
-		(pts
-			(xy 186.69 137.16) (xy 186.69 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ea1af450-0fb6-48ac-b125-393d4c801693")
 	)
 	(wire
 		(pts
@@ -4845,7 +4795,7 @@
 	)
 	(wire
 		(pts
-			(xy 173.99 137.16) (xy 186.69 137.16)
+			(xy 163.83 129.54) (xy 190.5 129.54)
 		)
 		(stroke
 			(width 0)
@@ -4872,16 +4822,6 @@
 			(type default)
 		)
 		(uuid "f82cd3fd-f7f6-47c6-a35f-d5aa02c18128")
-	)
-	(wire
-		(pts
-			(xy 184.15 127) (xy 184.15 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f85a40b0-d0fc-45e8-a58b-ec2817d4fdf8")
 	)
 	(wire
 		(pts
@@ -5000,6 +4940,17 @@
 			(justify right bottom)
 		)
 		(uuid "228a2641-2f8b-47b0-b707-49ffc060c8ac")
+	)
+	(label "SDN"
+		(at 177.8 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2373b83c-f317-4973-b553-ed1ca7e1f52d")
 	)
 	(label "SCLK"
 		(at 25.4 38.1 0)
@@ -5167,7 +5118,7 @@
 		(uuid "61ae285c-28a4-4954-9f0e-52d8db92e280")
 	)
 	(label "ISP"
-		(at 153.67 137.16 0)
+		(at 143.51 129.54 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -5265,6 +5216,17 @@
 		)
 		(uuid "a02a64e1-a0d0-45b8-bf23-4051dc52f323")
 	)
+	(label "SDN"
+		(at 58.42 140.97 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "adef74a1-39ce-4978-8312-2816abe8b06e")
+	)
 	(label "GNSS_SCL"
 		(at 58.42 110.49 180)
 		(fields_autoplaced yes)
@@ -5321,7 +5283,7 @@
 		(uuid "c9122215-1bc6-4a14-bbc6-d3e2958cd53a")
 	)
 	(label "RESET"
-		(at 180.34 139.7 180)
+		(at 170.18 132.08 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -5829,7 +5791,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3cadc7d6-a004-4cb5-a314-d84428155b1b")
-		(property "Reference" "C12"
+		(property "Reference" "C15"
 			(at 267.97 82.5499 0)
 			(effects
 				(font
@@ -5883,7 +5845,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C12")
+					(reference "C15")
 					(unit 1)
 				)
 			)
@@ -5899,7 +5861,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3f468622-0906-4bf0-926d-166238926d87")
-		(property "Reference" "C21"
+		(property "Reference" "C8"
 			(at 63.5 172.7199 0)
 			(effects
 				(font
@@ -5953,7 +5915,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C21")
+					(reference "C8")
 					(unit 1)
 				)
 			)
@@ -5969,7 +5931,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "41bb9788-bdf4-4c07-8bd2-63bd3964b274")
-		(property "Reference" "R3"
+		(property "Reference" "R11"
 			(at 122.682 35.56 0)
 			(effects
 				(font
@@ -6023,7 +5985,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R3")
+					(reference "R11")
 					(unit 1)
 				)
 			)
@@ -6104,7 +6066,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "43a2d7c1-584c-4016-bdb2-05220415d3be")
-		(property "Reference" "R5"
+		(property "Reference" "R4"
 			(at 164.592 40.64 0)
 			(effects
 				(font
@@ -6158,7 +6120,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R5")
+					(reference "R4")
 					(unit 1)
 				)
 			)
@@ -6174,7 +6136,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "47b9bf95-9d3c-4da2-9fc3-1bee71de557e")
-		(property "Reference" "R10"
+		(property "Reference" "R5"
 			(at 150.622 58.42 0)
 			(effects
 				(font
@@ -6228,7 +6190,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R10")
+					(reference "R5")
 					(unit 1)
 				)
 			)
@@ -6374,7 +6336,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "51cf34ed-2423-4f64-9c9e-fe0bcde1e99f")
-		(property "Reference" "C26"
+		(property "Reference" "C13"
 			(at 149.86 172.7199 0)
 			(effects
 				(font
@@ -6428,7 +6390,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C26")
+					(reference "C13")
 					(unit 1)
 				)
 			)
@@ -6575,7 +6537,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "59c0cdc0-9cf8-4d1b-8465-a047d1986c70")
-		(property "Reference" "C24"
+		(property "Reference" "C11"
 			(at 101.6 172.7199 0)
 			(effects
 				(font
@@ -6629,7 +6591,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C24")
+					(reference "C11")
 					(unit 1)
 				)
 			)
@@ -6645,7 +6607,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5a1edb2f-8f91-4c4e-8836-890f513f55d0")
-		(property "Reference" "C22"
+		(property "Reference" "C9"
 			(at 76.2 172.7199 0)
 			(effects
 				(font
@@ -6699,7 +6661,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C22")
+					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -6846,7 +6808,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6aa99294-75cf-4bd5-a184-c0461e022484")
-		(property "Reference" "R12"
+		(property "Reference" "R9"
 			(at 172.212 104.14 0)
 			(effects
 				(font
@@ -6900,7 +6862,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R12")
+					(reference "R9")
 					(unit 1)
 				)
 			)
@@ -6916,7 +6878,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6ac824ce-3dfc-4021-9523-a203642b0e5b")
-		(property "Reference" "C18"
+		(property "Reference" "C5"
 			(at 25.4 172.7199 0)
 			(effects
 				(font
@@ -6970,7 +6932,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C18")
+					(reference "C5")
 					(unit 1)
 				)
 			)
@@ -7044,7 +7006,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_02x05_Odd_Even")
-		(at 166.37 134.62 0)
+		(at 156.21 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -7053,7 +7015,7 @@
 		(fields_autoplaced yes)
 		(uuid "8059447a-8e8c-46c9-a8b1-990df3c352b3")
 		(property "Reference" "J1"
-			(at 167.64 123.19 0)
+			(at 157.48 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7061,7 +7023,7 @@
 			)
 		)
 		(property "Value" "EXT_DEBUGGER"
-			(at 167.64 125.73 0)
+			(at 157.48 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7069,7 +7031,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_1.27mm:PinHeader_2x05_P1.27mm_Vertical"
-			(at 166.37 134.62 0)
+			(at 156.21 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7078,7 +7040,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 166.37 134.62 0)
+			(at 156.21 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7087,7 +7049,7 @@
 			)
 		)
 		(property "Description" "Generic connector, double row, 02x05, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 166.37 134.62 0)
+			(at 156.21 127 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7143,7 +7105,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "817b9b4b-db80-49e5-a1e8-596768166086")
-		(property "Reference" "L4"
+		(property "Reference" "L2"
 			(at 254 102.108 90)
 			(effects
 				(font
@@ -7195,7 +7157,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "L4")
+					(reference "L2")
 					(unit 1)
 				)
 			)
@@ -7211,7 +7173,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "84162fcf-9dc0-4d23-838c-7e160f8bdc14")
-		(property "Reference" "C23"
+		(property "Reference" "C10"
 			(at 88.9 172.7199 0)
 			(effects
 				(font
@@ -7265,7 +7227,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C23")
+					(reference "C10")
 					(unit 1)
 				)
 			)
@@ -7413,7 +7375,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9c6a897c-917b-459d-aff0-afa5b55e26c7")
-		(property "Reference" "C27"
+		(property "Reference" "C14"
 			(at 162.56 172.7199 0)
 			(effects
 				(font
@@ -7467,7 +7429,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C27")
+					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -7483,7 +7445,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9ec1f13e-2d16-4160-b99e-5631cf2a5937")
-		(property "Reference" "C20"
+		(property "Reference" "C7"
 			(at 50.8 172.7199 0)
 			(effects
 				(font
@@ -7537,7 +7499,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C20")
+					(reference "C7")
 					(unit 1)
 				)
 			)
@@ -7683,7 +7645,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b067373e-0067-40ed-a312-fd9a457d2c42")
-		(property "Reference" "C28"
+		(property "Reference" "C16"
 			(at 262.89 107.9499 0)
 			(effects
 				(font
@@ -7737,7 +7699,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C28")
+					(reference "C16")
 					(unit 1)
 				)
 			)
@@ -7884,7 +7846,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ba9620ba-cf6d-4fe9-9084-e814d53cbae9")
-		(property "Reference" "C25"
+		(property "Reference" "C12"
 			(at 124.46 172.7199 0)
 			(effects
 				(font
@@ -7938,7 +7900,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C25")
+					(reference "C12")
 					(unit 1)
 				)
 			)
@@ -8219,7 +8181,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bda5fc1c-0ab2-4d54-b956-472936263b02")
-		(property "Reference" "C19"
+		(property "Reference" "C6"
 			(at 38.1 172.7199 0)
 			(effects
 				(font
@@ -8273,7 +8235,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C19")
+					(reference "C6")
 					(unit 1)
 				)
 			)
@@ -8281,7 +8243,7 @@
 	)
 	(symbol
 		(lib_id "power:+3.3V")
-		(at 158.75 124.46 0)
+		(at 148.59 116.84 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -8290,7 +8252,7 @@
 		(fields_autoplaced yes)
 		(uuid "bf813a6d-0e34-4ab3-9ab1-ed1dd4ef6783")
 		(property "Reference" "#PWR02"
-			(at 158.75 128.27 0)
+			(at 148.59 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8299,7 +8261,7 @@
 			)
 		)
 		(property "Value" "+3.3V"
-			(at 158.75 119.38 0)
+			(at 148.59 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8307,7 +8269,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 158.75 124.46 0)
+			(at 148.59 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8316,7 +8278,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 158.75 124.46 0)
+			(at 148.59 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8325,7 +8287,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 158.75 124.46 0)
+			(at 148.59 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8421,7 +8383,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c683f832-c9dc-4a64-a40b-136aba4a27d2")
-		(property "Reference" "R6"
+		(property "Reference" "R2"
 			(at 258.572 72.39 0)
 			(effects
 				(font
@@ -8475,7 +8437,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R6")
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -8621,7 +8583,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d13bfda5-f0f7-41b4-8dde-436f6b267902")
-		(property "Reference" "R1"
+		(property "Reference" "R8"
 			(at 158.242 83.82 0)
 			(effects
 				(font
@@ -8675,7 +8637,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R1")
+					(reference "R8")
 					(unit 1)
 				)
 			)
@@ -8691,7 +8653,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d8b22f01-f545-4ab2-b434-4a367028049d")
-		(property "Reference" "R4"
+		(property "Reference" "R3"
 			(at 156.972 40.64 0)
 			(effects
 				(font
@@ -8745,7 +8707,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R4")
+					(reference "R3")
 					(unit 1)
 				)
 			)
@@ -8753,7 +8715,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 158.75 147.32 0)
+		(at 148.59 139.7 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -8762,7 +8724,7 @@
 		(fields_autoplaced yes)
 		(uuid "da1d1170-c558-4a44-a897-02709493b95f")
 		(property "Reference" "#PWR01"
-			(at 158.75 153.67 0)
+			(at 148.59 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8771,7 +8733,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 158.75 152.4 0)
+			(at 148.59 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8779,7 +8741,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 158.75 147.32 0)
+			(at 148.59 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8788,7 +8750,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 158.75 147.32 0)
+			(at 148.59 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8797,7 +8759,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 158.75 147.32 0)
+			(at 148.59 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8827,7 +8789,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "da7bb2f4-996f-418b-852c-5110fa975648")
-		(property "Reference" "R9"
+		(property "Reference" "R7"
 			(at 150.622 83.82 0)
 			(effects
 				(font
@@ -8881,7 +8843,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R9")
+					(reference "R7")
 					(unit 1)
 				)
 			)
@@ -9027,7 +8989,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "df093ae1-dfc5-459f-bc07-7887dbea755e")
-		(property "Reference" "R13"
+		(property "Reference" "R10"
 			(at 179.832 104.14 0)
 			(effects
 				(font
@@ -9081,7 +9043,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R13")
+					(reference "R10")
 					(unit 1)
 				)
 			)
@@ -9294,7 +9256,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e6db14a2-52a5-4c7a-bf43-86331b8fa2c4")
-		(property "Reference" "R11"
+		(property "Reference" "R6"
 			(at 158.242 58.42 0)
 			(effects
 				(font
@@ -9348,7 +9310,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "R11")
+					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -9495,7 +9457,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eca4a9f9-acb2-4fb6-98a0-be9c6e074aa7")
-		(property "Reference" "C29"
+		(property "Reference" "C17"
 			(at 262.89 128.2699 0)
 			(effects
 				(font
@@ -9549,7 +9511,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "C29")
+					(reference "C17")
 					(unit 1)
 				)
 			)
@@ -9630,7 +9592,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f358b329-121e-45d3-b508-b8dfd161b1b6")
-		(property "Reference" "L5"
+		(property "Reference" "L3"
 			(at 254 122.428 90)
 			(effects
 				(font
@@ -9682,7 +9644,7 @@
 		(instances
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f"
-					(reference "L5")
+					(reference "L3")
 					(unit 1)
 				)
 			)
@@ -9755,7 +9717,7 @@
 	)
 	(sheet
 		(at 25.4 125.73)
-		(size 20.32 15.24)
+		(size 20.32 17.78)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -9775,7 +9737,7 @@
 			)
 		)
 		(property "Sheetfile" "communication.kicad_sch"
-			(at 25.4 141.5546 0)
+			(at 25.4 144.0946 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9833,6 +9795,16 @@
 				(justify right)
 			)
 			(uuid "3212836a-778c-454f-8b18-b452354bb682")
+		)
+		(pin "SDN" input
+			(at 45.72 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+			(uuid "b426fa52-0a11-4c10-8431-e75d67459758")
 		)
 		(instances
 			(project "picoballoon"
