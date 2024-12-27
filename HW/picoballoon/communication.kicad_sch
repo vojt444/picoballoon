@@ -2261,7 +2261,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Library:RECE20369001E01"
+		(property "Footprint" "Library:BNC_Connector_PCB"
 			(at 223.52 67.31 0)
 			(effects
 				(font
