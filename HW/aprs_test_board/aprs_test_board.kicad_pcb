@@ -2405,7 +2405,7 @@
 			(net 3 "GND")
 			(uuid "0f1b1dfc-c03c-4758-8313-f3ebb903a075")
 		)
-		(model "ECS-300-20-30B-DU-TR.stp"
+		(model "${KICAD8_3DMODEL_DIR}/Crystal.3dshapes/Crystal_SMD_5032-2Pin_5.0x3.2mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -4112,7 +4112,7 @@
 			(pintype "passive")
 			(uuid "3383d30b-555c-4efa-9289-75ae045d7ff9")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-20-1EP_4x4mm_P0.5mm_EP2.6x2.6mm.wrl"
+		(model "${KICAD8_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-20-1EP_4x4mm_P0.5mm_EP2.5x2.5mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -4865,15 +4865,15 @@
 			(remove_unused_layers no)
 			(uuid "d0a70436-dcbf-4bcb-a96b-5f5ce1520660")
 		)
-		(model "1-5227161-7.stp"
+		(model "${KIPRJMOD}/Library.pretty/3D/1-5227161-7.stp"
 			(offset
-				(xyz 2.539999924 33.61999843 7.899999977)
+				(xyz 2.5 33.5 8)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz -90 0 -180)
+				(xyz 90 180 0)
 			)
 		)
 	)
