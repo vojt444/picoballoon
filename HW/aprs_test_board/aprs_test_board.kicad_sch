@@ -4,6 +4,11 @@
 	(generator_version "8.0")
 	(uuid "ff73054a-192a-490d-828d-65a665a720f3")
 	(paper "A4")
+	(title_block
+		(title "APRS test board")
+		(date "2025-01-03")
+		(company "Vojtech Piroch")
+	)
 	(lib_symbols
 		(symbol "Connector:Conn_Coaxial"
 			(pin_names

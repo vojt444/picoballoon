@@ -7,6 +7,11 @@
 		(legacy_teardrops no)
 	)
 	(paper "A4")
+	(title_block
+		(title "APRS test board")
+		(date "2025-01-03")
+		(company "Vojtech Piroch")
+	)
 	(layers
 		(0 "F.Cu" signal)
 		(31 "B.Cu" power)

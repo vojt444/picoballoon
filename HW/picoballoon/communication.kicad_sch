@@ -4,6 +4,11 @@
 	(generator_version "8.0")
 	(uuid "ddd91568-696d-44ed-869a-c0f059fd2e9f")
 	(paper "A4")
+	(title_block
+		(title "Communication")
+		(date "2025-01-03")
+		(company "Vojtech Piroch")
+	)
 	(lib_symbols
 		(symbol "Device:Antenna"
 			(pin_numbers hide)

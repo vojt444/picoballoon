@@ -4,6 +4,11 @@
 	(generator_version "8.0")
 	(uuid "656b2cfd-66a3-41e0-89f4-fbc528543917")
 	(paper "A4")
+	(title_block
+		(title "GNSS")
+		(date "2025-01-03")
+		(company "Vojtech Piroch")
+	)
 	(lib_symbols
 		(symbol "Device:Antenna"
 			(pin_numbers hide)

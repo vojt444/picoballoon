@@ -7,6 +7,11 @@
 		(legacy_teardrops no)
 	)
 	(paper "A4")
+	(title_block
+		(title "4 layer PCB")
+		(date "2025-01-03")
+		(company "Vojtech Piroch")
+	)
 	(layers
 		(0 "F.Cu" signal "F.Signal")
 		(1 "In1.Cu" power "In1.GND")
@@ -20260,7 +20265,7 @@
 		(descr "Through hole straight pin header, 1x02, 1.27mm pitch, single row")
 		(tags "Through hole pin header THT 1x02 1.27mm single row")
 		(property "Reference" "J2"
-			(at -2.21 -0.37 360)
+			(at -2.21 -0.37 0)
 			(layer "F.SilkS")
 			(uuid "907bd4c8-e083-4466-ae04-85e98072d074")
 			(effects
