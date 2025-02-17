@@ -1,3 +1,4 @@
+#define ARDUINO
 #include "Arduino.h"
 #include <SPI.h>
 #include <Si446x.h>
@@ -43,10 +44,10 @@ void setup() {
   Serial.println(partInfo.romId, HEX);
   Serial.print("---------------");
   //49°13'19.3"N 16°35'44.5"E
-  uint8_t test_packet[64] = "OK4VP-0>APRS,TCPIP*,qAC:!4913.19N/01635.44W-Test message";
+  uint8_t test_packet[64] = "OK4VP-0>APRS,WIDE1-1,WIDE2-1:!4913.19N/01635.44W-Test message";
   uint8_t buf[] = {RF_POWER_UP};
   const uint8_t CONFIGURATION_DATA[] = RADIO_CONFIGURATION_DATA_ARRAY;
-
+  
   pinMode(SDN_PIN, OUTPUT);
   pinMode(CS_PIN, OUTPUT);
   pinMode(NIRQ_PIN, INPUT);
@@ -65,7 +66,7 @@ void setup() {
 
   //SET CONFIG
   setConfig(CONFIGURATION_DATA, sizeof(CONFIGURATION_DATA));
-  
+  fifoReset();
   fifoWrite(sizeof(test_packet),test_packet);
   //filter coefs?
   filter_coeffs();
