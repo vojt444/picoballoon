@@ -37,7 +37,7 @@ void setup() {
   char *digipeaters[][2] = {{"WIDE1", "1"}, {"WIDE2", "1"}};
   int digi_count = 2; // Number of digipeaters
 
-  char *payload = ",TEST-MESSAGE";
+  char *payload = ",12345TEST";
 
   create_aprs_packet(aprs_packet, &packet_len, source, source_ssid, destination, destination_ssid, digipeaters, digi_count, payload);
   print_packet_hex(aprs_packet, packet_len);

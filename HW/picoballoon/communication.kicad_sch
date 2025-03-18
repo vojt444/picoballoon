@@ -1982,7 +1982,7 @@
 				)
 			)
 		)
-		(property "Value" "74,74n"
+		(property "Value" "75n"
 			(at 213.36 72.39 90)
 			(effects
 				(font
@@ -2050,7 +2050,7 @@
 				)
 			)
 		)
-		(property "Value" "106n"
+		(property "Value" "110n"
 			(at 187.96 72.39 90)
 			(effects
 				(font
@@ -2525,7 +2525,7 @@
 				)
 			)
 		)
-		(property "Value" "74,74n"
+		(property "Value" "75n"
 			(at 200.66 72.39 90)
 			(effects
 				(font
@@ -2857,7 +2857,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "14,35p"
+		(property "Value" "15p"
 			(at 185.42 82.5499 0)
 			(effects
 				(font
@@ -3199,7 +3199,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "552n"
+		(property "Value" "480n"
 			(at 157.48 71.1199 0)
 			(effects
 				(font
@@ -3403,7 +3403,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "43,06p"
+		(property "Value" "43p"
 			(at 210.82 82.5499 0)
 			(effects
 				(font
