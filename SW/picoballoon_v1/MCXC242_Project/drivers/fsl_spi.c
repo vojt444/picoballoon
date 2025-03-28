@@ -1255,7 +1255,7 @@ void SPI_MasterTransferHandleIRQ(SPI_Type *base, spi_master_handle_t *handle)
 
             if (handle->callback != NULL)
             {
-                (handle->callback)(base, handle, kStatus_SPI_Idle, handle->userData);
+                (handle->callback)(base, handle, kStatus_Success, handle->userData);
             }
         }
     }

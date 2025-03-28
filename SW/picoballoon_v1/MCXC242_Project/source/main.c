@@ -11,6 +11,7 @@
  */
 #include <stdio.h>
 #include "board.h"
+#include "utils.h"
 #include "peripherals.h"
 #include "pin_mux.h"
 #include "clock_config.h"
@@ -18,6 +19,7 @@
 #include "fsl_adc16.h"
 
 #include "MCP9802.h"
+#include "si4461.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -34,30 +36,17 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-volatile uint32_t g_systick_counter;
 volatile bool g_ADC_conversion_done_flag = false;
 volatile uint32_t g_ADC_value = 0;
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
-void SysTick_Handler(void)
-{
-	if(g_systick_counter != 0U)
-		g_systick_counter--;
-}
 
 void ADC0_IRQHandler(void)
 {
 	g_ADC_value = ADC16_GetChannelConversionValue(ADC0, ADC_CHANNEL);
 	g_ADC_conversion_done_flag = true;
-}
-
-//delay in milliseconds
-void delay(uint32_t n)
-{
-	g_systick_counter = n;
-	while(g_systick_counter != 0U);
 }
 
 int main(void)
@@ -83,28 +72,57 @@ int main(void)
 	ADC_channel_config.enableDifferentialConversion = false;
 	ADC_channel_config.enableInterruptOnConversionCompleted = true;
 
-	//temp sensor vars
-	float temperature = 0;
-	//I2C for temp sensor init
-	MCP9802_init();
-
-	//read the temperature
-	MCP9802_read_temperature_oneshot(&temperature);
-
 	if(SysTick_Config(SystemCoreClock / 1000U))
 	{
 		while(1);
 	}
 
-	for(int i = 0; i < 9; ++i)
+	//temp sensor vars
+	float temperature = 0;
+	//I2C for temp sensor init
+	MCP9802_init();
+	//read the temperature
+	MCP9802_read_temperature_oneshot(&temperature);
+
+	//init Si4461
+	Si4461_init();
+
+//SPI pls
+//	spi_master_config_t spi_config = {0};
+//	spi_transfer_t transfer;
+//	uint32_t source_clock = 0;
+//	SPI_MasterGetDefaultConfig(&spi_config);
+//	spi_config.baudRate_Bps = 500000;
+//	spi_config.outputMode = kSPI_SlaveSelectAsGpio;
+//	source_clock = SPI_CLOCK_SOURCE;
+//	SPI_MasterInit(SPI_BASE, &spi_config, source_clock);
+//	SPI_MasterTransferCreateHandle(SPI_BASE, &g_spi_handle, spi_callback, NULL);
+//	NVIC_EnableIRQ(SPI0_IRQn);
+//
+//	memset(rxData, 0, sizeof(rxData));
+//	transfer.txData = txData;
+//	transfer.rxData = rxData;
+//	transfer.dataSize = TRANSFER_SIZE;
+//
+//	GPIO_PortClear(SI4461_CS_GPIO, SI4461_CS_PIN_MASK);
+//	g_transfer_completed = false;
+//	SPI_MasterTransferNonBlocking(SPI_BASE, &g_spi_handle, &transfer);
+//	while(!g_transfer_completed);
+//	GPIO_PortSet(SI4461_CS_GPIO, SI4461_CS_PIN_MASK);
+
+	for(int i = 0; i < 5; ++i)
 	{
 		delay(300U);
-		GPIO_PortToggle(BOARD_LED_GPIO, 1u << BOARD_LED_PIN);
+		GPIO_PortSet(BOARD_LED_GPIO, 1 << BOARD_LED_PIN);
+		delay(300U);
+		GPIO_PortClear(BOARD_LED_GPIO, 1 << BOARD_LED_PIN);
 	}
+	delay(300U);
+	GPIO_PortSet(BOARD_LED_GPIO, 1 << BOARD_LED_PIN);
 
 	while(1)
 	{
-		MCP9802_read_temperature_oneshot(&temperature);
+//		MCP9802_read_temperature_oneshot(&temperature);
 //
 //		ADC16_SetChannelConfig(ADC0, ADC_CHANNEL, &ADC_channel_config);
 //
@@ -113,7 +131,12 @@ int main(void)
 //			g_ADC_conversion_done_flag = false;
 //			voltage = 2 * ((float)g_ADC_value / 4096) * 3.3;
 //		}
-		delay(100);
+//		delay(100);
+
+		delay(300U);
+		GPIO_PortSet(BOARD_LED_GPIO, 1 << BOARD_LED_PIN);
+		delay(300U);
+		GPIO_PortClear(BOARD_LED_GPIO, 1 << BOARD_LED_PIN);
 
 	}
 }

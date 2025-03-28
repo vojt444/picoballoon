@@ -14,7 +14,13 @@ mcu_data: ksdk2_0
 processor_version: 24.12.10
 board: FRDM-MCXC242
 pin_labels:
+- {pin_num: '53', pin_signal: CMP0_IN2/PTC8/I2C0_SCL/TPM0_CH4, label: D7-TPM0_CH4/CMP0_IN2, identifier: nIRQ}
+- {pin_num: '49', pin_signal: PTC4/LLWU_P8/SPI0_PCS0/LPUART1_TX/TPM0_CH3/SPI1_PCS0, label: D10-SPI0_CS0, identifier: CS}
+- {pin_num: '51', pin_signal: CMP0_IN0/PTC6/LLWU_P10/SPI0_MOSI/EXTRG_IN/SPI0_MISO, label: D11-SPI0_MOSI, identifier: MOSI}
+- {pin_num: '52', pin_signal: CMP0_IN1/PTC7/SPI0_MISO/USB_SOF_OUT/SPI0_MOSI, label: D12-SPI0_MISO, identifier: MISO}
+- {pin_num: '50', pin_signal: PTC5/LLWU_P9/SPI0_SCK/LPTMR0_ALT2/CMP0_OUT, label: D13-SPI0_SCK, identifier: SCLK}
 - {pin_num: '9', pin_signal: ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/LPUART0_TX/FXIO0_D4, label: A2-ADC0_SE0, identifier: voltage;VOLTAGE}
+- {pin_num: '46', pin_signal: PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT, label: 'J2[15]', identifier: SDN}
 - {pin_num: '38', pin_signal: ADC0_SE13/PTB3/I2C0_SDA/TPM2_CH1, label: 'J1[13]', identifier: SDA_TEMP}
 - {pin_num: '37', pin_signal: ADC0_SE12/PTB2/I2C0_SCL/TPM2_CH0, label: 'J1[15]', identifier: SCL_TEMP}
 - {pin_num: '17', pin_signal: CMP0_IN5/ADC0_SE4b/PTE29/TPM0_CH2/TPM_CLKIN0, label: LED, identifier: LED}
@@ -44,10 +50,16 @@ void BOARD_InitBootPins(void)
 BOARD_InitPins:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: '17', peripheral: GPIOE, signal: 'GPIO, 29', pin_signal: CMP0_IN5/ADC0_SE4b/PTE29/TPM0_CH2/TPM_CLKIN0, direction: OUTPUT}
   - {pin_num: '9', peripheral: ADC0, signal: 'SE, 0', pin_signal: ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/LPUART0_TX/FXIO0_D4, identifier: VOLTAGE}
-  - {pin_num: '38', peripheral: I2C0, signal: SDA, pin_signal: ADC0_SE13/PTB3/I2C0_SDA/TPM2_CH1}
+  - {pin_num: '17', peripheral: GPIOE, signal: 'GPIO, 29', pin_signal: CMP0_IN5/ADC0_SE4b/PTE29/TPM0_CH2/TPM_CLKIN0, direction: OUTPUT}
   - {pin_num: '37', peripheral: I2C0, signal: SCL, pin_signal: ADC0_SE12/PTB2/I2C0_SCL/TPM2_CH0}
+  - {pin_num: '38', peripheral: I2C0, signal: SDA, pin_signal: ADC0_SE13/PTB3/I2C0_SDA/TPM2_CH1}
+  - {pin_num: '46', peripheral: GPIOC, signal: 'GPIO, 3', pin_signal: PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT, direction: OUTPUT}
+  - {pin_num: '49', peripheral: GPIOC, signal: 'GPIO, 4', pin_signal: PTC4/LLWU_P8/SPI0_PCS0/LPUART1_TX/TPM0_CH3/SPI1_PCS0, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: '50', peripheral: SPI0, signal: SCK, pin_signal: PTC5/LLWU_P9/SPI0_SCK/LPTMR0_ALT2/CMP0_OUT, direction: OUTPUT}
+  - {pin_num: '51', peripheral: SPI0, signal: MOSI, pin_signal: CMP0_IN0/PTC6/LLWU_P10/SPI0_MOSI/EXTRG_IN/SPI0_MISO, direction: OUTPUT}
+  - {pin_num: '52', peripheral: SPI0, signal: MISO, pin_signal: CMP0_IN1/PTC7/SPI0_MISO/USB_SOF_OUT/SPI0_MOSI, direction: INPUT}
+  - {pin_num: '53', peripheral: GPIOC, signal: 'GPIO, 8', pin_signal: CMP0_IN2/PTC8/I2C0_SCL/TPM0_CH4, direction: OUTPUT}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -62,8 +74,31 @@ void BOARD_InitPins(void)
 {
     /* Port B Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortB);
+    /* Port C Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortC);
     /* Port E Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortE);
+
+    gpio_pin_config_t SDN_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTC3 (pin 46)  */
+    GPIO_PinInit(BOARD_INITPINS_SDN_GPIO, BOARD_INITPINS_SDN_PIN, &SDN_config);
+
+    gpio_pin_config_t CS_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 1U
+    };
+    /* Initialize GPIO functionality on pin PTC4 (pin 49)  */
+    GPIO_PinInit(BOARD_INITPINS_CS_GPIO, BOARD_INITPINS_CS_PIN, &CS_config);
+
+    gpio_pin_config_t nIRQ_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTC8 (pin 53)  */
+    GPIO_PinInit(BOARD_INITPINS_nIRQ_GPIO, BOARD_INITPINS_nIRQ_PIN, &nIRQ_config);
 
     gpio_pin_config_t LED_config = {
         .pinDirection = kGPIO_DigitalOutput,
@@ -77,6 +112,24 @@ void BOARD_InitPins(void)
 
     /* PORTB3 (pin 38) is configured as I2C0_SDA */
     PORT_SetPinMux(BOARD_INITPINS_SDA_TEMP_PORT, BOARD_INITPINS_SDA_TEMP_PIN, kPORT_MuxAlt2);
+
+    /* PORTC3 (pin 46) is configured as PTC3 */
+    PORT_SetPinMux(BOARD_INITPINS_SDN_PORT, BOARD_INITPINS_SDN_PIN, kPORT_MuxAsGpio);
+
+    /* PORTC4 (pin 49) is configured as PTC4 */
+    PORT_SetPinMux(BOARD_INITPINS_CS_PORT, BOARD_INITPINS_CS_PIN, kPORT_MuxAsGpio);
+
+    /* PORTC5 (pin 50) is configured as SPI0_SCK */
+    PORT_SetPinMux(BOARD_INITPINS_SCLK_PORT, BOARD_INITPINS_SCLK_PIN, kPORT_MuxAlt2);
+
+    /* PORTC6 (pin 51) is configured as SPI0_MOSI */
+    PORT_SetPinMux(BOARD_INITPINS_MOSI_PORT, BOARD_INITPINS_MOSI_PIN, kPORT_MuxAlt2);
+
+    /* PORTC7 (pin 52) is configured as SPI0_MISO */
+    PORT_SetPinMux(BOARD_INITPINS_MISO_PORT, BOARD_INITPINS_MISO_PIN, kPORT_MuxAlt2);
+
+    /* PORTC8 (pin 53) is configured as PTC8 */
+    PORT_SetPinMux(BOARD_INITPINS_nIRQ_PORT, BOARD_INITPINS_nIRQ_PIN, kPORT_MuxAsGpio);
 
     /* PORTE20 (pin 9) is configured as ADC0_SE0 */
     PORT_SetPinMux(BOARD_INITPINS_VOLTAGE_PORT, BOARD_INITPINS_VOLTAGE_PIN, kPORT_PinDisabledOrAnalog);
