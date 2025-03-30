@@ -30,6 +30,9 @@ extern "C"
 #define SI4461_CS_PIN				4U
 #define SI4461_CS_PIN_MASK			(1 << SI4461_CS_PIN)
 
+#define CTS_TIMEOUT					5000
+#define TIMEOUT						1000
+
 typedef struct
 {
 	uint8_t chip_rev;
@@ -54,8 +57,9 @@ typedef enum
 } si4461_state_t;
 
 bool Si4461_init(void);
-void Si4461_get_info(si4461_info_t *info);
-
+bool Si4461_get_info(si4461_info_t *info);
+bool Si4461_set_properties(uint16_t start_property, uint8_t length, uint8_t *params);
+bool Si4461_get_properties(uint16_t start_property, uint8_t length, uint8_t *params);
 
 #ifdef __cplusplus
 }

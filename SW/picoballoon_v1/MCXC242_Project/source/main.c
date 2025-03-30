@@ -85,30 +85,9 @@ int main(void)
 	MCP9802_read_temperature_oneshot(&temperature);
 
 	//init Si4461
+	si4461_info_t si4461_info;
 	Si4461_init();
-
-//SPI pls
-//	spi_master_config_t spi_config = {0};
-//	spi_transfer_t transfer;
-//	uint32_t source_clock = 0;
-//	SPI_MasterGetDefaultConfig(&spi_config);
-//	spi_config.baudRate_Bps = 500000;
-//	spi_config.outputMode = kSPI_SlaveSelectAsGpio;
-//	source_clock = SPI_CLOCK_SOURCE;
-//	SPI_MasterInit(SPI_BASE, &spi_config, source_clock);
-//	SPI_MasterTransferCreateHandle(SPI_BASE, &g_spi_handle, spi_callback, NULL);
-//	NVIC_EnableIRQ(SPI0_IRQn);
-//
-//	memset(rxData, 0, sizeof(rxData));
-//	transfer.txData = txData;
-//	transfer.rxData = rxData;
-//	transfer.dataSize = TRANSFER_SIZE;
-//
-//	GPIO_PortClear(SI4461_CS_GPIO, SI4461_CS_PIN_MASK);
-//	g_transfer_completed = false;
-//	SPI_MasterTransferNonBlocking(SPI_BASE, &g_spi_handle, &transfer);
-//	while(!g_transfer_completed);
-//	GPIO_PortSet(SI4461_CS_GPIO, SI4461_CS_PIN_MASK);
+	Si4461_get_info(&si4461_info);
 
 	for(int i = 0; i < 5; ++i)
 	{

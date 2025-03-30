@@ -40,4 +40,7 @@
 #define SI4461_CMD_RX_HOP				0x36
 #define SI4461_CMD_TX_HOP				0x37
 
+//PROPERTIES
+#define SI4463_PROPERTY_PA_MODE                          0x2200
+
 #endif /* SI4461_DESC_H_ */
