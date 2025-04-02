@@ -8,6 +8,9 @@
 #ifndef SI4461_DESC_H_
 #define SI4461_DESC_H_
 
+//MISC
+#define SI4461_FREQ_CHANNEL				0
+
 // COMMAND SUMMARY
 #define SI4461_CMD_NOP					0x00
 #define SI4461_CMD_POWER_UP				0x02

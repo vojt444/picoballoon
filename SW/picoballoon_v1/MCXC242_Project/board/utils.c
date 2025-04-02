@@ -20,4 +20,17 @@ void delay(uint32_t n)
 	while(g_systick_counter != 0U);
 }
 
+void pad_string(char *str, size_t desired_length)
+{
+	size_t current_length = strlen(str);
 
+	if(current_length < desired_length)
+	{
+		memset(str + current_length, ' ', desired_length - current_length);
+		str[desired_length] = '\0';
+	}
+	else if(current_length > desired_length)
+	{
+		str[desired_length] = '\0';
+	}
+}

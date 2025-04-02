@@ -31,7 +31,7 @@ void setup() {
 
   char *source = "OK4VP ";
   uint8_t source_ssid = 1;
-  char *destination = "APRS  ";
+  char *destination = "APRS   ";
   uint8_t destination_ssid = 0;
   
   char *digipeaters[][2] = {{"WIDE1", "1"}, {"WIDE2", "1"}};

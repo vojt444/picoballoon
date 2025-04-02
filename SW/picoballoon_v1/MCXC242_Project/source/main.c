@@ -20,6 +20,7 @@
 
 #include "MCP9802.h"
 #include "si4461.h"
+#include "aprs.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
@@ -86,8 +87,30 @@ int main(void)
 
 	//init Si4461
 	si4461_info_t si4461_info;
+	si4461_state_t state;
+	si4461_state_t new_state = SI4461_STATE_SPI_ACTIVE;
 	Si4461_init();
 	Si4461_get_info(&si4461_info);
+
+	//APRS
+	//uint8_t test_packet[64] = "OK4VP-0>APRS,WIDE1-1,WIDE2-1:!4913.19N/01635.44W-Test message";
+	uint8_t aprs_packet[256];
+	size_t packet_len;
+
+	char source[6] = "OK4VP";
+	pad_string(source, CALLSIGN_LEN);
+	uint8_t source_ssid = 1;
+	char destination[6] = "APRS";
+	pad_string(destination, CALLSIGN_LEN);
+	uint8_t destination_ssid = 0;
+
+	char *digipeaters[][2] = { {"WIDE1", "1"}, {"WIDE2", "1"}};
+	int digi_count = 2;
+	char *payload = ",12345TEST";
+
+	create_aprs_packet(aprs_packet, &packet_len, source, source_ssid, destination, destination_ssid, digipeaters, digi_count, payload);
+
+	Si4461_send_packet(aprs_packet, packet_len);
 
 	for(int i = 0; i < 5; ++i)
 	{
