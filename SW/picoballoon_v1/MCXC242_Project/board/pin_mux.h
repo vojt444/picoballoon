@@ -25,6 +25,9 @@ extern "C" {
  */
 void BOARD_InitBootPins(void);
 
+#define SOPT5_LPUART0RXSRC_LPUART_RX 0x00u /*!<@brief LPUART0 Receive Data Source Select: LPUART_RX pin */
+#define SOPT5_LPUART0TXSRC_LPUART_TX 0x00u /*!<@brief LPUART0 Transmit Data Source Select: LPUART0_TX pin */
+
 /*! @name PORTE20 (number 9), A2-ADC0_SE0
   @{ */
 
@@ -138,6 +141,42 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_nIRQ_PIN 8U                   /*!<@brief PORT pin number */
 #define BOARD_INITPINS_nIRQ_PIN_MASK (1U << 8U)      /*!<@brief PORT pin mask */
                                                      /* @} */
+
+/*! @name PORTE0 (number 1), J3[1]/UART1_TX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_SDA_GNSS_PORT PORTE               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_SDA_GNSS_PIN 0U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_SDA_GNSS_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
+                                                         /* @} */
+
+/*! @name PORTE1 (number 2), J3[3]/UART1_RX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_SCL_GNSS_PORT PORTE               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_SCL_GNSS_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_SCL_GNSS_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
+                                                         /* @} */
+
+/*! @name PORTD7 (number 64), D15-I2C1_SCL/ACCELL_SCL
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_TX_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_TX_PIN 7U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_TX_PIN_MASK (1U << 7U)      /*!<@brief PORT pin mask */
+                                                   /* @} */
+
+/*! @name PORTD6 (number 63), D14-I2C1_SDA/ACCELL_SDA
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_RX_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_RX_PIN 6U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_RX_PIN_MASK (1U << 6U)      /*!<@brief PORT pin mask */
+                                                   /* @} */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

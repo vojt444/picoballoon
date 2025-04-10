@@ -25,12 +25,16 @@
          <pins_profile>
             <processor_version>24.12.10</processor_version>
             <pin_labels>
+               <pin_label pin_num="1" pin_signal="PTE0/CLKOUT32K/SPI1_MISO/LPUART1_TX/RTC_CLKOUT/CMP0_OUT/I2C1_SDA" label="J3[1]/UART1_TX" identifier="SDA_GNSS"/>
                <pin_label pin_num="53" pin_signal="CMP0_IN2/PTC8/I2C0_SCL/TPM0_CH4" label="D7-TPM0_CH4/CMP0_IN2" identifier="nIRQ"/>
                <pin_label pin_num="49" pin_signal="PTC4/LLWU_P8/SPI0_PCS0/LPUART1_TX/TPM0_CH3/SPI1_PCS0" label="D10-SPI0_CS0" identifier="CS"/>
                <pin_label pin_num="51" pin_signal="CMP0_IN0/PTC6/LLWU_P10/SPI0_MOSI/EXTRG_IN/SPI0_MISO" label="D11-SPI0_MOSI" identifier="MOSI"/>
                <pin_label pin_num="52" pin_signal="CMP0_IN1/PTC7/SPI0_MISO/USB_SOF_OUT/SPI0_MOSI" label="D12-SPI0_MISO" identifier="MISO"/>
                <pin_label pin_num="50" pin_signal="PTC5/LLWU_P9/SPI0_SCK/LPTMR0_ALT2/CMP0_OUT" label="D13-SPI0_SCK" identifier="SCLK"/>
+               <pin_label pin_num="63" pin_signal="ADC0_SE7b/PTD6/LLWU_P15/SPI1_MOSI/LPUART0_RX/I2C1_SDA/SPI1_MISO/FXIO0_D6" label="D14-I2C1_SDA/ACCELL_SDA" identifier="RX"/>
+               <pin_label pin_num="64" pin_signal="PTD7/SPI1_MISO/LPUART0_TX/I2C1_SCL/SPI1_MOSI/FXIO0_D7" label="D15-I2C1_SCL/ACCELL_SCL" identifier="TX"/>
                <pin_label pin_num="9" pin_signal="ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/LPUART0_TX/FXIO0_D4" label="A2-ADC0_SE0" identifier="voltage;VOLTAGE"/>
+               <pin_label pin_num="2" pin_signal="PTE1/SPI1_MOSI/LPUART1_RX/SPI1_MISO/I2C1_SCL" label="J3[3]/UART1_RX" identifier="SCL_GNSS"/>
                <pin_label pin_num="46" pin_signal="PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT" label="J2[15]" identifier="SDN"/>
                <pin_label pin_num="38" pin_signal="ADC0_SE13/PTB3/I2C0_SDA/TPM2_CH1" label="J1[13]" identifier="SDA_TEMP"/>
                <pin_label pin_num="37" pin_signal="ADC0_SE12/PTB2/I2C0_SCL/TPM2_CH0" label="J1[15]" identifier="SCL_TEMP"/>
@@ -57,6 +61,16 @@
                      </feature>
                   </dependency>
                   <dependency resourceType="Peripheral" resourceId="SPI0" description="Peripheral SPI0 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="Peripheral" resourceId="I2C1" description="Peripheral I2C1 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="Peripheral" resourceId="LPUART0" description="Peripheral LPUART0 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
                      <feature name="initialized" evaluation="equal">
                         <data>true</data>
                      </feature>
@@ -121,6 +135,14 @@
                         <pin_feature name="direction" value="OUTPUT"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="I2C1" signal="SDA" pin_num="1" pin_signal="PTE0/CLKOUT32K/SPI1_MISO/LPUART1_TX/RTC_CLKOUT/CMP0_OUT/I2C1_SDA"/>
+                  <pin peripheral="I2C1" signal="SCL" pin_num="2" pin_signal="PTE1/SPI1_MOSI/LPUART1_RX/SPI1_MISO/I2C1_SCL"/>
+                  <pin peripheral="LPUART0" signal="TX" pin_num="64" pin_signal="PTD7/SPI1_MISO/LPUART0_TX/I2C1_SCL/SPI1_MOSI/FXIO0_D7">
+                     <pin_features>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="LPUART0" signal="RX" pin_num="63" pin_signal="ADC0_SE7b/PTD6/LLWU_P15/SPI1_MOSI/LPUART0_RX/I2C1_SDA/SPI1_MISO/FXIO0_D6"/>
                </pins>
             </function>
          </functions_list>
@@ -153,12 +175,14 @@
                   <clock_output id="Core_clock.outFreq" value="48 MHz" locked="false" accuracy=""/>
                   <clock_output id="Flash_clock.outFreq" value="24 MHz" locked="false" accuracy=""/>
                   <clock_output id="LPO_clock.outFreq" value="1 kHz" locked="false" accuracy=""/>
+                  <clock_output id="LPUART0CLK.outFreq" value="48 MHz" locked="false" accuracy=""/>
                   <clock_output id="MCGIRCLK.outFreq" value="8 MHz" locked="false" accuracy=""/>
                   <clock_output id="MCGPCLK.outFreq" value="48 MHz" locked="false" accuracy=""/>
                   <clock_output id="System_clock.outFreq" value="48 MHz" locked="false" accuracy=""/>
                </clock_outputs>
                <clock_settings>
                   <setting id="MCGMode" value="HIRC" locked="false"/>
+                  <setting id="LPUART0ClkConfig" value="yes" locked="false"/>
                   <setting id="MCG.CLKS.sel" value="MCG.HIRC" locked="false"/>
                   <setting id="MCG_C2_OSC_MODE_CFG" value="ModeOscLowPower" locked="false"/>
                   <setting id="MCG_MC_HIRCEN_CFG" value="Enabled" locked="false"/>

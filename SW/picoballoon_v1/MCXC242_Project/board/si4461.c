@@ -31,7 +31,7 @@ static void spi_callback(SPI_Type *base, spi_master_handle_t *masterHandle,
 static bool Si4461_SPI_transfer(uint8_t *tx_buff, size_t tx_len, uint8_t *rx_buff,
 								size_t rx_len)
 {
-	spi_transfer_t transfer = {0};
+	spi_transfer_t transfer;
 	uint8_t dummy_rx[tx_len];
 	memset(dummy_rx, 0, tx_len);
 
@@ -44,7 +44,7 @@ static bool Si4461_SPI_transfer(uint8_t *tx_buff, size_t tx_len, uint8_t *rx_buf
 			!= kStatus_Success)
 		return false;
 
-	uint32_t timeout = 10000;
+	uint32_t timeout = TIMEOUT;
 	while(!g_spi_master_finished_flag && timeout--)
 	{
 		if(timeout == 0)
@@ -63,7 +63,7 @@ static bool Si4461_SPI_transfer(uint8_t *tx_buff, size_t tx_len, uint8_t *rx_buf
 			!= kStatus_Success)
 		return false;
 
-	timeout = 10000;
+	timeout = TIMEOUT;
 	while(!g_spi_master_finished_flag && timeout--)
 	{
 		if(timeout == 0)
@@ -75,7 +75,7 @@ static bool Si4461_SPI_transfer(uint8_t *tx_buff, size_t tx_len, uint8_t *rx_buf
 
 static bool Si4461_SPI_transfer_no_tx(uint8_t *rx_buff, size_t rx_len)
 {
-	spi_transfer_t transfer = {0};
+	spi_transfer_t transfer;
 	uint8_t dummy_tx[rx_len];
 	memset(dummy_tx, 0x44, rx_len);
 	memset(rx_buff, 0, rx_len);
@@ -89,7 +89,7 @@ static bool Si4461_SPI_transfer_no_tx(uint8_t *rx_buff, size_t rx_len)
 			!= kStatus_Success)
 		return false;
 
-	uint32_t timeout = 10000;
+	uint32_t timeout = TIMEOUT;
 	while(!g_spi_master_finished_flag && timeout--)
 	{
 		if(timeout == 0)
@@ -101,11 +101,9 @@ static bool Si4461_SPI_transfer_no_tx(uint8_t *rx_buff, size_t rx_len)
 
 static bool Si4461_SPI_transfer_no_rx(uint8_t *tx_buff, size_t tx_data_len)
 {
-	spi_transfer_t transfer = {0};
-	uint8_t rx[tx_data_len];
-	memset(rx, 0, tx_data_len);
+	spi_transfer_t transfer;
 	transfer.txData = tx_buff;
-	transfer.rxData = rx;
+	transfer.rxData = NULL;
 	transfer.dataSize = tx_data_len;
 
 	g_spi_master_finished_flag = false;
@@ -125,13 +123,12 @@ static bool Si4461_SPI_transfer_no_rx(uint8_t *tx_buff, size_t tx_data_len)
 
 static bool Si4461_wait_for_CTS(void)
 {
-	spi_transfer_t transfer = {0};
+	spi_transfer_t transfer;
 	uint8_t tx[2] = {SI4461_CMD_READ_CMD_BUFF, 0}; // SI4461_CMD_PART_INFO
 	uint8_t rx[2] = {0};
 
-	uint16_t timeout = CTS_TIMEOUT;
-
-	while(timeout--)
+	uint16_t timeout_cts = CTS_TIMEOUT;
+	while(timeout_cts--)
 	{
 		transfer.txData = tx;
 		transfer.rxData = rx;
@@ -142,30 +139,37 @@ static bool Si4461_wait_for_CTS(void)
 		if(SPI_MasterTransferNonBlocking(SPI_BASE, &g_spi_handle, &transfer)
 				!= kStatus_Success)
 			return false;
-		CHIP_DESELECT();
 
-		uint32_t timeout = 10000;
+		uint32_t timeout = TIMEOUT;
 		while(!g_spi_master_finished_flag && timeout--)
 		{
-			if(timeout == 0)
-				return false;
+			for(int i = 0; i < 10; i++);
+		}
+		CHIP_DESELECT();
+
+		if(timeout == 0)
+		{
+			CHIP_DESELECT();
+			return false;
 		}
 
 		if(rx[1] == 0xFF)
 			return true;
+
+		for(uint8_t i = 0; i < TIMEOUT; i++);
 	}
+
 	return false;
 }
 
 static bool Si4461_write_command(uint8_t cmd, uint8_t *data, size_t data_len)
 {
-//	if(!Si4461_wait_for_CTS())
-//		return false;
+	uint8_t data_send[data_len + 1];
+	data_send[0] = cmd;
+	memcpy(&data_send[1], data, data_len);
 
 	CHIP_SELECT();
-	if(!Si4461_SPI_transfer_no_rx(&cmd, 1))
-		return false;
-	if(!Si4461_SPI_transfer_no_rx(data, data_len))
+	if(!Si4461_SPI_transfer_no_rx(data_send, data_len))
 		return false;
 	CHIP_DESELECT();
 
@@ -209,11 +213,11 @@ static bool Si4461_set_config(const uint8_t *config, size_t config_len)
 	uint16_t pos = 0;
 	uint8_t buff[32] = {0};
 
+	//POWER UP already sent, so skipped
 	config_len = config_len - 1;
 	cmd_len = config[0];
 	pos = cmd_len + 1;
 
-	CHIP_SELECT();
 	while(pos < config_len)
 	{
 		cmd_len = config[pos++] - 1;
@@ -224,7 +228,7 @@ static bool Si4461_set_config(const uint8_t *config, size_t config_len)
 			return false;
 		pos += cmd_len;
 	}
-	CHIP_DESELECT();
+
 	return true;
 }
 
@@ -243,10 +247,36 @@ static bool Si4461_interrupts(void)
 	return true;
 }
 
+static bool Si4461_read_FRR(uint8_t reg, uint8_t *value)
+{
+	uint8_t tx_data = reg;
+	CHIP_SELECT();
+	if(!Si4461_SPI_transfer(&tx_data, 1, value, 1))
+	{
+		CHIP_DESELECT();
+		return false;
+	}
+	CHIP_DESELECT();
+	return true;
+}
+
+static bool Si4461_set_filter(void)
+{
+	uint8_t coeffs[9] = {0x1d, 0xe5, 0xb8, 0xaa, 0xc0, 0xf5, 0x36, 0x6b, 0x7f}; // 6dB@1200 Hz, 2400 Hz
+
+	if(!Si4461_set_properties(0x200f, sizeof(coeffs), coeffs))
+		return false;
+
+	return true;
+
+}
+
 bool Si4461_init(void)
 {
 	spi_master_config_t spi_config = {0};
 	uint32_t source_clock = 0;
+
+	//init SPI
 	SPI_MasterGetDefaultConfig(&spi_config);
 	spi_config.baudRate_Bps = 1000000;
 	spi_config.outputMode = kSPI_SlaveSelectAsGpio;
@@ -261,12 +291,12 @@ bool Si4461_init(void)
 	GPIO_PortSet(SI4461_SDN_GPIO, SI4461_SDN_PIN_MASK);
 	delay(100);
 	GPIO_PortClear(SI4461_SDN_GPIO, SI4461_SDN_PIN_MASK);
-	delay(100);
+	delay(50);
 
 	CHIP_SELECT();
 	Si4461_SPI_transfer_no_rx(power_up, sizeof(power_up));
 	CHIP_DESELECT();
-	delay(100);
+	delay(200);
 
 	//apply startup config
 	if(!Si4461_set_config(Si4461_startup_config, sizeof(Si4461_startup_config)))
@@ -274,11 +304,19 @@ bool Si4461_init(void)
 	//set power
 	if(!Si4461_set_tx_power(127))
 		return false;
+	//set frequency
+	if(!Si4461_set_freq(APRS_FREQUENCY))
+		return false;
 	//read pending interrupts and clear them
 	if(!Si4461_interrupts())
 		return false;
-	//set sleep state
-	if(!Si4461_set_state(SI4461_STATE_SLEEP))
+//	if(!Si4461_set_filter())
+//		return false;
+	//state
+//	if(!Si4461_set_state(SI4461_STATE_SLEEP))
+//		return false;
+	uint8_t state;
+	if(!Si4461_get_state(&state))
 		return false;
 
 	//test device
@@ -287,6 +325,11 @@ bool Si4461_init(void)
 		return false;
 
 	if(info.chip_rev != 0x22 && info.part != 0x4461)
+		return false;
+
+	//get state via FRR
+	uint8_t reg_B = 99;
+	if(!Si4461_read_FRR(SI4461_CMD_READ_FRR_B, &reg_B))
 		return false;
 
 	return true;
@@ -343,7 +386,7 @@ bool Si4461_get_properties(uint16_t start_property, uint8_t length, uint8_t *par
 
 	uint8_t buff[4];
 	buff[0] = SI4461_CMD_GET_PROPERTY;
-	buff[1] = start_property >> 8;
+	buff[1] = (uint8_t)(start_property >> 8);
 	buff[2] = length;
 	buff[3] = (uint8_t)(start_property && 0xFF);
 
@@ -378,7 +421,7 @@ bool Si4461_get_properties(uint16_t start_property, uint8_t length, uint8_t *par
 
 bool Si4461_fifo_reset(void)
 {
-	uint8_t buff[] = {0x03};
+	uint8_t buff[] = {0x01};
 	if(!Si4461_write_command(SI4461_CMD_FIFO_INFO, buff, 1))
 		return false;
 
@@ -408,14 +451,15 @@ bool Si4461_fifo_write(uint8_t *packet, size_t packet_length)
 
 bool Si4461_send_packet(uint8_t *packet, size_t packet_length)
 {
-	si4461_state_t state;
-	if(!Si4461_get_state(&state) || state == SI4461_STATE_TX
-			|| !Si4461_set_state(SI4461_STATE_READY) || !Si4461_fifo_reset()
-			|| !Si4461_interrupts())
+	uint8_t state;
+	if(!Si4461_get_state(&state))
+		return false;
+	if(state == SI4461_STATE_TX)
+		return false;
+	if(!Si4461_fifo_reset())
 		return false;
 
-	if(!Si4461_write_command(SI4461_CMD_WRITE_TX_FIFO, packet,
-							 sizeof(packet_length)))
+	if(!Si4461_fifo_write(packet, packet_length))
 		return false;
 
 	uint8_t data[6] = {0, 0x10, (uint8_t)((packet_length >> 8) & 0x1F),
@@ -424,21 +468,27 @@ bool Si4461_send_packet(uint8_t *packet, size_t packet_length)
 	if(!Si4461_TX(data))
 		return false;
 
-	return true;
+	do
+	{
+		if(!Si4461_get_state(&state))
+			return false;
+	} while(state == SI4461_STATE_TX);
+
+	return state == SI4461_STATE_SLEEP;
 }
 
-bool Si4461_get_state(si4461_state_t *state)
+bool Si4461_get_state(uint8_t *state)
 {
 	uint8_t data[3] = {0};
 
 	if(!Si4461_read_command(SI4461_CMD_REQUEST_DEVICE_STATE, data, sizeof(data)))
 		return false;
 
-	*state = (si4461_state_t)(data[1] & 0x0F);
+	*state = (data[1] & 0x0F);
 	return true;
 }
 
-bool Si4461_set_state(si4461_state_t new_state)
+bool Si4461_set_state(uint8_t new_state)
 {
 	uint8_t data[2] = {SI4461_CMD_CHANGE_STATE, new_state};
 
@@ -467,6 +517,56 @@ bool Si4461_set_tx_power(uint8_t power)
 	buff[1] = power;
 
 	return Si4461_set_properties(SI4463_PROPERTY_PA_MODE, sizeof(buff), buff);
+}
+
+bool Si4461_set_freq(uint32_t freq)
+{
+	uint8_t outdiv = 4;
+	uint8_t band = 0;
+	if(freq < 705000000UL)
+	{
+		outdiv = 6;
+		band = 1;
+	};
+	if(freq < 525000000UL)
+	{
+		outdiv = 8;
+		band = 2;
+	};
+	if(freq < 353000000UL)
+	{
+		outdiv = 12;
+		band = 3;
+	};
+	if(freq < 239000000UL)
+	{
+		outdiv = 16;
+		band = 4;
+	};
+	if(freq < 177000000UL)
+	{
+		outdiv = 24;
+		band = 5;
+	};
+
+	uint32_t f_pfd = 2 * RADIO_CONFIGURATION_DATA_RADIO_XO_FREQ / outdiv;
+	uint32_t n = ((uint32_t)(freq / f_pfd)) - 1;
+	float ratio = (float)freq / (float)f_pfd;
+	float rest = ratio - (float)n;
+	uint32_t m = (uint32_t)(rest * 524288UL);
+	uint32_t m2 = m / 0x10000;
+	uint32_t m1 = (m - m2 * 0x10000) / 0x100;
+	uint32_t m0 = (m - m2 * 0x10000 - m1 * 0x100);
+
+	uint8_t buf[1] = {0b1000 + band};
+	if(!Si4461_set_properties(0x2051, sizeof(buf), buf))
+		return false;
+
+	uint8_t buf2[4] = {n, m2, m1, m0};
+	if(!Si4461_set_properties(0x4000, sizeof(buf2), buf2))
+		return false;
+
+	return false;
 }
 
 bool Si4461_TX(uint8_t *tx_data)

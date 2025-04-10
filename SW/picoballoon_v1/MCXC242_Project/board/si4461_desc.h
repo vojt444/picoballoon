@@ -46,4 +46,15 @@
 //PROPERTIES
 #define SI4463_PROPERTY_PA_MODE                          0x2200
 
+//STATES
+
+#define SI4461_STATE_NOCHANGE         0x00
+#define SI4461_STATE_SLEEP            0x01
+#define SI4461_STATE_SPI_ACTIVE       0x02
+#define SI4461_STATE_READY            0x03
+#define SI4461_STATE_TX_TUNE          0x05
+#define SI4461_STATE_RX_TUNE          0x06
+#define SI4461_STATE_TX               0x07
+#define SI4461_STATE_RX               0x08
+
 #endif /* SI4461_DESC_H_ */

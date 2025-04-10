@@ -34,3 +34,9 @@ void pad_string(char *str, size_t desired_length)
 		str[desired_length] = '\0';
 	}
 }
+
+void uint16_to_little_endian(uint16_t value, uint8_t *buffer)
+{
+	buffer[0] = (uint8_t)(value & 0xFF);
+	buffer[1] = (uint8_t)((value >> 8) & 0xFF);
+}

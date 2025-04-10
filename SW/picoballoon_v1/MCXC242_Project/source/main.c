@@ -17,6 +17,7 @@
 #include "clock_config.h"
 #include "fsl_debug_console.h"
 #include "fsl_adc16.h"
+#include "ublox_max_m10m.h"
 
 #include "MCP9802.h"
 #include "si4461.h"
@@ -53,7 +54,7 @@ void ADC0_IRQHandler(void)
 int main(void)
 {
 	//basic init
-	BOARD_InitBootPins();
+ 	BOARD_InitBootPins();
 	BOARD_InitBootClocks();
 	BOARD_InitBootPeripherals();
 
@@ -78,6 +79,9 @@ int main(void)
 		while(1);
 	}
 
+	//GNSS
+	//max_m10_init();
+
 	//temp sensor vars
 	float temperature = 0;
 	//I2C for temp sensor init
@@ -85,12 +89,13 @@ int main(void)
 	//read the temperature
 	MCP9802_read_temperature_oneshot(&temperature);
 
+	//pressure
+
+
 	//init Si4461
 	si4461_info_t si4461_info;
-	si4461_state_t state;
-	si4461_state_t new_state = SI4461_STATE_SPI_ACTIVE;
-	Si4461_init();
-	Si4461_get_info(&si4461_info);
+	//Si4461_init();
+	//Si4461_get_info(&si4461_info);
 
 	//APRS
 	//uint8_t test_packet[64] = "OK4VP-0>APRS,WIDE1-1,WIDE2-1:!4913.19N/01635.44W-Test message";

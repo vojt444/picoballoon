@@ -18,6 +18,8 @@ extern "C" {
 
 void delay(uint32_t n);
 void pad_string(char *str, size_t desired_length);
+void uint16_to_little_endian(uint16_t value, uint8_t *buffer);
+
 
 #ifdef __cplusplus
 }

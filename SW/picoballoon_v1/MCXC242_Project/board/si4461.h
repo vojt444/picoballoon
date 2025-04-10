@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "radio_config.h"
 #include "si4461_desc.h"
+#include "aprs.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -32,7 +33,7 @@ extern "C"
 #define SI4461_CS_PIN_MASK			(1 << SI4461_CS_PIN)
 
 #define CTS_TIMEOUT					5000
-#define TIMEOUT						1000
+#define TIMEOUT						10000
 
 typedef struct
 {
@@ -50,29 +51,17 @@ typedef struct
 	uint8_t tx_fifo_count;
 } si4461_fifo_info_t;
 
-typedef enum
-{
-	SI4461_STATE_NO_CHANGE = 0,
-	SI4461_STATE_SLEEP = 1,
-	SI4461_STATE_SPI_ACTIVE = 2,
-	SI4461_STATE_READY = 3,
-	SI4461_STATE_READY2 = 4,
-	SI4461_STATE_TUNE_TX = 5,
-	SI4461_STATE_TUNE_RX = 6,
-	SI4461_STATE_TX = 7,
-	SI4461_STATE_RX = 8
-} si4461_state_t;
-
 bool Si4461_init(void);
 bool Si4461_get_info(si4461_info_t *info);
 bool Si4461_set_properties(uint16_t start_property, uint8_t length,
 						   uint8_t *params);
 bool Si4461_get_properties(uint16_t start_property, uint8_t length,
 						   uint8_t *params);
-bool Si4461_get_state(si4461_state_t *state);
-bool Si4461_set_state(si4461_state_t new_state);
+bool Si4461_get_state(uint8_t *state);
+bool Si4461_set_state(uint8_t new_state);
 bool Si4461_NOP(void);
 bool Si4461_set_tx_power(uint8_t power);
+bool Si4461_set_freq(uint32_t freq);
 bool Si4461_fifo_reset(void);
 bool Si4461_fifo_info(si4461_fifo_info_t *fifo_info);
 bool Si4461_fifo_write(uint8_t *packet, size_t packet_length);

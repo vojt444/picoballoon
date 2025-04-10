@@ -14,12 +14,16 @@ mcu_data: ksdk2_0
 processor_version: 24.12.10
 board: FRDM-MCXC242
 pin_labels:
+- {pin_num: '1', pin_signal: PTE0/CLKOUT32K/SPI1_MISO/LPUART1_TX/RTC_CLKOUT/CMP0_OUT/I2C1_SDA, label: 'J3[1]/UART1_TX', identifier: SDA_GNSS}
 - {pin_num: '53', pin_signal: CMP0_IN2/PTC8/I2C0_SCL/TPM0_CH4, label: D7-TPM0_CH4/CMP0_IN2, identifier: nIRQ}
 - {pin_num: '49', pin_signal: PTC4/LLWU_P8/SPI0_PCS0/LPUART1_TX/TPM0_CH3/SPI1_PCS0, label: D10-SPI0_CS0, identifier: CS}
 - {pin_num: '51', pin_signal: CMP0_IN0/PTC6/LLWU_P10/SPI0_MOSI/EXTRG_IN/SPI0_MISO, label: D11-SPI0_MOSI, identifier: MOSI}
 - {pin_num: '52', pin_signal: CMP0_IN1/PTC7/SPI0_MISO/USB_SOF_OUT/SPI0_MOSI, label: D12-SPI0_MISO, identifier: MISO}
 - {pin_num: '50', pin_signal: PTC5/LLWU_P9/SPI0_SCK/LPTMR0_ALT2/CMP0_OUT, label: D13-SPI0_SCK, identifier: SCLK}
+- {pin_num: '63', pin_signal: ADC0_SE7b/PTD6/LLWU_P15/SPI1_MOSI/LPUART0_RX/I2C1_SDA/SPI1_MISO/FXIO0_D6, label: D14-I2C1_SDA/ACCELL_SDA, identifier: RX}
+- {pin_num: '64', pin_signal: PTD7/SPI1_MISO/LPUART0_TX/I2C1_SCL/SPI1_MOSI/FXIO0_D7, label: D15-I2C1_SCL/ACCELL_SCL, identifier: TX}
 - {pin_num: '9', pin_signal: ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/LPUART0_TX/FXIO0_D4, label: A2-ADC0_SE0, identifier: voltage;VOLTAGE}
+- {pin_num: '2', pin_signal: PTE1/SPI1_MOSI/LPUART1_RX/SPI1_MISO/I2C1_SCL, label: 'J3[3]/UART1_RX', identifier: SCL_GNSS}
 - {pin_num: '46', pin_signal: PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT, label: 'J2[15]', identifier: SDN}
 - {pin_num: '38', pin_signal: ADC0_SE13/PTB3/I2C0_SDA/TPM2_CH1, label: 'J1[13]', identifier: SDA_TEMP}
 - {pin_num: '37', pin_signal: ADC0_SE12/PTB2/I2C0_SCL/TPM2_CH0, label: 'J1[15]', identifier: SCL_TEMP}
@@ -60,6 +64,10 @@ BOARD_InitPins:
   - {pin_num: '51', peripheral: SPI0, signal: MOSI, pin_signal: CMP0_IN0/PTC6/LLWU_P10/SPI0_MOSI/EXTRG_IN/SPI0_MISO, direction: OUTPUT}
   - {pin_num: '52', peripheral: SPI0, signal: MISO, pin_signal: CMP0_IN1/PTC7/SPI0_MISO/USB_SOF_OUT/SPI0_MOSI, direction: INPUT}
   - {pin_num: '53', peripheral: GPIOC, signal: 'GPIO, 8', pin_signal: CMP0_IN2/PTC8/I2C0_SCL/TPM0_CH4, direction: OUTPUT}
+  - {pin_num: '1', peripheral: I2C1, signal: SDA, pin_signal: PTE0/CLKOUT32K/SPI1_MISO/LPUART1_TX/RTC_CLKOUT/CMP0_OUT/I2C1_SDA}
+  - {pin_num: '2', peripheral: I2C1, signal: SCL, pin_signal: PTE1/SPI1_MOSI/LPUART1_RX/SPI1_MISO/I2C1_SCL}
+  - {pin_num: '64', peripheral: LPUART0, signal: TX, pin_signal: PTD7/SPI1_MISO/LPUART0_TX/I2C1_SCL/SPI1_MOSI/FXIO0_D7, direction: OUTPUT}
+  - {pin_num: '63', peripheral: LPUART0, signal: RX, pin_signal: ADC0_SE7b/PTD6/LLWU_P15/SPI1_MOSI/LPUART0_RX/I2C1_SDA/SPI1_MISO/FXIO0_D6}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -76,6 +84,8 @@ void BOARD_InitPins(void)
     CLOCK_EnableClock(kCLOCK_PortB);
     /* Port C Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortC);
+    /* Port D Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortD);
     /* Port E Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortE);
 
@@ -131,11 +141,33 @@ void BOARD_InitPins(void)
     /* PORTC8 (pin 53) is configured as PTC8 */
     PORT_SetPinMux(BOARD_INITPINS_nIRQ_PORT, BOARD_INITPINS_nIRQ_PIN, kPORT_MuxAsGpio);
 
+    /* PORTD6 (pin 63) is configured as LPUART0_RX */
+    PORT_SetPinMux(BOARD_INITPINS_RX_PORT, BOARD_INITPINS_RX_PIN, kPORT_MuxAlt3);
+
+    /* PORTD7 (pin 64) is configured as LPUART0_TX */
+    PORT_SetPinMux(BOARD_INITPINS_TX_PORT, BOARD_INITPINS_TX_PIN, kPORT_MuxAlt3);
+
+    /* PORTE0 (pin 1) is configured as I2C1_SDA */
+    PORT_SetPinMux(BOARD_INITPINS_SDA_GNSS_PORT, BOARD_INITPINS_SDA_GNSS_PIN, kPORT_MuxAlt6);
+
+    /* PORTE1 (pin 2) is configured as I2C1_SCL */
+    PORT_SetPinMux(BOARD_INITPINS_SCL_GNSS_PORT, BOARD_INITPINS_SCL_GNSS_PIN, kPORT_MuxAlt6);
+
     /* PORTE20 (pin 9) is configured as ADC0_SE0 */
     PORT_SetPinMux(BOARD_INITPINS_VOLTAGE_PORT, BOARD_INITPINS_VOLTAGE_PIN, kPORT_PinDisabledOrAnalog);
 
     /* PORTE29 (pin 17) is configured as PTE29 */
     PORT_SetPinMux(BOARD_INITPINS_LED_PORT, BOARD_INITPINS_LED_PIN, kPORT_MuxAsGpio);
+
+    SIM->SOPT5 = ((SIM->SOPT5 &
+                   /* Mask bits to zero which are setting */
+                   (~(SIM_SOPT5_LPUART0TXSRC_MASK | SIM_SOPT5_LPUART0RXSRC_MASK)))
+
+                  /* LPUART0 Transmit Data Source Select: LPUART0_TX pin. */
+                  | SIM_SOPT5_LPUART0TXSRC(SOPT5_LPUART0TXSRC_LPUART_TX)
+
+                  /* LPUART0 Receive Data Source Select: LPUART_RX pin. */
+                  | SIM_SOPT5_LPUART0RXSRC(SOPT5_LPUART0RXSRC_LPUART_RX));
 }
 /***********************************************************************************************************************
  * EOF

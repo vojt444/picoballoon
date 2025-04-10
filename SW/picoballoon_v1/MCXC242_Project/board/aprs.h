@@ -18,6 +18,7 @@ extern "C"
 {
 #endif
 
+#define APRS_FREQUENCY	144800000UL
 #define CALLSIGN_LEN	6
 
 void ax25_encode_callsign(char *callsign, uint8_t ssid, uint8_t *encoded);
