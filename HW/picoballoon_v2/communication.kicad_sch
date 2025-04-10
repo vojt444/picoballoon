@@ -254,27 +254,28 @@
 				)
 			)
 		)
-		(symbol "Device:Crystal"
-			(pin_numbers hide)
+		(symbol "Device:Crystal_GND23"
 			(pin_names
 				(offset 1.016) hide)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "Y"
-				(at 0 3.81 0)
+				(at 3.175 5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify left)
 				)
 			)
-			(property "Value" "Crystal"
-				(at 0 -3.81 0)
+			(property "Value" "Crystal_GND23"
+				(at 3.175 3.175 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
+					(justify left)
 				)
 			)
 			(property "Footprint" ""
@@ -295,7 +296,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Two pin crystal"
+			(property "Description" "Four pin crystal, GND on pins 2 and 3"
 				(at 0 0 0)
 				(effects
 					(font
@@ -322,7 +323,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "Crystal_0_1"
+			(symbol "Crystal_GND23_0_1"
 				(rectangle
 					(start -1.143 2.54)
 					(end 1.143 -2.54)
@@ -336,7 +337,7 @@
 				)
 				(polyline
 					(pts
-						(xy -2.54 0) (xy -1.905 0)
+						(xy -2.54 0) (xy -2.032 0)
 					)
 					(stroke
 						(width 0)
@@ -348,7 +349,7 @@
 				)
 				(polyline
 					(pts
-						(xy -1.905 -1.27) (xy -1.905 1.27)
+						(xy -2.032 -1.27) (xy -2.032 1.27)
 					)
 					(stroke
 						(width 0.508)
@@ -360,7 +361,31 @@
 				)
 				(polyline
 					(pts
-						(xy 1.905 -1.27) (xy 1.905 1.27)
+						(xy 0 -3.81) (xy 0 -3.556)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 3.556) (xy 0 3.81)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.032 -1.27) (xy 2.032 1.27)
 					)
 					(stroke
 						(width 0.508)
@@ -372,7 +397,31 @@
 				)
 				(polyline
 					(pts
-						(xy 2.54 0) (xy 1.905 0)
+						(xy 2.032 0) (xy 2.54 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 -2.286) (xy -2.54 -3.556) (xy 2.54 -3.556) (xy 2.54 -2.286)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 2.286) (xy -2.54 3.556) (xy 2.54 3.556) (xy 2.54 2.286)
 					)
 					(stroke
 						(width 0)
@@ -383,7 +432,7 @@
 					)
 				)
 			)
-			(symbol "Crystal_1_1"
+			(symbol "Crystal_GND23_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 1.27)
@@ -403,7 +452,7 @@
 					)
 				)
 				(pin passive line
-					(at 3.81 0 180)
+					(at 0 5.08 270)
 					(length 1.27)
 					(name "2"
 						(effects
@@ -413,6 +462,42 @@
 						)
 					)
 					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 90)
+					(length 1.27)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 1.27)
+					(name "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1384,16 +1469,6 @@
 	)
 	(wire
 		(pts
-			(xy 130.81 87.63) (xy 124.46 87.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "10b6b2ab-30ea-4e4b-bb0c-b45f5f0fc1c7")
-	)
-	(wire
-		(pts
 			(xy 143.51 105.41) (xy 143.51 109.22)
 		)
 		(stroke
@@ -1484,6 +1559,16 @@
 	)
 	(wire
 		(pts
+			(xy 104.14 82.55) (xy 102.87 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d0e0461-b1f2-4c6b-8dd9-f57593221f54")
+	)
+	(wire
+		(pts
 			(xy 219.71 85.09) (xy 219.71 87.63)
 		)
 		(stroke
@@ -1564,16 +1649,6 @@
 	)
 	(wire
 		(pts
-			(xy 124.46 87.63) (xy 124.46 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "435b7a50-8104-4acf-9a09-acdb0ed5671a")
-	)
-	(wire
-		(pts
 			(xy 207.01 87.63) (xy 207.01 85.09)
 		)
 		(stroke
@@ -1631,16 +1706,6 @@
 			(type default)
 		)
 		(uuid "5f1154b7-14b1-4bef-a9c7-24a4f724989f")
-	)
-	(wire
-		(pts
-			(xy 124.46 77.47) (xy 124.46 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "68ba9932-be1a-4673-a04d-a22f63deb865")
 	)
 	(wire
 		(pts
@@ -1764,16 +1829,6 @@
 	)
 	(wire
 		(pts
-			(xy 130.81 77.47) (xy 124.46 77.47)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9a5517a9-c459-4640-8c8c-04e8840c63f9")
-	)
-	(wire
-		(pts
 			(xy 127 90.17) (xy 133.35 90.17)
 		)
 		(stroke
@@ -1784,6 +1839,26 @@
 	)
 	(wire
 		(pts
+			(xy 109.22 77.47) (xy 130.81 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ab01918a-0115-41b5-9006-44d7a3b40a0c")
+	)
+	(wire
+		(pts
+			(xy 102.87 82.55) (xy 102.87 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b06f1d9d-9cc0-4d14-ba2d-c56b0078161e")
+	)
+	(wire
+		(pts
 			(xy 194.31 74.93) (xy 194.31 77.47)
 		)
 		(stroke
@@ -1791,6 +1866,26 @@
 			(type default)
 		)
 		(uuid "bbe708ee-fc46-45e7-af60-b1b82bd97e4b")
+	)
+	(wire
+		(pts
+			(xy 109.22 77.47) (xy 109.22 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c60ccbed-4ae6-4ad4-9078-6c3edeaaa3d8")
+	)
+	(wire
+		(pts
+			(xy 115.57 82.55) (xy 115.57 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c8ca851e-01f5-4b0c-b451-03ab8a902729")
 	)
 	(wire
 		(pts
@@ -1844,6 +1939,16 @@
 	)
 	(wire
 		(pts
+			(xy 114.3 82.55) (xy 115.57 82.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e930a6ba-bebe-4d85-a0ab-fe0ebff30866")
+	)
+	(wire
+		(pts
 			(xy 142.24 179.07) (xy 142.24 181.61)
 		)
 		(stroke
@@ -1851,6 +1956,26 @@
 			(type default)
 		)
 		(uuid "eb2c53d3-94c3-4ee1-8336-d2945a11bcd4")
+	)
+	(wire
+		(pts
+			(xy 109.22 87.63) (xy 109.22 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eba9b5a3-1a4a-49ad-935e-48948c1df5d7")
+	)
+	(wire
+		(pts
+			(xy 109.22 87.63) (xy 130.81 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ec7d3107-5041-4f05-9c54-111fac38b979")
 	)
 	(wire
 		(pts
@@ -2163,6 +2288,71 @@
 			(project ""
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/0be041e6-a91d-4835-9904-cb6208b1f90b"
 					(reference "L5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 102.87 90.17 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "28e87bc8-80dd-4fa9-aa50-6f12c39eb180")
+		(property "Reference" "#PWR034"
+			(at 102.87 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 102.87 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 102.87 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 102.87 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 102.87 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c1a242df-8060-492c-b231-5fb149903b2f")
+		)
+		(instances
+			(project "picoballoon"
+				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/0be041e6-a91d-4835-9904-cb6208b1f90b"
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
@@ -2576,35 +2766,32 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:Crystal")
-		(at 124.46 82.55 90)
-		(mirror x)
+		(lib_id "Device:Crystal_GND23")
+		(at 109.22 82.55 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "7fb2bf2b-74c7-4d4d-af0e-0373f3365f98")
+		(uuid "79f952d4-f17a-4227-9b28-5ec4d35dce49")
 		(property "Reference" "Y1"
-			(at 121.92 81.534 90)
+			(at 105.918 77.216 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Value" "30M"
-			(at 121.666 83.312 90)
+			(at 105.664 74.676 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" "Library:ECS3002030BDUTR"
-			(at 124.46 82.55 0)
+		(property "Footprint" ""
+			(at 109.22 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2613,7 +2800,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 124.46 82.55 0)
+			(at 109.22 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2621,8 +2808,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Two pin crystal"
-			(at 124.46 82.55 0)
+		(property "Description" "Four pin crystal, GND on pins 2 and 3"
+			(at 109.22 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2631,10 +2818,16 @@
 			)
 		)
 		(pin "2"
-			(uuid "d37bde6d-1b97-4a59-b6c7-a6975393925b")
+			(uuid "55aff968-4a9f-4e38-b5ce-559798d3b834")
 		)
 		(pin "1"
-			(uuid "16e52e52-3bcf-45a4-ad79-d50406dc0764")
+			(uuid "1763c109-6602-4499-a5d8-6f36797e56ff")
+		)
+		(pin "4"
+			(uuid "1daed853-10a1-491c-8a56-305660ad963c")
+		)
+		(pin "3"
+			(uuid "bb1422be-1989-4bec-b1a3-3b75c4839d0e")
 		)
 		(instances
 			(project ""
@@ -2706,6 +2899,71 @@
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/0be041e6-a91d-4835-9904-cb6208b1f90b"
 					(reference "#PWR053")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 115.57 90.17 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "88b395b5-b9a4-40b7-8261-47d305e11926")
+		(property "Reference" "#PWR065"
+			(at 115.57 96.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 115.57 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 115.57 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 115.57 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "99121028-914d-45a7-853f-36bccc0cdf28")
+		)
+		(instances
+			(project "picoballoon"
+				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/0be041e6-a91d-4835-9904-cb6208b1f90b"
+					(reference "#PWR065")
 					(unit 1)
 				)
 			)
