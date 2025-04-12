@@ -10,7 +10,7 @@
 		(company "Vojtech Piroch")
 	)
 	(lib_symbols
-		(symbol "Device:Antenna"
+		(symbol "Device:Antenna_Shield"
 			(pin_numbers hide)
 			(pin_names
 				(offset 1.016) hide)
@@ -18,7 +18,7 @@
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "AE"
-				(at -1.905 1.905 0)
+				(at -1.905 4.445 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -26,8 +26,8 @@
 					(justify right)
 				)
 			)
-			(property "Value" "Antenna"
-				(at -1.905 0 0)
+			(property "Value" "Antenna_Shield"
+				(at -1.905 2.54 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -36,7 +36,7 @@
 				)
 			)
 			(property "Footprint" ""
-				(at 0 0 0)
+				(at 0 2.54 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -45,7 +45,7 @@
 				)
 			)
 			(property "Datasheet" "~"
-				(at 0 0 0)
+				(at 0 2.54 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -53,7 +53,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Antenna"
+			(property "Description" "Antenna with extra pin for shielding"
 				(at 0 0 0)
 				(effects
 					(font
@@ -71,10 +71,46 @@
 					(hide yes)
 				)
 			)
-			(symbol "Antenna_0_1"
+			(symbol "Antenna_Shield_0_1"
+				(arc
+					(start -0.508 -1.143)
+					(mid -0.8429 -2.1194)
+					(end 0 -2.667)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 -2.667)
+					(mid 0.7989 -2.1052)
+					(end 0.508 -1.143)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(polyline
 					(pts
-						(xy 0 2.54) (xy 0 -3.81)
+						(xy 0 -2.54) (xy 0 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 5.08) (xy 0 -3.81)
 					)
 					(stroke
 						(width 0.254)
@@ -86,7 +122,31 @@
 				)
 				(polyline
 					(pts
-						(xy 1.27 2.54) (xy 0 -2.54) (xy -1.27 2.54)
+						(xy 0.762 -1.905) (xy 2.54 -1.905)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 -1.905)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 5.08) (xy 0 0) (xy -1.27 5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -94,10 +154,21 @@
 					)
 					(fill
 						(type none)
+					)
+				)
+				(circle
+					(center 0.762 -1.905)
+					(radius 0.1778)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 			)
-			(symbol "Antenna_1_1"
+			(symbol "Antenna_Shield_1_1"
 				(pin input line
 					(at 0 -5.08 90)
 					(length 2.54)
@@ -109,6 +180,24 @@
 						)
 					)
 					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(name "Shield"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1789,6 +1878,16 @@
 	)
 	(wire
 		(pts
+			(xy 232.41 73.66) (xy 232.41 74.93)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7e006acc-54d0-42ed-bda5-36bd5dcf63ca")
+	)
+	(wire
+		(pts
 			(xy 144.78 62.23) (xy 144.78 66.04)
 		)
 		(stroke
@@ -1839,6 +1938,16 @@
 	)
 	(wire
 		(pts
+			(xy 226.06 73.66) (xy 232.41 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e42702f-6741-4b26-afe4-e0fc3dc9e6d2")
+	)
+	(wire
+		(pts
 			(xy 109.22 77.47) (xy 130.81 77.47)
 		)
 		(stroke
@@ -1886,6 +1995,16 @@
 			(type default)
 		)
 		(uuid "c8ca851e-01f5-4b0c-b451-03ab8a902729")
+	)
+	(wire
+		(pts
+			(xy 226.06 72.39) (xy 226.06 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf58fe3b-1604-4b80-8646-804437b591bc")
 	)
 	(wire
 		(pts
@@ -2158,6 +2277,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:Antenna_Shield")
+		(at 223.52 67.31 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "12e56a47-e0c3-4bae-a630-462ff5700dd8")
+		(property "Reference" "AE1"
+			(at 227.33 65.4049 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Antenna"
+			(at 227.33 67.9449 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Library:BNC_Connector_PCB"
+			(at 223.52 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 223.52 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Antenna with extra pin for shielding"
+			(at 223.52 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "54bfab53-baee-4fcd-ac0e-b4f931e503c9")
+		)
+		(pin "2"
+			(uuid "d22f783f-f2e2-4ff6-982d-ca0dd381bf0e")
+		)
+		(instances
+			(project ""
+				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/0be041e6-a91d-4835-9904-cb6208b1f90b"
+					(reference "AE1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:L")
 		(at 187.96 74.93 90)
 		(unit 1)
@@ -2423,73 +2612,6 @@
 			(project "picoballoon"
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/0be041e6-a91d-4835-9904-cb6208b1f90b"
 					(reference "C33")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Antenna")
-		(at 223.52 67.31 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "47ae89bf-471c-4d24-b1a9-33977c538d95")
-		(property "Reference" "AE2"
-			(at 226.06 66.6749 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Antenna"
-			(at 226.06 69.2149 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Library:BNC_Connector_PCB"
-			(at 223.52 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 223.52 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Antenna"
-			(at 223.52 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "7de848f8-c91d-4372-b135-2001658378b1")
-		)
-		(instances
-			(project ""
-				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/0be041e6-a91d-4835-9904-cb6208b1f90b"
-					(reference "AE2")
 					(unit 1)
 				)
 			)
@@ -2790,7 +2912,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Library:ECS3002030BDUTR"
 			(at 109.22 82.55 0)
 			(effects
 				(font
@@ -3637,6 +3759,72 @@
 			(project ""
 				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/0be041e6-a91d-4835-9904-cb6208b1f90b"
 					(reference "C29")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 232.41 74.93 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ee4e9dba-f244-44d5-85d5-f0a64d157ea7")
+		(property "Reference" "#PWR011"
+			(at 232.41 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 232.41 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 232.41 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 232.41 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 232.41 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d35d9ffa-d16b-4434-b53e-7fd936828501")
+		)
+		(instances
+			(project "picoballoon"
+				(path "/f2ac4b1c-d093-4228-80b2-7ee26b75b20f/0be041e6-a91d-4835-9904-cb6208b1f90b"
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)

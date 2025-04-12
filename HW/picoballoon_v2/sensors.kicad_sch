@@ -1204,7 +1204,7 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 49.53) (xy 50.8 49.53)
+			(xy 44.45 49.53) (xy 50.8 49.53)
 		)
 		(stroke
 			(width 0)
@@ -1214,7 +1214,7 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 52.07) (xy 50.8 52.07)
+			(xy 44.45 52.07) (xy 50.8 52.07)
 		)
 		(stroke
 			(width 0)
@@ -1244,16 +1244,6 @@
 	)
 	(wire
 		(pts
-			(xy 151.13 175.26) (xy 161.29 175.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aa2b3aef-8104-491b-babe-e4a07cd6d40c")
-	)
-	(wire
-		(pts
 			(xy 228.6 59.69) (xy 228.6 60.96)
 		)
 		(stroke
@@ -1271,16 +1261,6 @@
 			(type default)
 		)
 		(uuid "b6a2f94c-71d9-4f88-be92-ed235bcb16e2")
-	)
-	(wire
-		(pts
-			(xy 151.13 177.8) (xy 161.29 177.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ba42bb1f-1d10-4ea6-a09b-751f62791e87")
 	)
 	(wire
 		(pts
@@ -1442,8 +1422,8 @@
 		)
 		(uuid "38b12ff4-2c25-47f5-98ca-7f0a6600d144")
 	)
-	(label "SDA_TEMP"
-		(at 40.64 49.53 0)
+	(label "SDA"
+		(at 44.45 49.53 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1453,30 +1433,8 @@
 		)
 		(uuid "66043acf-6ee0-4136-812a-0d4cb7e2bb80")
 	)
-	(label "SDA_TEMP"
-		(at 151.13 175.26 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "6f7fbb44-6a6b-4aeb-b511-30f0ff6183fa")
-	)
-	(label "SCL_TEMP"
-		(at 151.13 177.8 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "8557e797-8992-4cb4-8081-83f2bdbf98cd")
-	)
-	(label "SCL_TEMP"
-		(at 40.64 52.07 0)
+	(label "SCL"
+		(at 44.45 52.07 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1541,18 +1499,6 @@
 		)
 		(uuid "e9f53d65-6498-4546-a8c1-0365a181df3b")
 	)
-	(hierarchical_label "SDA_TEMP"
-		(shape bidirectional)
-		(at 161.29 175.26 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "1af58fb2-8e82-45db-b51b-da17ec58532f")
-	)
 	(hierarchical_label "SDA"
 		(shape bidirectional)
 		(at 161.29 181.61 0)
@@ -1564,18 +1510,6 @@
 			(justify left)
 		)
 		(uuid "2b95870e-f71a-46a8-9890-b56b250c41d5")
-	)
-	(hierarchical_label "SCL_TEMP"
-		(shape input)
-		(at 161.29 177.8 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "3a53756a-ff6b-4e8e-aedf-e135ef995e01")
 	)
 	(hierarchical_label "SCL"
 		(shape input)
