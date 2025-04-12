@@ -9660,7 +9660,7 @@
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "ffd8e7ff-30f4-4c06-af17-707c797d16f4")
+			(uuid "765b4799-5238-4672-b8f5-75bfa33cb028")
 		)
 		(fp_line
 			(start 1.57753 5.775)
@@ -9743,6 +9743,16 @@
 			(uuid "e8b39165-8e94-42b0-80c9-950e8bdc9aed")
 		)
 		(fp_line
+			(start -1.13 3.68)
+			(end -1.13 5.775)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "4088ca3b-4c1d-4466-8f9e-3f895b03fcab")
+		)
+		(fp_line
 			(start -1.13 0.76)
 			(end -0.563471 0.76)
 			(stroke
@@ -9751,16 +9761,6 @@
 			)
 			(layer "F.SilkS")
 			(uuid "8bd5f50a-9d63-4331-8c79-546c54fa87a2")
-		)
-		(fp_line
-			(start -1.13 0.76)
-			(end -1.13 5.775)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "765b4799-5238-4672-b8f5-75bfa33cb028")
 		)
 		(fp_line
 			(start -1.13 0)
@@ -9781,6 +9781,46 @@
 			)
 			(layer "F.SilkS")
 			(uuid "45efee04-0ef5-451a-b84f-8eebde2e5781")
+		)
+		(fp_line
+			(start -1.14 0.76)
+			(end -1.14 1.4)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "c6c286d6-b568-41e5-a6b6-97742ad6bccf")
+		)
+		(fp_line
+			(start -1.555 3.67)
+			(end -1.125 3.67)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "39f3933c-ab04-4cf6-a044-b600780e8307")
+		)
+		(fp_line
+			(start -1.57 1.39)
+			(end -1.57 3.67)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "ffd8e7ff-30f4-4c06-af17-707c797d16f4")
+		)
+		(fp_line
+			(start -1.575 1.4)
+			(end -1.14 1.4)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "e8b838a7-8dfc-4d38-aea8-f1c0c8ecd0db")
 		)
 		(fp_line
 			(start 2.85 6.25)
@@ -20536,7 +20576,7 @@
 			(justify left bottom)
 		)
 	)
-	(gr_text "Vojtech Piroch\nPicoballoon v2\nvojta.piroch@gmail.com\n2024/25"
+	(gr_text "Vojtech Piroch\nPicoballoon v2\n2024/25"
 		(at 138.81 95.68 0)
 		(layer "B.SilkS")
 		(uuid "91a0751a-512c-48dc-8d12-5b55b537f6c5")
