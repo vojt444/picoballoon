@@ -829,7 +829,7 @@
 		(path "/4642c74f-a21d-4819-82a4-3921732966b9/edc9c448-5f9a-4b60-9e56-9f1361cbc161")
 		(sheetname "power")
 		(sheetfile "power.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start 1.33 1.27)
 			(end 1.33 3.87)
@@ -1913,7 +1913,7 @@
 		(path "/5f4497d1-ad88-4b05-809e-a165ed29847c/6105a719-7f66-460d-8a42-75d4ce37904f")
 		(sheetname "GNSS")
 		(sheetfile "GNSS.kicad_sch")
-		(attr smd)
+		(attr smd exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -0.254724 0.5225)
 			(end 0.254724 0.5225)
@@ -6058,7 +6058,7 @@
 		(path "/0be041e6-a91d-4835-9904-cb6208b1f90b/12e56a47-e0c3-4bae-a630-462ff5700dd8")
 		(sheetname "communication")
 		(sheetfile "communication.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_pos_files exclude_from_bom)
 		(pad "1" thru_hole circle
 			(at 0 0 90)
 			(size 2.2 2.2)
@@ -9647,7 +9647,7 @@
 		(path "/8059447a-8e8c-46c9-a8b1-990df3c352b3")
 		(sheetname "Root")
 		(sheetfile "picoballoon.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start 2.4 -0.695)
 			(end 2.4 5.775)
@@ -16454,7 +16454,7 @@
 		(path "/4642c74f-a21d-4819-82a4-3921732966b9/1d2ab858-47a6-4dd6-bfcd-1c1773b121d7")
 		(sheetname "power")
 		(sheetfile "power.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_pos_files exclude_from_bom)
 		(fp_text user "${REFERENCE}"
 			(at 0 2.5 0)
 			(unlocked yes)
@@ -19887,7 +19887,7 @@
 		(path "/4642c74f-a21d-4819-82a4-3921732966b9/a0841376-8e9d-4922-8198-1fb3e7de4e16")
 		(sheetname "power")
 		(sheetfile "power.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_pos_files exclude_from_bom)
 		(fp_line
 			(start -1.33 -1.33)
 			(end 0 -1.33)
