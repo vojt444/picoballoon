@@ -8,8 +8,8 @@
 #ifndef MCP9802_H_
 #define MCP9802_H_
 
+#include <i2c_ctrl.h>
 #include "board.h"
-#include "fsl_i2c.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,8 +21,6 @@ extern "C" {
 #define MCP9802_REG_TSET		0x03U
 
 #define MCP9802_ADDRESS			0x48U
-#define MCP9802_I2C				I2C0
-#define I2C_MASTER_CLK_FREQ 	CLOCK_GetFreq(I2C0_CLK_SRC)
 
 #define MCP9802_INIT_CONFIG	 	0x21U //0b0010_0001 init config suitable for picoballoon project
 #define MCP9802_ONESHOT_READ 	0xA1U

@@ -7,12 +7,12 @@
 #ifndef SI4461_H_
 #define SI4461_H_
 
+#include "radio_config.h"
 #include <string.h>
 #include <stdbool.h>
 #include "fsl_spi.h"
 #include "board.h"
 #include "utils.h"
-#include "radio_config.h"
 #include "si4461_desc.h"
 #include "aprs.h"
 
@@ -51,7 +51,7 @@ typedef struct
 	uint8_t tx_fifo_count;
 } si4461_fifo_info_t;
 
-bool Si4461_init(void);
+bool Si4461_init(uint32_t frequency);
 bool Si4461_get_info(si4461_info_t *info);
 bool Si4461_set_properties(uint16_t start_property, uint8_t length,
 						   uint8_t *params);
@@ -67,6 +67,7 @@ bool Si4461_fifo_info(si4461_fifo_info_t *fifo_info);
 bool Si4461_fifo_write(uint8_t *packet, size_t packet_length);
 bool Si4461_send_packet(uint8_t *packet, size_t packet_length);
 bool Si4461_TX(uint8_t *tx_data);
+void Si4461_shutdown(void);
 
 #ifdef __cplusplus
 }

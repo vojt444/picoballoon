@@ -23,7 +23,11 @@ pin_labels:
 - {pin_num: '63', pin_signal: ADC0_SE7b/PTD6/LLWU_P15/SPI1_MOSI/LPUART0_RX/I2C1_SDA/SPI1_MISO/FXIO0_D6, label: D14-I2C1_SDA/ACCELL_SDA, identifier: RX}
 - {pin_num: '64', pin_signal: PTD7/SPI1_MISO/LPUART0_TX/I2C1_SCL/SPI1_MOSI/FXIO0_D7, label: D15-I2C1_SCL/ACCELL_SCL, identifier: TX}
 - {pin_num: '9', pin_signal: ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/LPUART0_TX/FXIO0_D4, label: A2-ADC0_SE0, identifier: voltage;VOLTAGE}
+- {pin_num: '36', pin_signal: ADC0_SE9/PTB1/I2C0_SDA/TPM1_CH1/SPI1_MISO/SPI1_MOSI, label: A4-I2C0_SDA/ADC0_SE9, identifier: SDA_SENS}
+- {pin_num: '35', pin_signal: ADC0_SE8/PTB0/LLWU_P5/I2C0_SCL/TPM1_CH0/SPI1_MOSI/SPI1_MISO, label: A5-I2C0_SCL/ADC0_SE8, identifier: SC_SENS;SCL_SENS}
 - {pin_num: '2', pin_signal: PTE1/SPI1_MOSI/LPUART1_RX/SPI1_MISO/I2C1_SCL, label: 'J3[3]/UART1_RX', identifier: SCL_GNSS}
+- {pin_num: '61', pin_signal: PTD4/LLWU_P14/SPI1_PCS0/UART2_RX/TPM0_CH4/FXIO0_D4, label: 'J1[9]', identifier: GNSS_EN}
+- {pin_num: '62', pin_signal: ADC0_SE6b/PTD5/SPI1_SCK/UART2_TX/TPM0_CH5/FXIO0_D5, label: 'J1[11]/J3[2]/SDA_PTD5', identifier: EXTINT_GNSS}
 - {pin_num: '46', pin_signal: PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT, label: 'J2[15]', identifier: SDN}
 - {pin_num: '38', pin_signal: ADC0_SE13/PTB3/I2C0_SDA/TPM2_CH1, label: 'J1[13]', identifier: SDA_TEMP}
 - {pin_num: '37', pin_signal: ADC0_SE12/PTB2/I2C0_SCL/TPM2_CH0, label: 'J1[15]', identifier: SCL_TEMP}
@@ -52,12 +56,12 @@ void BOARD_InitBootPins(void)
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 BOARD_InitPins:
-- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
+- options: {createDeInit: 'true', callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
   - {pin_num: '9', peripheral: ADC0, signal: 'SE, 0', pin_signal: ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/LPUART0_TX/FXIO0_D4, identifier: VOLTAGE}
   - {pin_num: '17', peripheral: GPIOE, signal: 'GPIO, 29', pin_signal: CMP0_IN5/ADC0_SE4b/PTE29/TPM0_CH2/TPM_CLKIN0, direction: OUTPUT}
-  - {pin_num: '37', peripheral: I2C0, signal: SCL, pin_signal: ADC0_SE12/PTB2/I2C0_SCL/TPM2_CH0}
-  - {pin_num: '38', peripheral: I2C0, signal: SDA, pin_signal: ADC0_SE13/PTB3/I2C0_SDA/TPM2_CH1}
+  - {pin_num: '35', peripheral: I2C0, signal: SCL, pin_signal: ADC0_SE8/PTB0/LLWU_P5/I2C0_SCL/TPM1_CH0/SPI1_MOSI/SPI1_MISO, identifier: SCL_SENS}
+  - {pin_num: '36', peripheral: I2C0, signal: SDA, pin_signal: ADC0_SE9/PTB1/I2C0_SDA/TPM1_CH1/SPI1_MISO/SPI1_MOSI}
   - {pin_num: '46', peripheral: GPIOC, signal: 'GPIO, 3', pin_signal: PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT, direction: OUTPUT}
   - {pin_num: '49', peripheral: GPIOC, signal: 'GPIO, 4', pin_signal: PTC4/LLWU_P8/SPI0_PCS0/LPUART1_TX/TPM0_CH3/SPI1_PCS0, direction: OUTPUT, gpio_init_state: 'true'}
   - {pin_num: '50', peripheral: SPI0, signal: SCK, pin_signal: PTC5/LLWU_P9/SPI0_SCK/LPTMR0_ALT2/CMP0_OUT, direction: OUTPUT}
@@ -68,6 +72,8 @@ BOARD_InitPins:
   - {pin_num: '2', peripheral: I2C1, signal: SCL, pin_signal: PTE1/SPI1_MOSI/LPUART1_RX/SPI1_MISO/I2C1_SCL}
   - {pin_num: '64', peripheral: LPUART0, signal: TX, pin_signal: PTD7/SPI1_MISO/LPUART0_TX/I2C1_SCL/SPI1_MOSI/FXIO0_D7, direction: OUTPUT}
   - {pin_num: '63', peripheral: LPUART0, signal: RX, pin_signal: ADC0_SE7b/PTD6/LLWU_P15/SPI1_MOSI/LPUART0_RX/I2C1_SDA/SPI1_MISO/FXIO0_D6}
+  - {pin_num: '62', peripheral: GPIOD, signal: 'GPIO, 5', pin_signal: ADC0_SE6b/PTD5/SPI1_SCK/UART2_TX/TPM0_CH5/FXIO0_D5, direction: OUTPUT}
+  - {pin_num: '61', peripheral: GPIOD, signal: 'GPIO, 4', pin_signal: PTD4/LLWU_P14/SPI1_PCS0/UART2_RX/TPM0_CH4/FXIO0_D4, direction: OUTPUT, gpio_init_state: 'false'}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -110,6 +116,20 @@ void BOARD_InitPins(void)
     /* Initialize GPIO functionality on pin PTC8 (pin 53)  */
     GPIO_PinInit(BOARD_INITPINS_nIRQ_GPIO, BOARD_INITPINS_nIRQ_PIN, &nIRQ_config);
 
+    gpio_pin_config_t GNSS_EN_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTD4 (pin 61)  */
+    GPIO_PinInit(BOARD_INITPINS_GNSS_EN_GPIO, BOARD_INITPINS_GNSS_EN_PIN, &GNSS_EN_config);
+
+    gpio_pin_config_t EXTINT_GNSS_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTD5 (pin 62)  */
+    GPIO_PinInit(BOARD_INITPINS_EXTINT_GNSS_GPIO, BOARD_INITPINS_EXTINT_GNSS_PIN, &EXTINT_GNSS_config);
+
     gpio_pin_config_t LED_config = {
         .pinDirection = kGPIO_DigitalOutput,
         .outputLogic = 0U
@@ -117,11 +137,11 @@ void BOARD_InitPins(void)
     /* Initialize GPIO functionality on pin PTE29 (pin 17)  */
     GPIO_PinInit(BOARD_INITPINS_LED_GPIO, BOARD_INITPINS_LED_PIN, &LED_config);
 
-    /* PORTB2 (pin 37) is configured as I2C0_SCL */
-    PORT_SetPinMux(BOARD_INITPINS_SCL_TEMP_PORT, BOARD_INITPINS_SCL_TEMP_PIN, kPORT_MuxAlt2);
+    /* PORTB0 (pin 35) is configured as I2C0_SCL */
+    PORT_SetPinMux(BOARD_INITPINS_SCL_SENS_PORT, BOARD_INITPINS_SCL_SENS_PIN, kPORT_MuxAlt2);
 
-    /* PORTB3 (pin 38) is configured as I2C0_SDA */
-    PORT_SetPinMux(BOARD_INITPINS_SDA_TEMP_PORT, BOARD_INITPINS_SDA_TEMP_PIN, kPORT_MuxAlt2);
+    /* PORTB1 (pin 36) is configured as I2C0_SDA */
+    PORT_SetPinMux(BOARD_INITPINS_SDA_SENS_PORT, BOARD_INITPINS_SDA_SENS_PIN, kPORT_MuxAlt2);
 
     /* PORTC3 (pin 46) is configured as PTC3 */
     PORT_SetPinMux(BOARD_INITPINS_SDN_PORT, BOARD_INITPINS_SDN_PIN, kPORT_MuxAsGpio);
@@ -140,6 +160,12 @@ void BOARD_InitPins(void)
 
     /* PORTC8 (pin 53) is configured as PTC8 */
     PORT_SetPinMux(BOARD_INITPINS_nIRQ_PORT, BOARD_INITPINS_nIRQ_PIN, kPORT_MuxAsGpio);
+
+    /* PORTD4 (pin 61) is configured as PTD4 */
+    PORT_SetPinMux(BOARD_INITPINS_GNSS_EN_PORT, BOARD_INITPINS_GNSS_EN_PIN, kPORT_MuxAsGpio);
+
+    /* PORTD5 (pin 62) is configured as PTD5 */
+    PORT_SetPinMux(BOARD_INITPINS_EXTINT_GNSS_PORT, BOARD_INITPINS_EXTINT_GNSS_PIN, kPORT_MuxAsGpio);
 
     /* PORTD6 (pin 63) is configured as LPUART0_RX */
     PORT_SetPinMux(BOARD_INITPINS_RX_PORT, BOARD_INITPINS_RX_PIN, kPORT_MuxAlt3);
@@ -168,6 +194,1061 @@ void BOARD_InitPins(void)
 
                   /* LPUART0 Receive Data Source Select: LPUART_RX pin. */
                   | SIM_SOPT5_LPUART0RXSRC(SOPT5_LPUART0RXSRC_LPUART_RX));
+}
+
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_InitPins_deinit
+ * Description   : This is a de-initialization function for 'BOARD_InitPins' function.
+ * It sets all pins features (routing, direction and electrical) to their after-reset state.
+ * It also tries to route the previous peripheral signals to their default pins.
+ *
+ * END ****************************************************************************************************************/
+void BOARD_InitPins_deinit(void)
+{
+    /* Port B Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortB);
+    /* Port C Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortC);
+    /* Port D Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortD);
+    /* Port E Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortE);
+
+    /* PORTB0 (pin 35) is configured as ADC0_SE8 */
+    PORT_SetPinMux(PORTB, 0U, kPORT_PinDisabledOrAnalog);
+
+    PORTB->PCR[0] =
+        ((PORTB->PCR[0] &
+          /* Mask bits to zero which are setting */
+          (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+         /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the corresponding PE
+          * field is set. */
+         | PORT_PCR_PS(kPORT_PullUp)
+
+         /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+         | PORT_PCR_PE(kPORT_PullDisable)
+
+         /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is configured as
+          * a digital output. */
+         | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+         /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
+          * configured as a digital output. */
+         | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTB1 (pin 36) is configured as ADC0_SE9 */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_SDA_SENS_PORT, BOARD_INITPINS_DEINIT_SDA_SENS_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTB->PCR[1] =
+        ((PORTB->PCR[1] &
+          /* Mask bits to zero which are setting */
+          (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+         /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the corresponding PE
+          * field is set. */
+         | PORT_PCR_PS(kPORT_PullUp)
+
+         /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+         | PORT_PCR_PE(kPORT_PullDisable)
+
+         /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is configured as
+          * a digital output. */
+         | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+         /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
+          * configured as a digital output. */
+         | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTC3 (pin 46) is disabled */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_SDN_PORT, BOARD_INITPINS_DEINIT_SDN_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[3] =
+        ((PORTC->PCR[3] &
+          /* Mask bits to zero which are setting */
+          (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+         /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the corresponding PE
+          * field is set. */
+         | PORT_PCR_PS(kPORT_PullUp)
+
+         /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+         | PORT_PCR_PE(kPORT_PullDisable)
+
+         /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is configured as
+          * a digital output. */
+         | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+         /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
+          * configured as a digital output. */
+         | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTC4 (pin 49) is disabled */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_CS_PORT, BOARD_INITPINS_DEINIT_CS_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[4] =
+        ((PORTC->PCR[4] &
+          /* Mask bits to zero which are setting */
+          (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+         /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the corresponding PE
+          * field is set. */
+         | PORT_PCR_PS(kPORT_PullUp)
+
+         /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+         | PORT_PCR_PE(kPORT_PullDisable)
+
+         /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is configured as
+          * a digital output. */
+         | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+         /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
+          * configured as a digital output. */
+         | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTC5 (pin 50) is disabled */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_SCLK_PORT, BOARD_INITPINS_DEINIT_SCLK_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[5] = ((PORTC->PCR[5] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTC6 (pin 51) is configured as CMP0_IN0 */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_MOSI_PORT, BOARD_INITPINS_DEINIT_MOSI_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[6] = ((PORTC->PCR[6] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTC7 (pin 52) is configured as CMP0_IN1 */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_MISO_PORT, BOARD_INITPINS_DEINIT_MISO_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[7] = ((PORTC->PCR[7] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTC8 (pin 53) is configured as CMP0_IN2 */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_nIRQ_PORT, BOARD_INITPINS_DEINIT_nIRQ_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[8] = ((PORTC->PCR[8] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTD4 (pin 61) is disabled */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_GNSS_EN_PORT, BOARD_INITPINS_DEINIT_GNSS_EN_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTD->PCR[4] = ((PORTD->PCR[4] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTD5 (pin 62) is configured as ADC0_SE6b */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_EXTINT_GNSS_PORT, BOARD_INITPINS_DEINIT_EXTINT_GNSS_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTD->PCR[5] = ((PORTD->PCR[5] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTD6 (pin 63) is configured as ADC0_SE7b */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_RX_PORT, BOARD_INITPINS_DEINIT_RX_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTD->PCR[6] =
+        ((PORTD->PCR[6] &
+          /* Mask bits to zero which are setting */
+          (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+         /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the corresponding PE
+          * field is set. */
+         | PORT_PCR_PS(kPORT_PullUp)
+
+         /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+         | PORT_PCR_PE(kPORT_PullDisable)
+
+         /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is configured as
+          * a digital output. */
+         | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+         /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
+          * configured as a digital output. */
+         | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTD7 (pin 64) is disabled */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_TX_PORT, BOARD_INITPINS_DEINIT_TX_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTD->PCR[7] =
+        ((PORTD->PCR[7] &
+          /* Mask bits to zero which are setting */
+          (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+         /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the corresponding PE
+          * field is set. */
+         | PORT_PCR_PS(kPORT_PullUp)
+
+         /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+         | PORT_PCR_PE(kPORT_PullDisable)
+
+         /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is configured as
+          * a digital output. */
+         | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+         /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
+          * configured as a digital output. */
+         | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTE0 (pin 1) is disabled */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_SDA_GNSS_PORT, BOARD_INITPINS_DEINIT_SDA_GNSS_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTE->PCR[0] = ((PORTE->PCR[0] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTE1 (pin 2) is disabled */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_SCL_GNSS_PORT, BOARD_INITPINS_DEINIT_SCL_GNSS_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTE->PCR[1] = ((PORTE->PCR[1] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTE20 (pin 9) is configured as ADC0_DP0, ADC0_SE0 */
+    PORT_SetPinMux(PORTE, 20U, kPORT_PinDisabledOrAnalog);
+
+    PORTE->PCR[20] = ((PORTE->PCR[20] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTE29 (pin 17) is configured as ADC0_SE4b, CMP0_IN5 */
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_LED_PORT, BOARD_INITPINS_DEINIT_LED_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTE->PCR[29] = ((PORTE->PCR[29] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+}
+
+/* clang-format off */
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+BOARD_init_sleep_pins:
+- options: {createDeInit: 'true', callFromInitBoot: 'false', coreID: core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: '61', peripheral: GPIOD, signal: 'GPIO, 4', pin_signal: PTD4/LLWU_P14/SPI1_PCS0/UART2_RX/TPM0_CH4/FXIO0_D4, direction: OUTPUT, gpio_init_state: 'false'}
+  - {pin_num: '1', peripheral: n/a, signal: disabled, pin_signal: PTE0/CLKOUT32K/SPI1_MISO/LPUART1_TX/RTC_CLKOUT/CMP0_OUT/I2C1_SDA}
+  - {pin_num: '2', peripheral: n/a, signal: disabled, pin_signal: PTE1/SPI1_MOSI/LPUART1_RX/SPI1_MISO/I2C1_SCL}
+  - {pin_num: '19', peripheral: n/a, signal: disabled, pin_signal: PTE31/TPM0_CH4}
+  - {pin_num: '20', peripheral: n/a, signal: disabled, pin_signal: PTE24/TPM0_CH0/I2C0_SCL}
+  - {pin_num: '21', peripheral: n/a, signal: disabled, pin_signal: PTE25/TPM0_CH1/I2C0_SDA}
+  - {pin_num: '22', peripheral: n/a, signal: disabled, pin_signal: PTA0/TPM0_CH5/SWD_CLK, pull_enable: disable}
+  - {pin_num: '23', peripheral: n/a, signal: disabled, pin_signal: PTA1/LPUART0_RX/TPM2_CH0}
+  - {pin_num: '24', peripheral: n/a, signal: disabled, pin_signal: PTA2/LPUART0_TX/TPM2_CH1}
+  - {pin_num: '25', peripheral: n/a, signal: disabled, pin_signal: PTA3/I2C1_SCL/TPM0_CH0/SWD_DIO, pull_enable: disable}
+  - {pin_num: '26', peripheral: n/a, signal: disabled, pin_signal: PTA4/I2C1_SDA/TPM0_CH1/NMI_b, pull_enable: disable, passive_filter: disable}
+  - {pin_num: '27', peripheral: n/a, signal: disabled, pin_signal: PTA5/USB_CLKIN/TPM0_CH2}
+  - {pin_num: '28', peripheral: n/a, signal: disabled, pin_signal: PTA12/TPM1_CH0}
+  - {pin_num: '29', peripheral: n/a, signal: disabled, pin_signal: PTA13/TPM1_CH1}
+  - {pin_num: '34', peripheral: n/a, signal: disabled, pin_signal: PTA20/RESET_b, pull_enable: disable}
+  - {pin_num: '39', peripheral: n/a, signal: disabled, pin_signal: PTB16/SPI1_MOSI/LPUART0_RX/TPM_CLKIN0/SPI1_MISO}
+  - {pin_num: '40', peripheral: n/a, signal: disabled, pin_signal: PTB17/SPI1_MISO/LPUART0_TX/TPM_CLKIN1/SPI1_MOSI}
+  - {pin_num: '41', peripheral: n/a, signal: disabled, pin_signal: PTB18/TPM2_CH0}
+  - {pin_num: '42', peripheral: n/a, signal: disabled, pin_signal: PTB19/TPM2_CH1}
+  - {pin_num: '46', peripheral: n/a, signal: disabled, pin_signal: PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT}
+  - {pin_num: '49', peripheral: n/a, signal: disabled, pin_signal: PTC4/LLWU_P8/SPI0_PCS0/LPUART1_TX/TPM0_CH3/SPI1_PCS0}
+  - {pin_num: '50', peripheral: n/a, signal: disabled, pin_signal: PTC5/LLWU_P9/SPI0_SCK/LPTMR0_ALT2/CMP0_OUT}
+  - {pin_num: '55', peripheral: n/a, signal: disabled, pin_signal: PTC10/I2C1_SCL}
+  - {pin_num: '56', peripheral: n/a, signal: disabled, pin_signal: PTC11/I2C1_SDA}
+  - {pin_num: '57', peripheral: n/a, signal: disabled, pin_signal: PTD0/SPI0_PCS0/TPM0_CH0/FXIO0_D0}
+  - {pin_num: '59', peripheral: n/a, signal: disabled, pin_signal: PTD2/SPI0_MOSI/UART2_RX/TPM0_CH2/SPI0_MISO/FXIO0_D2}
+  - {pin_num: '60', peripheral: n/a, signal: disabled, pin_signal: PTD3/SPI0_MISO/UART2_TX/TPM0_CH3/SPI0_MOSI/FXIO0_D3}
+  - {pin_num: '64', peripheral: n/a, signal: disabled, pin_signal: PTD7/SPI1_MISO/LPUART0_TX/I2C1_SCL/SPI1_MOSI/FXIO0_D7}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+/* clang-format on */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_init_sleep_pins
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+void BOARD_init_sleep_pins(void)
+{
+    /* Port A Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortA);
+    /* Port B Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortB);
+    /* Port C Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortC);
+    /* Port D Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortD);
+    /* Port E Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortE);
+
+    gpio_pin_config_t GNSS_EN_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTD4 (pin 61)  */
+    GPIO_PinInit(BOARD_INIT_SLEEP_PINS_GNSS_EN_GPIO, BOARD_INIT_SLEEP_PINS_GNSS_EN_PIN, &GNSS_EN_config);
+
+    /* PORTA0 (pin 22) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDCLK_PORT, BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDCLK_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTA->PCR[0] = ((PORTA->PCR[0] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable));
+
+    /* PORTA1 (pin 23) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEBUG_UART_RX_PORT, BOARD_INIT_SLEEP_PINS_DEBUG_UART_RX_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTA12 (pin 28) is disabled */
+    PORT_SetPinMux(PORTA, 12U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTA13 (pin 29) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_LED_BLUE_PORT, BOARD_INIT_SLEEP_PINS_LED_BLUE_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTA2 (pin 24) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEBUG_UART_TX_PORT, BOARD_INIT_SLEEP_PINS_DEBUG_UART_TX_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTA20 (pin 34) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_SW1_PORT, BOARD_INIT_SLEEP_PINS_SW1_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTA->PCR[20] = ((PORTA->PCR[20] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable));
+
+    /* PORTA3 (pin 25) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDIO_PORT, BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDIO_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTA->PCR[3] = ((PORTA->PCR[3] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable));
+
+    /* PORTA4 (pin 26) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_SW3_PORT, BOARD_INIT_SLEEP_PINS_SW3_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTA->PCR[4] = ((PORTA->PCR[4] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PE_MASK | PORT_PCR_PFE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Passive Filter Enable: Passive input filter is disabled on the corresponding pin. */
+                     | PORT_PCR_PFE(kPORT_PassiveFilterDisable));
+
+    /* PORTA5 (pin 27) is disabled */
+    PORT_SetPinMux(PORTA, 5U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTB16 (pin 39) is disabled */
+    PORT_SetPinMux(PORTB, 16U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTB17 (pin 40) is disabled */
+    PORT_SetPinMux(PORTB, 17U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTB18 (pin 41) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_LED_RED_PORT, BOARD_INIT_SLEEP_PINS_LED_RED_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTB19 (pin 42) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_LED_GREEN_PORT, BOARD_INIT_SLEEP_PINS_LED_GREEN_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC10 (pin 55) is disabled */
+    PORT_SetPinMux(PORTC, 10U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC11 (pin 56) is disabled */
+    PORT_SetPinMux(PORTC, 11U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC3 (pin 46) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_SDN_PORT, BOARD_INIT_SLEEP_PINS_SDN_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC4 (pin 49) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_CS_PORT, BOARD_INIT_SLEEP_PINS_CS_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC5 (pin 50) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_SCLK_PORT, BOARD_INIT_SLEEP_PINS_SCLK_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTD0 (pin 57) is disabled */
+    PORT_SetPinMux(PORTD, 0U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTD2 (pin 59) is disabled */
+    PORT_SetPinMux(PORTD, 2U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTD3 (pin 60) is disabled */
+    PORT_SetPinMux(PORTD, 3U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTD4 (pin 61) is configured as PTD4 */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_GNSS_EN_PORT, BOARD_INIT_SLEEP_PINS_GNSS_EN_PIN, kPORT_MuxAsGpio);
+
+    /* PORTD7 (pin 64) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_TX_PORT, BOARD_INIT_SLEEP_PINS_TX_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTE0 (pin 1) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_SDA_GNSS_PORT, BOARD_INIT_SLEEP_PINS_SDA_GNSS_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTE1 (pin 2) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_SCL_GNSS_PORT, BOARD_INIT_SLEEP_PINS_SCL_GNSS_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTE24 (pin 20) is disabled */
+    PORT_SetPinMux(PORTE, 24U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTE25 (pin 21) is disabled */
+    PORT_SetPinMux(PORTE, 25U, kPORT_PinDisabledOrAnalog);
+
+    /* PORTE31 (pin 19) is disabled */
+    PORT_SetPinMux(PORTE, 31U, kPORT_PinDisabledOrAnalog);
+}
+
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : BOARD_init_sleep_pins_deinit
+ * Description   : This is a de-initialization function for 'BOARD_init_sleep_pins' function.
+ * It sets all pins features (routing, direction and electrical) to their after-reset state.
+ * It also tries to route the previous peripheral signals to their default pins.
+ *
+ * END ****************************************************************************************************************/
+void BOARD_init_sleep_pins_deinit(void)
+{
+    /* Port A Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortA);
+    /* Port B Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortB);
+    /* Port C Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortC);
+    /* Port D Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortD);
+    /* Port E Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortE);
+
+    const port_pin_config_t DEBUG_SWD_SWDCLK = {/* Internal pull-down resistor is enabled */
+                                                .pullSelect = kPORT_PullDown,
+                                                /* Slow slew rate is configured */
+                                                .slewRate = kPORT_SlowSlewRate,
+                                                /* Passive filter is disabled */
+                                                .passiveFilterEnable = kPORT_PassiveFilterDisable,
+                                                /* Low drive strength is configured */
+                                                .driveStrength = kPORT_LowDriveStrength,
+                                                /* Pin is configured as SWD_CLK */
+                                                .mux = kPORT_MuxAlt7};
+    /* PORTA0 (pin 22) is configured as SWD_CLK */
+    PORT_SetPinConfig(BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDCLK_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDCLK_PIN, &DEBUG_SWD_SWDCLK);
+
+    /* PORTA1 (pin 23) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_RX_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_RX_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTA->PCR[1] = ((PORTA->PCR[1] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTA12 (pin 28) is disabled */
+    PORT_SetPinMux(PORTA, 12U, kPORT_PinDisabledOrAnalog);
+
+    PORTA->PCR[12] = ((PORTA->PCR[12] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTA13 (pin 29) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_LED_BLUE_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_LED_BLUE_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTA->PCR[13] = ((PORTA->PCR[13] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTA2 (pin 24) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_TX_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_TX_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTA->PCR[2] = ((PORTA->PCR[2] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    const port_pin_config_t SW1 = {/* Internal pull-up resistor is enabled */
+                                   .pullSelect = kPORT_PullUp,
+                                   /* Slow slew rate is configured */
+                                   .slewRate = kPORT_SlowSlewRate,
+                                   /* Passive filter is disabled */
+                                   .passiveFilterEnable = kPORT_PassiveFilterDisable,
+                                   /* Low drive strength is configured */
+                                   .driveStrength = kPORT_LowDriveStrength,
+                                   /* Pin is disabled */
+                                   .mux = kPORT_PinDisabledOrAnalog};
+    /* PORTA20 (pin 34) is disabled */
+    PORT_SetPinConfig(BOARD_INIT_SLEEP_PINS_DEINIT_SW1_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_SW1_PIN, &SW1);
+
+    const port_pin_config_t DEBUG_SWD_SWDIO = {/* Internal pull-up resistor is enabled */
+                                               .pullSelect = kPORT_PullUp,
+                                               /* Fast slew rate is configured */
+                                               .slewRate = kPORT_FastSlewRate,
+                                               /* Passive filter is disabled */
+                                               .passiveFilterEnable = kPORT_PassiveFilterDisable,
+                                               /* Low drive strength is configured */
+                                               .driveStrength = kPORT_LowDriveStrength,
+                                               /* Pin is configured as SWD_DIO */
+                                               .mux = kPORT_MuxAlt7};
+    /* PORTA3 (pin 25) is configured as SWD_DIO */
+    PORT_SetPinConfig(BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDIO_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDIO_PIN, &DEBUG_SWD_SWDIO);
+
+    const port_pin_config_t SW3 = {/* Internal pull-up resistor is enabled */
+                                   .pullSelect = kPORT_PullUp,
+                                   /* Slow slew rate is configured */
+                                   .slewRate = kPORT_SlowSlewRate,
+                                   /* Passive filter is enabled */
+                                   .passiveFilterEnable = kPORT_PassiveFilterEnable,
+                                   /* Low drive strength is configured */
+                                   .driveStrength = kPORT_LowDriveStrength,
+                                   /* Pin is configured as NMI_b */
+                                   .mux = kPORT_MuxAlt7};
+    /* PORTA4 (pin 26) is configured as NMI_b */
+    PORT_SetPinConfig(BOARD_INIT_SLEEP_PINS_DEINIT_SW3_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_SW3_PIN, &SW3);
+
+    /* PORTA5 (pin 27) is disabled */
+    PORT_SetPinMux(PORTA, 5U, kPORT_PinDisabledOrAnalog);
+
+    PORTA->PCR[5] = ((PORTA->PCR[5] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTB16 (pin 39) is disabled */
+    PORT_SetPinMux(PORTB, 16U, kPORT_PinDisabledOrAnalog);
+
+    PORTB->PCR[16] = ((PORTB->PCR[16] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTB17 (pin 40) is disabled */
+    PORT_SetPinMux(PORTB, 17U, kPORT_PinDisabledOrAnalog);
+
+    PORTB->PCR[17] = ((PORTB->PCR[17] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTB18 (pin 41) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_LED_RED_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_LED_RED_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTB->PCR[18] = ((PORTB->PCR[18] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTB19 (pin 42) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_LED_GREEN_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_LED_GREEN_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTB->PCR[19] = ((PORTB->PCR[19] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTC10 (pin 55) is disabled */
+    PORT_SetPinMux(PORTC, 10U, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[10] = ((PORTC->PCR[10] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTC11 (pin 56) is disabled */
+    PORT_SetPinMux(PORTC, 11U, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[11] = ((PORTC->PCR[11] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTC3 (pin 46) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_SDN_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_SDN_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[3] =
+        ((PORTC->PCR[3] &
+          /* Mask bits to zero which are setting */
+          (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+         /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the corresponding PE
+          * field is set. */
+         | PORT_PCR_PS(kPORT_PullUp)
+
+         /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+         | PORT_PCR_PE(kPORT_PullDisable)
+
+         /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is configured as
+          * a digital output. */
+         | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+         /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
+          * configured as a digital output. */
+         | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTC4 (pin 49) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_CS_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_CS_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[4] =
+        ((PORTC->PCR[4] &
+          /* Mask bits to zero which are setting */
+          (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+         /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the corresponding PE
+          * field is set. */
+         | PORT_PCR_PS(kPORT_PullUp)
+
+         /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+         | PORT_PCR_PE(kPORT_PullDisable)
+
+         /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is configured as
+          * a digital output. */
+         | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+         /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
+          * configured as a digital output. */
+         | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTC5 (pin 50) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_SCLK_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_SCLK_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[5] = ((PORTC->PCR[5] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTD0 (pin 57) is disabled */
+    PORT_SetPinMux(PORTD, 0U, kPORT_PinDisabledOrAnalog);
+
+    PORTD->PCR[0] = ((PORTD->PCR[0] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTD2 (pin 59) is disabled */
+    PORT_SetPinMux(PORTD, 2U, kPORT_PinDisabledOrAnalog);
+
+    PORTD->PCR[2] = ((PORTD->PCR[2] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTD3 (pin 60) is disabled */
+    PORT_SetPinMux(PORTD, 3U, kPORT_PinDisabledOrAnalog);
+
+    PORTD->PCR[3] = ((PORTD->PCR[3] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTD4 (pin 61) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_GNSS_EN_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_GNSS_EN_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTD->PCR[4] = ((PORTD->PCR[4] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTD7 (pin 64) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_TX_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_TX_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTD->PCR[7] =
+        ((PORTD->PCR[7] &
+          /* Mask bits to zero which are setting */
+          (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_DSE_MASK | PORT_PCR_ISF_MASK)))
+
+         /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the corresponding PE
+          * field is set. */
+         | PORT_PCR_PS(kPORT_PullUp)
+
+         /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+         | PORT_PCR_PE(kPORT_PullDisable)
+
+         /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is configured as
+          * a digital output. */
+         | PORT_PCR_SRE(kPORT_FastSlewRate)
+
+         /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
+          * configured as a digital output. */
+         | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTE0 (pin 1) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_SDA_GNSS_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_SDA_GNSS_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTE->PCR[0] = ((PORTE->PCR[0] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTE1 (pin 2) is disabled */
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_SCL_GNSS_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_SCL_GNSS_PIN, kPORT_PinDisabledOrAnalog);
+
+    PORTE->PCR[1] = ((PORTE->PCR[1] &
+                      /* Mask bits to zero which are setting */
+                      (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                     /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                      * corresponding PE field is set. */
+                     | PORT_PCR_PS(kPORT_PullUp)
+
+                     /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding pin. */
+                     | PORT_PCR_PE(kPORT_PullDisable)
+
+                     /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                      * configured as a digital output. */
+                     | PORT_PCR_SRE(kPORT_FastSlewRate));
+
+    /* PORTE24 (pin 20) is disabled */
+    PORT_SetPinMux(PORTE, 24U, kPORT_PinDisabledOrAnalog);
+
+    PORTE->PCR[24] = ((PORTE->PCR[24] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTE25 (pin 21) is disabled */
+    PORT_SetPinMux(PORTE, 25U, kPORT_PinDisabledOrAnalog);
+
+    PORTE->PCR[25] = ((PORTE->PCR[25] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
+
+    /* PORTE31 (pin 19) is disabled */
+    PORT_SetPinMux(PORTE, 31U, kPORT_PinDisabledOrAnalog);
+
+    PORTE->PCR[31] = ((PORTE->PCR[31] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
 }
 /***********************************************************************************************************************
  * EOF

@@ -40,3 +40,13 @@ void uint16_to_little_endian(uint16_t value, uint8_t *buffer)
 	buffer[0] = (uint8_t)(value & 0xFF);
 	buffer[1] = (uint8_t)((value >> 8) & 0xFF);
 }
+
+void uint32_to_little_endian(uint32_t value, uint8_t *buffer)
+{
+	buffer[0] = (uint8_t)(value & 0xFF);
+	buffer[1] = (uint8_t)((value >> 8) & 0xFF);
+	buffer[2] = (uint8_t)((value >> 16) & 0xFF);
+	buffer[3] = (uint8_t)((value >> 24) & 0xFF);
+
+}
+

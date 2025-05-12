@@ -8,142 +8,98 @@
 #include "ublox_max_m10m.h"
 
 //VARIABLES
-static lpuart_config_t max_m10_uart_config;
-static lpuart_handle_t max_m10_uart_handle;
-static uint8_t max_m10_rx_buffer[MAX_M10_BUFFER_SIZE];
-static uint8_t max_m10_tx_buffer[MAX_M10_BUFFER_SIZE];
-static volatile bool max_m10_rx_complete = true;
-static volatile bool max_m10_tx_complete = true;
-static uint16_t max_m10_rx_index = 0;
+static lpuart_config_t uart_config;
+static lpuart_handle_t uart_handle;
+
+uint8_t tx_buffer[MAX_M10_BUFFER_SIZE];
+uint8_t rx_buffer[MAX_M10_BUFFER_SIZE];
+volatile bool rx_buffer_full = false;
+volatile bool tx_complete = true;
+volatile uint32_t rx_index = 0;
 
 //HEADERS
-static uint8_t max_m10_send_ubx_message(uint8_t msg_class, uint8_t msg_id, uint8_t *data, uint16_t data_len);
-static void max_m10_calc_checksum(const uint8_t *data, uint16_t len, uint8_t *ck_a, uint8_t *ck_b);
+static bool LPUART_send_data(uint8_t *data, size_t data_len);
+static void LPUART_rx_char(void);
+static bool max_m10_send_ubx_message(uint8_t msg_class, uint8_t msg_id, uint8_t *data, uint16_t data_len);
+static bool max_m10_wait_ack(uint8_t msg_class, uint8_t msg_id);
+static bool max_m10_disable_messages(void);
 
-//CALLBACK
-void LPUART_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t status, void *userData)
+void LPUART0_IRQHandler(void)
 {
-	userData = userData;
+	if((kLPUART_RxDataRegFullFlag) & LPUART_GetStatusFlags(LPUART0))
+		LPUART_rx_char();
+	else
+		LPUART_TransferHandleIRQ(LPUART0, &uart_handle);
 
-	if(kStatus_LPUART_TxIdle == status)
-	{
-		max_m10_tx_complete = true;
-	}
+	__DSB();
+}
 
-	if(kStatus_LPUART_RxIdle == status)
-	{
-		max_m10_rx_complete = true;
-		max_m10_rx_index = handle->rxData - max_m10_rx_buffer;
-	}
-
+static void LPUART_UserCallback(LPUART_Type *base, lpuart_handle_t *handle, status_t status, void *userData)
+{
+	if(status == kStatus_LPUART_TxIdle)
+		tx_complete = true;
+	else if(status == kStatus_LPUART_RxIdle)
+		rx_buffer_full = true;
+	else if(status == kStatus_LPUART_RxHardwareOverrun || status == kStatus_LPUART_RxRingBufferOverrun)
+		rx_index = 0;
 }
 
 //FUNCTIONS
 bool max_m10_init(void)
 {
-	CLOCK_EnableClock(kCLOCK_Lpuart0);
+	LPUART_GetDefaultConfig(&uart_config);
 
-	LPUART_GetDefaultConfig(&max_m10_uart_config);
-	max_m10_uart_config.baudRate_Bps = LPUART_BAUDRATE;
-	max_m10_uart_config.enableRx = true;
-	max_m10_uart_config.enableTx = true;
+	uart_config.baudRate_Bps = LPUART_BAUDRATE;
+	uart_config.enableTx = true;
+	uart_config.enableRx = true;
 
-	if(LPUART_Init(LPUART_BASE, &max_m10_uart_config, LPUART_CLK_FREQ) != kStatus_Success)
-		return false;
+	LPUART_Init(LPUART0, &uart_config, LPUART_CLK_FREQ);
+	LPUART_TransferCreateHandle(LPUART0, &uart_handle, LPUART_UserCallback, NULL);
+	LPUART_EnableInterrupts(LPUART0, kLPUART_RxDataRegFullInterruptEnable);
 
-	LPUART_TransferCreateHandle(LPUART_BASE, &max_m10_uart_handle, LPUART_callback, NULL);
+	EnableIRQ(LPUART0_IRQn);
 
-	for(volatile int i = 0; i < 100000; i++);
+	for(uint32_t i = 0; i < MAX_M10_BUFFER_SIZE; i++)
+		tx_buffer[i] = 0;
 
-	if(!max_m10_verify_comm())
-		return false;
+	for(uint32_t i = 0; i < MAX_M10_BUFFER_SIZE; i++)
+		rx_buffer[i] = 0;
 
-	return true;
-}
-
-bool max_m10_set_mode(max_m10_mode_t mode)
-{
-	uint8_t data[8];
-	memset(data, 0, sizeof(data));
-
-	switch(mode)
+	for(uint8_t i = 0; i < 10; i++)
 	{
-		case MAX_M10_MODE_NORMAL:
-			data[0] = UBX_CFG_PMS_FULL_POWER;
+		if(max_m10_disable_messages())
 			break;
-		case MAX_M10_MODE_POWERSAVE:
-			data[0] = UBX_CFG_PMS_BALANCED;
-			break;
-		case MAX_M10_MODE_SLEEP:
-			data[0] = UBX_CFG_PMS_PSMOO;
-			break;
-		default:
+		if(i == 9)
 			return false;
 	}
+
+	gnss_position_t pos;
+
+	if(!max_m10_get_pos(&pos))
+		return false;
+
+	if(!max_m10_set_mode(MAX_M10_MODE_PSMOO))
+		return false;
+
 	return true;
 }
 
-bool max_m10_verify_comm(void)
-{
-	uint8_t retry_count = 5;
-
-	while(retry_count--)
-	{
-		if(!max_m10_send_ubx_message(UBX_CLASS_MON, UBX_MON_VER, NULL, 0))
-			continue;
-
-		lpuart_transfer_t rx_transfer;
-		rx_transfer.data = max_m10_rx_buffer;
-		rx_transfer.dataSize = MAX_M10_BUFFER_SIZE;
-
-		max_m10_rx_complete = false;
-		max_m10_rx_index = 0;
-		if(LPUART_TransferReceiveNonBlocking(LPUART_BASE, &max_m10_uart_handle, &rx_transfer, NULL)
-				!= kStatus_Success)
-			continue;
-
-		uint32_t timeout = MAX_M10_UART_TIMEOUT;
-		while(!max_m10_rx_complete && timeout--)
-			for(volatile int i = 0; i < 10; i++);
-
-		if(!max_m10_rx_complete)
-		{
-			LPUART_TransferAbortReceive(LPUART_BASE, &max_m10_uart_handle);
-			continue;
-		}
-
-		for(uint16_t i = 0; i < max_m10_rx_index; i++)
-		{
-			if(max_m10_rx_buffer[i] == UBX_SYNC_CHAR_1 && max_m10_rx_buffer[i + 1] == UBX_SYNC_CHAR_2)
-				if(i + 6 < max_m10_rx_index)
-					if(max_m10_rx_buffer[i + 2] == UBX_CLASS_MON && max_m10_rx_buffer[i + 3] == UBX_MON_VER)
-						return true;
-		}
-	}
-
-	return false;
-}
-
-static uint8_t max_m10_send_ubx_message(uint8_t msg_class, uint8_t msg_id, uint8_t *data, uint16_t data_len)
+static bool max_m10_send_ubx_message(uint8_t msg_class, uint8_t msg_id, uint8_t *data, uint16_t data_len)
 {
 	uint16_t tx_index = 0;
 
-	max_m10_tx_buffer[tx_index++] = UBX_SYNC_CHAR_1;
-	max_m10_tx_buffer[tx_index++] = UBX_SYNC_CHAR_2;
-	max_m10_tx_buffer[tx_index++] = msg_class;
-	max_m10_tx_buffer[tx_index++] = msg_id;
-
-	uint8_t length[2] = {0};
-	uint16_to_little_endian(data_len, length);
-
-	max_m10_tx_buffer[tx_index++] = length[0];
-	max_m10_tx_buffer[tx_index++] = length[1];
+	tx_buffer[tx_index++] = UBX_SYNC_CHAR_1;
+	tx_buffer[tx_index++] = UBX_SYNC_CHAR_2;
+	tx_buffer[tx_index++] = msg_class;
+	tx_buffer[tx_index++] = msg_id;
+	tx_buffer[tx_index++] = data_len & 0xFF;
+	tx_buffer[tx_index++] = (data_len >> 8) & 0xFF;
 
 	uint8_t ck_a = 0, ck_b = 0;
 
 	for(uint8_t i = 2; i < 6; i++)
 	{
-		ck_a += max_m10_tx_buffer[i];
+		ck_a += tx_buffer[i];
 		ck_b += ck_a;
 	}
 
@@ -154,293 +110,339 @@ static uint8_t max_m10_send_ubx_message(uint8_t msg_class, uint8_t msg_id, uint8
 
 		for(uint16_t i = 0; i < data_len; i++)
 		{
-			max_m10_tx_buffer[tx_index++] = data[i];
+			tx_buffer[tx_index++] = data[i];
 			ck_a += data[i];
 			ck_b += ck_a;
 		}
 	}
 
-	max_m10_tx_buffer[tx_index++] = ck_a;
-	max_m10_tx_buffer[tx_index++] = ck_b;
+	tx_buffer[tx_index++] = ck_a;
+	tx_buffer[tx_index++] = ck_b;
 
-	lpuart_transfer_t tx_transfer;
-	tx_transfer.txData = max_m10_tx_buffer;
-	tx_transfer.dataSize = tx_index;
-
-	max_m10_tx_complete = false;
-	if(LPUART_TransferSendNonBlocking(LPUART_BASE, &max_m10_uart_handle, &tx_transfer) != kStatus_Success)
+	if(!LPUART_send_data(tx_buffer, tx_index))
 		return false;
 
-	uint32_t timeout = MAX_M10_UART_TIMEOUT;
-	while(!max_m10_tx_complete && timeout--)
-		for(volatile int i = 0; i < 10; i++);
+	uint32_t timeout = UART_TIMEOUT;
+	while(!tx_complete && timeout--)
+		for(uint8_t i = 0; i < 50; i++);
 
-	if(!max_m10_tx_complete)
+	if(!tx_complete)
 	{
-		LPUART_TransferAbortSend(LPUART_BASE, &max_m10_uart_handle);
+		LPUART_TransferAbortSend(LPUART_INSTANCE, &uart_handle);
 		return false;
 	}
-
 	return true;
 }
 
-/*
-static bool parse_nmea_sentence(char *sentence)
+bool max_m10_get_pos(gnss_position_t *position)
 {
-
-	if(sentence == NULL || sentence[0] != NMEA_START_CHAR)
+	if(!max_m10_send_ubx_message(UBX_CLASS_NAV, UBX_NAV_POSLLH, NULL, 0))
 		return false;
 
-//check for GGA sentence
-//$xxGGA,time,lat,NS,lon,EW,quality,numSV,HDOP,alt,altUnit,sep,sepUnit,diffAge,diffStation*cs\r\n
-	if(strncmp(sentence + 1, "GPGGA", 5) == 0 || strncmp(sentence + 1, "GNGGA", 5) == 0)
+	uint32_t start_time = get_time_ms();
+
+	while((get_time_ms() - start_time) < 3000)
 	{
-		char *ptr = sentence;
-		char *field[15];
-		uint8_t field_count = 0;
-
-		while((sentence = strchr(sentence, ',')) != NULL && field_count < 15)
+		if(rx_buffer_full || rx_index >= 30)
 		{
-			*ptr = '\0';
-			field[field_count++] = ++ptr;
+			for(uint32_t i = 0; i < rx_index - 7; i++)
+			{
+				if(rx_buffer[i] == UBX_SYNC_CHAR_1 && rx_buffer[i + 1] == UBX_SYNC_CHAR_2
+						&& rx_buffer[i + 2] == UBX_CLASS_NAV && rx_buffer[i + 3] == UBX_NAV_POSLLH)
+				{
+					uint16_t payload_len = rx_buffer[i + 4] | (rx_buffer[i + 5] << 8);
+					if(payload_len != 28)
+						continue;
+					else
+					{
+						int32_t longitude_int = (int32_t)(rx_buffer[i + 10] | (rx_buffer[i + 11] << 8)
+								| (rx_buffer[i + 12] << 16) | (rx_buffer[i + 13] << 24));
+						position->longitude = longitude_int * 1e-7f;
+
+						int32_t latitude_int = (int32_t)(rx_buffer[i + 14] | (rx_buffer[i + 15] << 8)
+								| (rx_buffer[i + 16] << 16) | (rx_buffer[i + 17] << 24));
+						position->latitude = latitude_int * 1e-7f;
+
+						int32_t altitude_int = (int32_t)(rx_buffer[i + 22] | (rx_buffer[i + 23] << 8)
+								| (rx_buffer[i + 24] << 16) | (rx_buffer[i + 25] << 24));
+						position->altitude = (float)altitude_int / 1000;
+
+						memset(rx_buffer, 0, rx_index);
+						rx_index = 0;
+						rx_buffer_full = false;
+						return true;
+					}
+				}
+				else
+					continue;
+
+			}
 		}
-
-		char *checksum = strchr(field[field_count - 1], '*');
-
-		if(checksum != NULL)
-			*checksum = '\0';
-
-		if(field_count < 14)
-			return false;
-
-		//parse time
-		float time = strtof(field[0], NULL);
-		current_pos.timestamp = (uint32_t)time;
-
-		//parse latitude
-		if(strlen(field[1]) > 0)
-		{
-			float latitude = strtof(field[1], NULL);
-			int latitude_degrees = (int)(latitude / 100);
-			float latitude_minutes = latitude - (latitude_degrees * 100);
-			current_pos.latitude = latitude_degrees + (latitude_minutes / 60.0f);
-
-			if(field[2][0] == 'S')
-				current_pos.latitude = -current_pos.latitude;
-		}
-
-		//parse longitude
-		if(strlen(field[3]) > 0)
-		{
-			float longitude = strtof(field[3], NULL);
-			int longitude_degrees = (int)(longitude / 100);
-			float longitude_minutes = longitude - (longitude_degrees * 100);
-			current_pos.longitude = longitude_degrees + (longitude_minutes / 60.0f);
-
-			if(field[4][0] == 'W')
-				current_pos.longitude = -current_pos.longitude;
-		}
-
-		//parse quality
-		int quality = atoi(field[5]);
-		switch(quality)
-		{
-			case 0:
-				current_pos.fix = UBLOX_FIX_NONE;
-				break;
-			case 1:
-				current_pos.fix = UBLOX_FIX_3D;
-				break;
-			case 2:
-				current_pos.fix = UBLOX_FIX_3D_DGPS;
-				break;
-			case 4:
-				current_pos.fix = UBLOX_FIX_RTK_FIXED;
-				break;
-			case 5:
-				current_pos.fix = UBLOX_FIX_RTK_FLOAT;
-				break;
-			default:
-				current_pos.fix = UBLOX_FIX_NONE;
-		}
-
-		//parse number of satellites
-		current_pos.satellites = atoi(field[6]);
-
-		//parse HDOP
-		current_pos.hdop = strtof(field[7], NULL);
-
-		//parse altitude
-		current_pos.altitude = strtof(field[8], NULL);
-
-		//new pos available
-		new_pos_available = true;
-
-		return true;
-	}
-//check for GLL sentence
-//$xxGLL,lat,NS,lon,EW,time,status,posMode*cs\r\n
-	else if(strncmp(sentence + 1, "GPGLL", 5) == 0 || strncmp(sentence + 1, "GNGLL", 5) == 0)
-	{
-		char *ptr = sentence;
-		char *field[8];
-		uint8_t field_count = 0;
-
-		while((sentence = strchr(sentence, ',')) != NULL && field_count < 8)
-		{
-			*ptr = '\0';
-			field[field_count++] = ++ptr;
-		}
-
-		char *checksum = strchr(field[field_count - 1], '*');
-
-		if(checksum != NULL)
-			*checksum = '\0';
-
-		if(field_count < 6)
-			return false;
-
-		//parse latitude
-		if(strlen(field[0]) > 0)
-		{
-			float latitude = strtof(field[0], NULL);
-			int latitude_degrees = (int)(latitude / 100);
-			float latitude_minutes = latitude - (latitude_degrees * 100);
-			current_pos.latitude = latitude_degrees + (latitude_minutes / 60.0f);
-
-			if(field[1][0] == 'S')
-				current_pos.latitude = -current_pos.latitude;
-		}
-
-		//parse longitude
-		if(strlen(field[2]) > 0)
-		{
-			float longitude = strtof(field[2], NULL);
-			int longitude_degrees = (int)(longitude / 100);
-			float longitude_minutes = longitude - (longitude_degrees * 100);
-			current_pos.longitude = longitude_degrees + (longitude_minutes / 60.0f);
-
-			if(field[3][0] == 'W')
-				current_pos.longitude = -current_pos.longitude;
-		}
-
-		//parse time
-		float time = strtof(field[4], NULL);
-		current_pos.timestamp = (uint32_t)time;
-
-		//parse status
-		if(field[5][0] != 'A')
-		{
-			current_pos.fix = UBLOX_FIX_NONE;
-			return false;
-		}
-
-		//2D fix since GLL doesn't provide altitude
-		current_pos.fix = UBLOX_FIX_2D;
-
-		//new pos available
-		new_pos_available = true;
-
-		return true;
-	}
-//check for RMC
-//$xxRMC,time,status,lat,NS,lon,EW,spd,cog,date,mv,mvEW,posMode,navStatus*cs\r\n
-	else if(strncmp(sentence + 1, "GPRMC", 5) == 0 || strncmp(sentence + 1, "GNRMC", 5) == 0)
-	{
-		char *ptr = sentence;
-		char *field[14];
-		uint8_t field_count = 0;
-
-		while((sentence = strchr(sentence, ',')) != NULL && field_count < 14)
-		{
-			*ptr = '\0';
-			field[field_count++] = ++ptr;
-		}
-
-		char *checksum = strchr(field[field_count - 1], '*');
-
-		if(checksum != NULL)
-			*checksum = '\0';
-
-		if(field_count < 14)
-			return false;
-
-		//parse time
-		float time = strtof(field[0], NULL);
-		current_pos.timestamp = (uint32_t)time;
-
-		//parse status
-		if(field[1][0] != 'A')
-		{
-			current_pos.fix = UBLOX_FIX_NONE;
-			return false;
-		}
-		//parse latitude
-		if(strlen(field[2]) > 0)
-		{
-			float latitude = strtof(field[2], NULL);
-			int latitude_degrees = (int)(latitude / 100);
-			float latitude_minutes = latitude - (latitude_degrees * 100);
-			current_pos.latitude = latitude_degrees + (latitude_minutes / 60.0f);
-
-			if(field[3][0] == 'S')
-				current_pos.latitude = -current_pos.latitude;
-		}
-
-		//parse longitude
-		if(strlen(field[4]) > 0)
-		{
-			float longitude = strtof(field[4], NULL);
-			int longitude_degrees = (int)(longitude / 100);
-			float longitude_minutes = longitude - (longitude_degrees * 100);
-			current_pos.longitude = longitude_degrees + (longitude_minutes / 60.0f);
-
-			if(field[5][0] == 'W')
-				current_pos.longitude = -current_pos.longitude;
-		}
-
-		//parse speed
-		if(strlen(field[6]) > 0)
-			current_pos.speed = strtof(field[6], NULL) * 0.51444f; //knots to m/s
-
-		//parse course
-		if(strlen(field[7]) > 0)
-			current_pos.course = strtof(field[7], NULL);
-
-		//parse date
-		if(strlen(field[8]) > 0)
-			current_pos.date = (uint32_t)atoi(field[8]);
-
-		//3D fix since RMC doesn't provide fix type
-		current_pos.fix = UBLOX_FIX_3D;
-
-		//new pos available
-		new_pos_available = true;
-
-		return true;
+		else
+			continue;
 	}
 
+	memset(rx_buffer, 0, rx_index);
+	rx_index = 0;
+	rx_buffer_full = false;
 	return false;
 }
-*/
 
 static bool max_m10_disable_messages(void)
 {
 	uint8_t data[128] = {0};
 	uint16_t data_len = 0;
 
+	data[data_len++] = 0;
+	data[data_len++] = UBX_CFG_LAYER_BOTH;
+	data[data_len++] = 0;
+	data[data_len++] = 0;
 
+	uint32_to_little_endian(CFG_MSGOUT_NMEA_ID_GLL_UART1, &data[data_len]);
+	data_len += 4;
+	uint32_to_little_endian(0, &data[data_len]);
+	data_len += 4;
+	if(!max_m10_send_ubx_message(UBX_CLASS_CFG, UBX_CFG_VALSET, data, data_len))
+		return false;
+	if(!max_m10_wait_ack(UBX_CLASS_CFG, UBX_CFG_VALSET))
+		return false;
 
+	data_len = 4;
+	uint32_to_little_endian(CFG_MSGOUT_NMEA_ID_GGA_UART1, &data[data_len]);
+	data_len += 4;
+	uint32_to_little_endian(0, &data[data_len]);
+	data_len += 4;
+	if(!max_m10_send_ubx_message(UBX_CLASS_CFG, UBX_CFG_VALSET, data, data_len))
+		return false;
+	if(!max_m10_wait_ack(UBX_CLASS_CFG, UBX_CFG_VALSET))
+		return false;
+
+	data_len = 4;
+	uint32_to_little_endian(CFG_MSGOUT_NMEA_ID_GSA_UART1, &data[data_len]);
+	data_len += 4;
+	uint32_to_little_endian(0, &data[data_len]);
+	data_len += 4;
+	if(!max_m10_send_ubx_message(UBX_CLASS_CFG, UBX_CFG_VALSET, data, data_len))
+		return false;
+	if(!max_m10_wait_ack(UBX_CLASS_CFG, UBX_CFG_VALSET))
+		return false;
+
+	data_len = 4;
+	uint32_to_little_endian(CFG_MSGOUT_NMEA_ID_GSV_UART1, &data[data_len]);
+	data_len += 4;
+	uint32_to_little_endian(0, &data[data_len]);
+	data_len += 4;
+	if(!max_m10_send_ubx_message(UBX_CLASS_CFG, UBX_CFG_VALSET, data, data_len))
+		return false;
+	if(!max_m10_wait_ack(UBX_CLASS_CFG, UBX_CFG_VALSET))
+		return false;
+
+	data_len = 4;
+	uint32_to_little_endian(CFG_MSGOUT_NMEA_ID_RMC_UART1, &data[data_len]);
+	data_len += 4;
+	uint32_to_little_endian(0, &data[data_len]);
+	data_len += 4;
+	if(!max_m10_send_ubx_message(UBX_CLASS_CFG, UBX_CFG_VALSET, data, data_len))
+		return false;
+	if(!max_m10_wait_ack(UBX_CLASS_CFG, UBX_CFG_VALSET))
+		return false;
+
+	data_len = 4;
+	uint32_to_little_endian(CFG_MSGOUT_NMEA_ID_VTG_UART1, &data[data_len]);
+	data_len += 4;
+	uint32_to_little_endian(0, &data[data_len]);
+	data_len += 4;
+	if(!max_m10_send_ubx_message(UBX_CLASS_CFG, UBX_CFG_VALSET, data, data_len))
+		return false;
+	if(!max_m10_wait_ack(UBX_CLASS_CFG, UBX_CFG_VALSET))
+		return false;
+
+	data_len = 4;
+	uint32_to_little_endian(CFG_MSGOUT_NMEA_ID_ZDA_UART1, &data[data_len]);
+	data_len += 4;
+	uint32_to_little_endian(0, &data[data_len]);
+	data_len += 4;
+	if(!max_m10_send_ubx_message(UBX_CLASS_CFG, UBX_CFG_VALSET, data, data_len))
+		return false;
+	if(!max_m10_wait_ack(UBX_CLASS_CFG, UBX_CFG_VALSET))
+		return false;
+
+	data_len = 4;
+	uint32_to_little_endian(CFG_MSGOUT_NMEA_ID_GST_UART1, &data[data_len]);
+	data_len += 4;
+	uint32_to_little_endian(0, &data[data_len]);
+	data_len += 4;
+	if(!max_m10_send_ubx_message(UBX_CLASS_CFG, UBX_CFG_VALSET, data, data_len))
+		return false;
+	if(!max_m10_wait_ack(UBX_CLASS_CFG, UBX_CFG_VALSET))
+		return false;
+
+	return true;
 }
 
-static void max_m10_calc_checksum(const uint8_t *data, uint16_t len, uint8_t *ck_a, uint8_t *ck_b)
+static bool LPUART_send_data(uint8_t *data, size_t data_len)
 {
-	*ck_a = 0;
-	*ck_b = 0;
-	for(int i = 0; i < len; i++)
+	lpuart_transfer_t transfer;
+
+	if(tx_complete)
 	{
-		*ck_a += data[i];
-		*ck_b += *ck_a;
+		transfer.data = data;
+		transfer.dataSize = data_len;
+
+		tx_complete = false;
+
+		if(LPUART_TransferSendNonBlocking(LPUART0, &uart_handle, &transfer) != kStatus_Success)
+			return false;
 	}
+	return true;
+}
+
+static void LPUART_rx_char(void)
+{
+	uint8_t data = LPUART_ReadByte(LPUART0);
+
+	if(rx_index < MAX_M10_BUFFER_SIZE)
+	{
+		rx_buffer[rx_index++] = data;
+		if(data == '\n' || data == '\r' || rx_index >= MAX_M10_BUFFER_SIZE)
+			rx_buffer_full = true;
+		else if(rx_index >= 8)
+		{
+			for(uint32_t i = 0; i < rx_index - 8; i++)
+			{
+				if(rx_buffer[i] == UBX_SYNC_CHAR_1 && rx_buffer[i + 1] == UBX_SYNC_CHAR_2)
+				{
+					uint16_t payload_len = rx_buffer[i + 4] | (rx_buffer[i + 5] << 8);
+					if(i + 8 + payload_len <= rx_index)
+					{
+						rx_buffer_full = true;
+						break;
+					}
+				}
+			}
+		}
+		if(rx_index >= MAX_M10_BUFFER_SIZE - 10)
+			rx_buffer_full = true;
+	}
+	else
+		rx_buffer_full = true;
+}
+
+static bool max_m10_wait_ack(uint8_t msg_class, uint8_t msg_id)
+{
+	rx_buffer_full = false;
+	rx_index = 0;
+	bool is_ack = false;
+	bool is_nak = false;
+	uint32_t timeout = 50000;
+
+	while(timeout--)
+	{
+		if(rx_buffer_full || rx_index >= 9)
+		{
+			for(uint32_t i = 0; i < rx_index - 7; i++)
+			{
+				if(rx_buffer[i] == UBX_SYNC_CHAR_1 && rx_buffer[i + 1] == UBX_SYNC_CHAR_2)
+					if(rx_buffer[i + 2] == UBX_CLASS_ACK)
+					{
+						if(rx_buffer[i + 3] == UBX_ACK_ACK)
+						{
+							if(rx_buffer[i + 6] == msg_class && rx_buffer[i + 7] == msg_id)
+							{
+								is_ack = true;
+								break;
+							}
+						}
+						else if(rx_buffer[i + 3] == UBX_ACK_NAK)
+						{
+							if(rx_buffer[i + 6] == msg_class && rx_buffer[i + 7] == msg_id)
+							{
+								is_nak = true;
+								break;
+							}
+						}
+					}
+			}
+		}
+		if(is_ack)
+		{
+			memset(rx_buffer, 0, rx_index);
+			rx_index = 0;
+			rx_buffer_full = false;
+			return true;
+		}
+		if(is_nak)
+		{
+			memset(rx_buffer, 0, rx_index);
+			rx_index = 0;
+			rx_buffer_full = false;
+			return true;
+		}
+		if(timeout == 0)
+		{
+			memset(rx_buffer, 0, rx_index);
+			rx_index = 0;
+			rx_buffer_full = false;
+			return false;
+		}
+
+		if(rx_index > MAX_M10_BUFFER_SIZE / 2)
+			rx_index = 0;
+		rx_buffer_full = false;
+	}
+
+	return false;
+}
+
+bool max_m10_sleep(void)
+{
+	uint8_t data[32] = {0};
+	uint16_t data_len = 0;
+
+	//version + reserved = 4 bytes
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+	//duration (0 for wakeup signal) = 4 bytes
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+	//flags = 4 bytes
+	data[data_len++] = 0x40; //minimum power consumption
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+	//wakeup source = 4 bytes
+	data[data_len++] = 0x20; //wakeup when there is an edge on EXTINT pin
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+
+	if(!max_m10_send_ubx_message(UBX_CLASS_RXM, UBX_RXM_PMREQ, data, data_len))
+		return false;
+
+	return true;
+}
+
+bool max_m10_set_mode(max_m10_mode_t mode)
+{
+	uint8_t data[64] = {0};
+	uint16_t data_len = 0;
+
+	data[data_len++] = 0;
+	data[data_len++] = UBX_CFG_LAYER_BOTH;
+	data[data_len++] = 0;
+	data[data_len++] = 0;
+
+	uint32_to_little_endian(mode, &data[data_len]);
+	data_len += 4;
+	if(!max_m10_send_ubx_message(UBX_CLASS_CFG, UBX_CFG_VALSET, data, data_len))
+		return false;
+	if(!max_m10_wait_ack(UBX_CLASS_CFG, UBX_CFG_VALSET))
+		return false;
+
+	return true;
 }
 

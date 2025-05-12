@@ -7,6 +7,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include "tpm_timer.h"
 #include "fsl_gpio.h"
 #include "fsl_lpuart.h"
 #include "utils.h"
@@ -18,97 +20,285 @@
 #define NMEA_END_CHAR_1 	'\r'
 #define NMEA_END_CHAR_2 	'\n'
 
-#define MAX_M10_UART_TIMEOUT    10000
+#define MESSAGE_TYPE_NONE    	0
+#define MESSAGE_TYPE_NMEA    	1
+#define MESSAGE_TYPE_UBX     	2
+
+#define UART_TIMEOUT    		10000
 #define MAX_M10_BUFFER_SIZE 	256
-#define MAX_M10_CMD_TIMEOUT		500
+#define CMD_TIMEOUT				500
+#define PROCESSED_DATA_SIZE 	256
 
-#define LPUART_BASE 			LPUART0
-#define LPUART_CLKSRC 			kCLOCK_McgIrc48MClk
+#define LPUART_INSTANCE			LPUART0
 #define LPUART_CLK_FREQ 		CLOCK_GetFreq(kCLOCK_McgIrc48MClk)
-#define LPUART_BAUDRATE			9600
+#define LPUART_BAUDRATE			9600U
 
-//RAM/BBR/FLASH
-#define UBX_CFG_LAYER_RAM         0x01
-#define UBX_CFG_LAYER_BBR         0x02
-#define UBX_CFG_LAYER_FLASH       0x04
+#define MAX_M10_PORT			GPIOD
+#define MAX_M10_PIN				0U
+#define MAX_M10_MASK			(1U << 5U)
 
-// UBX protocol message lengths
-#define UBX_CFG_PRT_LEN        20
-#define UBX_CFG_MSG_LEN        8
-#define UBX_CFG_RATE_LEN       6
-#define UBX_CFG_RST_LEN        4
-#define UBX_CFG_CFG_LEN        12
-#define UBX_NAV_PVT_LEN        92
-#define UBX_HEADER_LEN         6
-#define UBX_CHECKSUM_LEN       2
+//RAM/BBR
+#define UBX_CFG_LAYER_RAM       0x01
+#define UBX_CFG_LAYER_BBR		0x02
+#define UBX_CFG_LAYER_BOTH		0x03
 
-//UBX protocol constants
-#define UBX_SYNC_CHAR_1 		0xB5
-#define UBX_SYNC_CHAR_2 		0x62
-
-/* NMEA sentence identifiers */
-#define NMEA_GGA_ID               "$GNGGA"  /* Global Positioning System Fix Data */
-#define NMEA_RMC_ID               "$GNRMC"  /* Recommended Minimum Navigation Information */
-
-/* UBX protocol defines */
+//UBX protocol
 #define UBX_SYNC_CHAR_1           	0xB5
 #define UBX_SYNC_CHAR_2           	0x62
 
-/* UBX classes */
+//UBX classes
 #define UBX_CLASS_RXM				0x02
 #define UBX_CLASS_CFG				0x06
 #define UBX_CLASS_ACK				0x05
 #define UBX_CLASS_MON				0x0A
+#define UBX_CLASS_NAV				0x01
+#define NMEA_PUBX					0xf1
 
-/* UBX message IDs */
+// UBX message IDs
 #define UBX_RXM_PMREQ             	0x41
 #define UBX_CFG_PMS					0x86
+#define UBX_CFG_VALSET				0x8a
 #define UBX_MON_VER               	0x04
 #define UBX_ACK_ACK               	0x01
 #define UBX_ACK_NAK               	0x00
+#define UBX_NAV_POSLLH				0x02
+#define NMEA_PUBX_CONFIG			0x40
 
-/* UART transfer status */
+//UART transfer status
 #define MAX_M10_UART_RX_IDLE		0
 #define MAX_M10_UART_RX_BUSY		1
 #define MAX_M10_UART_RX_COMPLETE	2
 
-/* UBX CFG-PMS power modes */
-#define UBX_CFG_PMS_FULL_POWER		0x00      /* Full power mode */
-#define UBX_CFG_PMS_BALANCED		0x01      /* Balanced power mode */
-#define UBX_CFG_PMS_INTERVAL		0x02      /* Interval power mode */
-#define UBX_CFG_PMS_AGGRESSIVE_1HZ	0x03     /* Aggressive with 1Hz */
-#define UBX_CFG_PMS_AGGRESSIVE_2HZ	0x04     /* Aggressive with 2Hz */
-#define UBX_CFG_PMS_AGGRESSIVE_4HZ	0x05     /* Aggressive with 4Hz */
-#define UBX_CFG_PMS_PSMOO			0xFF      /* Power Save Mode */
+//OUTPUT MESSAGE CONFIG
+//UBX-NAV-CLOCK messages
+#define CFG_MSGOUT_UBX_NAV_CLOCK_I2C          0x20910176
+#define CFG_MSGOUT_UBX_NAV_CLOCK_SPI          0x2091017a
+#define CFG_MSGOUT_UBX_NAV_CLOCK_UART1        0x20910177
+#define CFG_MSGOUT_UBX_NAV_CLOCK_USB          0x20910178
+
+//UBX-NAV-DOP messages
+#define CFG_MSGOUT_UBX_NAV_DOP_I2C            0x20910038
+#define CFG_MSGOUT_UBX_NAV_DOP_SPI            0x2091003c
+#define CFG_MSGOUT_UBX_NAV_DOP_UART1          0x20910039
+#define CFG_MSGOUT_UBX_NAV_DOP_USB            0x2091003a
+
+//UBX-NAV-EOE messages
+#define CFG_MSGOUT_UBX_NAV_EOE_I2C            0x20910160
+#define CFG_MSGOUT_UBX_NAV_EOE_SPI            0x20910164
+#define CFG_MSGOUT_UBX_NAV_EOE_UART1          0x20910161
+#define CFG_MSGOUT_UBX_NAV_EOE_USB            0x20910162
+
+//UBX-NAV-POSECEF messages
+#define CFG_MSGOUT_UBX_NAV_POSECEF_I2C        0x20910024
+#define CFG_MSGOUT_UBX_NAV_POSECEF_SPI        0x20910028
+#define CFG_MSGOUT_UBX_NAV_POSECEF_UART1      0x20910025
+#define CFG_MSGOUT_UBX_NAV_POSECEF_USB        0x20910026
+
+//UBX-NAV-POSLLH messages
+#define CFG_MSGOUT_UBX_NAV_POSLLH_I2C         0x20910029
+#define CFG_MSGOUT_UBX_NAV_POSLLH_SPI         0x2091002d
+#define CFG_MSGOUT_UBX_NAV_POSLLH_UART1       0x2091002a
+#define CFG_MSGOUT_UBX_NAV_POSLLH_USB         0x2091002b
+
+//UBX-NAV-PVT messages
+#define CFG_MSGOUT_UBX_NAV_PVT_I2C            0x20910006
+#define CFG_MSGOUT_UBX_NAV_PVT_SPI            0x2091000a
+#define CFG_MSGOUT_UBX_NAV_PVT_UART1          0x20910007
+#define CFG_MSGOUT_UBX_NAV_PVT_USB            0x20910008
+
+//UBX-NAV-SAT messages
+#define CFG_MSGOUT_UBX_NAV_SAT_I2C            0x20910015
+#define CFG_MSGOUT_UBX_NAV_SAT_SPI            0x20910019
+#define CFG_MSGOUT_UBX_NAV_SAT_UART1          0x20910016
+#define CFG_MSGOUT_UBX_NAV_SAT_USB            0x20910017
+
+//UBX-NAV-SBAS messages
+#define CFG_MSGOUT_UBX_NAV_SBAS_I2C           0x2091006a
+#define CFG_MSGOUT_UBX_NAV_SBAS_SPI           0x2091006e
+#define CFG_MSGOUT_UBX_NAV_SBAS_UART1         0x2091006b
+#define CFG_MSGOUT_UBX_NAV_SBAS_USB           0x2091006c
+
+//UBX-NAV-SIG messages
+#define CFG_MSGOUT_UBX_NAV_SIG_I2C            0x20910345
+#define CFG_MSGOUT_UBX_NAV_SIG_SPI            0x20910349
+#define CFG_MSGOUT_UBX_NAV_SIG_UART1          0x20910346
+#define CFG_MSGOUT_UBX_NAV_SIG_USB            0x20910347
+
+//UBX-NAV-STATUS messages
+#define CFG_MSGOUT_UBX_NAV_STATUS_I2C         0x2091001a
+#define CFG_MSGOUT_UBX_NAV_STATUS_SPI         0x2091001e
+#define CFG_MSGOUT_UBX_NAV_STATUS_UART1       0x2091001b
+#define CFG_MSGOUT_UBX_NAV_STATUS_USB         0x2091001c
+
+//UBX-NAV-TIMEBDS messages
+#define CFG_MSGOUT_UBX_NAV_TIMEBDS_I2C        0x20910051
+#define CFG_MSGOUT_UBX_NAV_TIMEBDS_SPI        0x20910055
+#define CFG_MSGOUT_UBX_NAV_TIMEBDS_UART1      0x20910052
+#define CFG_MSGOUT_UBX_NAV_TIMEBDS_USB        0x20910053
+
+//UBX-NAV-TIMEGAL messages
+#define CFG_MSGOUT_UBX_NAV_TIMEGAL_I2C        0x20910056
+#define CFG_MSGOUT_UBX_NAV_TIMEGAL_SPI        0x2091005a
+#define CFG_MSGOUT_UBX_NAV_TIMEGAL_UART1      0x20910057
+#define CFG_MSGOUT_UBX_NAV_TIMEGAL_USB        0x20910058
+
+//UBX-NAV-TIMEGLO messages
+#define CFG_MSGOUT_UBX_NAV_TIMEGLO_I2C        0x2091004c
+#define CFG_MSGOUT_UBX_NAV_TIMEGLO_SPI        0x20910050
+#define CFG_MSGOUT_UBX_NAV_TIMEGLO_UART1      0x2091004d
+#define CFG_MSGOUT_UBX_NAV_TIMEGLO_USB        0x2091004e
+
+//UBX-NAV-TIMEGPS messages
+#define CFG_MSGOUT_UBX_NAV_TIMEGPS_I2C        0x20910047
+#define CFG_MSGOUT_UBX_NAV_TIMEGPS_SPI        0x2091004b
+#define CFG_MSGOUT_UBX_NAV_TIMEGPS_UART1      0x20910048
+#define CFG_MSGOUT_UBX_NAV_TIMEGPS_USB        0x20910049
+
+//UBX-NAV-TIMELS messages
+#define CFG_MSGOUT_UBX_NAV_TIMELS_I2C         0x20910060
+#define CFG_MSGOUT_UBX_NAV_TIMELS_SPI         0x20910064
+#define CFG_MSGOUT_UBX_NAV_TIMELS_UART1       0x20910061
+#define CFG_MSGOUT_UBX_NAV_TIMELS_USB         0x20910062
+
+//UBX-NAV-TIMEQZSS messages
+#define CFG_MSGOUT_UBX_NAV_TIMEQZSS_I2C       0x20910386
+#define CFG_MSGOUT_UBX_NAV_TIMEQZSS_SPI       0x2091038a
+#define CFG_MSGOUT_UBX_NAV_TIMEQZSS_UART1     0x20910387
+#define CFG_MSGOUT_UBX_NAV_TIMEQZSS_USB       0x20910388
+
+//UBX-NAV-TIMEUTC messages
+#define CFG_MSGOUT_UBX_NAV_TIMEUTC_I2C        0x2091005b
+#define CFG_MSGOUT_UBX_NAV_TIMEUTC_SPI        0x2091005f
+#define CFG_MSGOUT_UBX_NAV_TIMEUTC_UART1      0x2091005c
+#define CFG_MSGOUT_UBX_NAV_TIMEUTC_USB        0x2091005d
+
+//UBX-NAV-VELECEF messages
+#define CFG_MSGOUT_UBX_NAV_VELECEF_I2C        0x2091003d
+#define CFG_MSGOUT_UBX_NAV_VELECEF_SPI        0x20910041
+#define CFG_MSGOUT_UBX_NAV_VELECEF_UART1      0x2091003e
+#define CFG_MSGOUT_UBX_NAV_VELECEF_USB        0x2091003f
+
+//UBX-NAV-VELNED messages
+#define CFG_MSGOUT_UBX_NAV_VELNED_I2C         0x20910042
+#define CFG_MSGOUT_UBX_NAV_VELNED_SPI         0x20910046
+#define CFG_MSGOUT_UBX_NAV_VELNED_UART1       0x20910043
+#define CFG_MSGOUT_UBX_NAV_VELNED_USB         0x20910044
+
+//UBX-RXM-RTCM messages
+#define CFG_MSGOUT_UBX_RXM_RTCM_I2C           0x20910268
+#define CFG_MSGOUT_UBX_RXM_RTCM_SPI           0x2091026c
+#define CFG_MSGOUT_UBX_RXM_RTCM_UART1         0x20910269
+#define CFG_MSGOUT_UBX_RXM_RTCM_USB           0x2091026a
+
+//UBX-RXM-SFRBX messages
+#define CFG_MSGOUT_UBX_RXM_SFRBX_I2C          0x20910231
+#define CFG_MSGOUT_UBX_RXM_SFRBX_SPI          0x20910235
+#define CFG_MSGOUT_UBX_RXM_SFRBX_UART1        0x20910232
+#define CFG_MSGOUT_UBX_RXM_SFRBX_USB          0x20910233
+
+//UBX-TIM-TM2 messages
+#define CFG_MSGOUT_UBX_TIM_TM2_I2C            0x20910178
+#define CFG_MSGOUT_UBX_TIM_TM2_SPI            0x2091017c
+#define CFG_MSGOUT_UBX_TIM_TM2_UART1          0x20910179
+#define CFG_MSGOUT_UBX_TIM_TM2_USB            0x2091017a
+
+//NMEA Standard messages
+#define CFG_MSGOUT_NMEA_ID_DTM_I2C            0x209100a6
+#define CFG_MSGOUT_NMEA_ID_DTM_SPI            0x209100aa
+#define CFG_MSGOUT_NMEA_ID_DTM_UART1          0x209100a7
+#define CFG_MSGOUT_NMEA_ID_DTM_USB            0x209100a8
+
+#define CFG_MSGOUT_NMEA_ID_GBS_I2C            0x209100dd
+#define CFG_MSGOUT_NMEA_ID_GBS_SPI            0x209100e1
+#define CFG_MSGOUT_NMEA_ID_GBS_UART1          0x209100de
+#define CFG_MSGOUT_NMEA_ID_GBS_USB            0x209100df
+
+#define CFG_MSGOUT_NMEA_ID_GGA_I2C            0x209100ba
+#define CFG_MSGOUT_NMEA_ID_GGA_SPI            0x209100be
+#define CFG_MSGOUT_NMEA_ID_GGA_UART1          0x209100bb
+#define CFG_MSGOUT_NMEA_ID_GGA_USB            0x209100bc
+
+#define CFG_MSGOUT_NMEA_ID_GLL_I2C            0x209100c9
+#define CFG_MSGOUT_NMEA_ID_GLL_SPI            0x209100cd
+#define CFG_MSGOUT_NMEA_ID_GLL_UART1          0x209100ca
+#define CFG_MSGOUT_NMEA_ID_GLL_USB            0x209100cb
+
+#define CFG_MSGOUT_NMEA_ID_GNS_I2C            0x209100b5
+#define CFG_MSGOUT_NMEA_ID_GNS_SPI            0x209100b9
+#define CFG_MSGOUT_NMEA_ID_GNS_UART1          0x209100b6
+#define CFG_MSGOUT_NMEA_ID_GNS_USB            0x209100b7
+
+#define CFG_MSGOUT_NMEA_ID_GSA_I2C            0x209100bf
+#define CFG_MSGOUT_NMEA_ID_GSA_SPI            0x209100c3
+#define CFG_MSGOUT_NMEA_ID_GSA_UART1          0x209100c0
+#define CFG_MSGOUT_NMEA_ID_GSA_USB            0x209100c1
+
+#define CFG_MSGOUT_NMEA_ID_GST_I2C            0x209100d2
+#define CFG_MSGOUT_NMEA_ID_GST_SPI            0x209100d6
+#define CFG_MSGOUT_NMEA_ID_GST_UART1          0x209100d3
+#define CFG_MSGOUT_NMEA_ID_GST_USB            0x209100d4
+
+#define CFG_MSGOUT_NMEA_ID_GSV_I2C            0x209100c4
+#define CFG_MSGOUT_NMEA_ID_GSV_SPI            0x209100c8
+#define CFG_MSGOUT_NMEA_ID_GSV_UART1          0x209100c5
+#define CFG_MSGOUT_NMEA_ID_GSV_USB            0x209100c6
+
+#define CFG_MSGOUT_NMEA_ID_RMC_I2C            0x209100ab
+#define CFG_MSGOUT_NMEA_ID_RMC_SPI            0x209100af
+#define CFG_MSGOUT_NMEA_ID_RMC_UART1          0x209100ac
+#define CFG_MSGOUT_NMEA_ID_RMC_USB            0x209100ad
+
+#define CFG_MSGOUT_NMEA_ID_VLW_I2C            0x209100e7
+#define CFG_MSGOUT_NMEA_ID_VLW_SPI            0x209100eb
+#define CFG_MSGOUT_NMEA_ID_VLW_UART1          0x209100e8
+#define CFG_MSGOUT_NMEA_ID_VLW_USB            0x209100e9
+
+#define CFG_MSGOUT_NMEA_ID_VTG_I2C            0x209100b0
+#define CFG_MSGOUT_NMEA_ID_VTG_SPI            0x209100b4
+#define CFG_MSGOUT_NMEA_ID_VTG_UART1          0x209100b1
+#define CFG_MSGOUT_NMEA_ID_VTG_USB            0x209100b2
+
+#define CFG_MSGOUT_NMEA_ID_ZDA_I2C            0x209100d7
+#define CFG_MSGOUT_NMEA_ID_ZDA_SPI            0x209100db
+#define CFG_MSGOUT_NMEA_ID_ZDA_UART1          0x209100d8
+#define CFG_MSGOUT_NMEA_ID_ZDA_USB            0x209100d9
+
+//PUBX messages
+#define CFG_MSGOUT_PUBX_ID_POLYP_I2C          0x209100ec
+#define CFG_MSGOUT_PUBX_ID_POLYP_SPI          0x209100f0
+#define CFG_MSGOUT_PUBX_ID_POLYP_UART1        0x209100ed
+#define CFG_MSGOUT_PUBX_ID_POLYP_USB          0x209100ee
+
+#define CFG_MSGOUT_PUBX_ID_POLYS_I2C          0x209100f1
+#define CFG_MSGOUT_PUBX_ID_POLYS_SPI          0x209100f5
+#define CFG_MSGOUT_PUBX_ID_POLYS_UART1        0x209100f2
+#define CFG_MSGOUT_PUBX_ID_POLYS_USB          0x209100f3
+
+#define CFG_MSGOUT_PUBX_ID_POLYT_I2C          0x209100f6
+#define CFG_MSGOUT_PUBX_ID_POLYT_SPI          0x209100fa
+#define CFG_MSGOUT_PUBX_ID_POLYT_UART1        0x209100f7
+#define CFG_MSGOUT_PUBX_ID_POLYT_USB          0x209100f8
+
+#define CFG_PM_OPERATEMODE					0x20d00001
+#define CFG_PM_EXTINTWAKE					0x10d0000c
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-/* MAX-M10 operating modes */
 typedef enum
 {
-	MAX_M10_MODE_NORMAL, /* Full power, standard operation */
-	MAX_M10_MODE_POWERSAVE, /* Cyclic tracking, reduced power */
-	MAX_M10_MODE_SLEEP /* Minimal power consumption */
+	MAX_M10_MODE_FULL,
+	MAX_M10_MODE_PSMOO,
+	MAX_M10_MODE_PSMCT
 } max_m10_mode_t;
 
-/* GPS position data structure */
-typedef struct
-{
-	float latitude; /* Degrees, North positive */
-	float longitude; /* Degrees, East positive */
-	float altitude; /* Meters above mean sea level */
-	uint8_t satellites; /* Number of satellites used in fix */
-	bool valid_fix; /* Whether the position fix is valid */
-	uint8_t fix_type; /* 0=No fix, 1=Dead reckoning, 2=2D, 3=3D, etc. */
-	uint32_t timestamp; /* UTC time in milliseconds from midnight */
-} max_m10_position_t;
-
 bool max_m10_init(void);
-bool max_m10_verify_comm(void);
+bool max_m10_get_pos(gnss_position_t *position);
+bool max_m10_sleep(void);
 bool max_m10_set_mode(max_m10_mode_t mode);
+
 
 #ifdef __cplusplus
 }

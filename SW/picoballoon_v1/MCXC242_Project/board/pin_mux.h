@@ -52,22 +52,22 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_LED_PIN_MASK (1U << 29U)      /*!<@brief PORT pin mask */
                                                      /* @} */
 
-/*! @name PORTB2 (number 37), J1[15]
+/*! @name PORTB0 (number 35), A5-I2C0_SCL/ADC0_SE8
   @{ */
 
 /* Symbols to be used with PORT driver */
-#define BOARD_INITPINS_SCL_TEMP_PORT PORTB               /*!<@brief PORT peripheral base pointer */
-#define BOARD_INITPINS_SCL_TEMP_PIN 2U                   /*!<@brief PORT pin number */
-#define BOARD_INITPINS_SCL_TEMP_PIN_MASK (1U << 2U)      /*!<@brief PORT pin mask */
+#define BOARD_INITPINS_SCL_SENS_PORT PORTB               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_SCL_SENS_PIN 0U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_SCL_SENS_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
                                                          /* @} */
 
-/*! @name PORTB3 (number 38), J1[13]
+/*! @name PORTB1 (number 36), A4-I2C0_SDA/ADC0_SE9
   @{ */
 
 /* Symbols to be used with PORT driver */
-#define BOARD_INITPINS_SDA_TEMP_PORT PORTB               /*!<@brief PORT peripheral base pointer */
-#define BOARD_INITPINS_SDA_TEMP_PIN 3U                   /*!<@brief PORT pin number */
-#define BOARD_INITPINS_SDA_TEMP_PIN_MASK (1U << 3U)      /*!<@brief PORT pin mask */
+#define BOARD_INITPINS_SDA_SENS_PORT PORTB               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_SDA_SENS_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_SDA_SENS_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
                                                          /* @} */
 
 /*! @name PORTC3 (number 46), J2[15]
@@ -178,11 +178,492 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_RX_PIN_MASK (1U << 6U)      /*!<@brief PORT pin mask */
                                                    /* @} */
 
+/*! @name PORTD5 (number 62), J1[11]/J3[2]/SDA_PTD5
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_EXTINT_GNSS_FGPIO FGPIOD             /*!<@brief FGPIO peripheral base pointer */
+#define BOARD_INITPINS_EXTINT_GNSS_GPIO GPIOD               /*!<@brief GPIO peripheral base pointer */
+#define BOARD_INITPINS_EXTINT_GNSS_INIT_GPIO_VALUE 0U       /*!<@brief GPIO output initial state */
+#define BOARD_INITPINS_EXTINT_GNSS_GPIO_PIN_MASK (1U << 5U) /*!<@brief GPIO pin mask */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_EXTINT_GNSS_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_EXTINT_GNSS_PIN 5U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_EXTINT_GNSS_PIN_MASK (1U << 5U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PORTD4 (number 61), J1[9]
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_GNSS_EN_FGPIO FGPIOD             /*!<@brief FGPIO peripheral base pointer */
+#define BOARD_INITPINS_GNSS_EN_GPIO GPIOD               /*!<@brief GPIO peripheral base pointer */
+#define BOARD_INITPINS_GNSS_EN_INIT_GPIO_VALUE 0U       /*!<@brief GPIO output initial state */
+#define BOARD_INITPINS_GNSS_EN_GPIO_PIN_MASK (1U << 4U) /*!<@brief GPIO pin mask */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_GNSS_EN_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_GNSS_EN_PIN 4U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_GNSS_EN_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
+                                                        /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
 void BOARD_InitPins(void);
+
+/*! @name PORTE29 (number 17), LED
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_LED_PORT PORTE                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_LED_PIN 29U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_LED_PIN_MASK (1U << 29U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PORTE29 (number 17), LED
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_LED_PORT PORTE                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_LED_PIN 29U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_LED_PIN_MASK (1U << 29U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PORTB1 (number 36), A4-I2C0_SDA/ADC0_SE9
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_SDA_SENS_PORT PORTB               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_SDA_SENS_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_SDA_SENS_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
+                                                                /* @} */
+
+/*! @name PORTC3 (number 46), J2[15]
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_SDN_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_SDN_PIN 3U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_SDN_PIN_MASK (1U << 3U)      /*!<@brief PORT pin mask */
+                                                           /* @} */
+
+/*! @name PORTC4 (number 49), D10-SPI0_CS0
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_CS_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_CS_PIN 4U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_CS_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
+                                                          /* @} */
+
+/*! @name PORTC5 (number 50), D13-SPI0_SCK
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_SCLK_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_SCLK_PIN 5U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_SCLK_PIN_MASK (1U << 5U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PORTC6 (number 51), D11-SPI0_MOSI
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_MOSI_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_MOSI_PIN 6U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_MOSI_PIN_MASK (1U << 6U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PORTC7 (number 52), D12-SPI0_MISO
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_MISO_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_MISO_PIN 7U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_MISO_PIN_MASK (1U << 7U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PORTC8 (number 53), D7-TPM0_CH4/CMP0_IN2
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_nIRQ_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_nIRQ_PIN 8U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_nIRQ_PIN_MASK (1U << 8U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PORTE0 (number 1), J3[1]/UART1_TX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_SDA_GNSS_PORT PORTE               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_SDA_GNSS_PIN 0U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_SDA_GNSS_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
+                                                                /* @} */
+
+/*! @name PORTE1 (number 2), J3[3]/UART1_RX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_SCL_GNSS_PORT PORTE               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_SCL_GNSS_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_SCL_GNSS_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
+                                                                /* @} */
+
+/*! @name PORTD7 (number 64), D15-I2C1_SCL/ACCELL_SCL
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_TX_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_TX_PIN 7U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_TX_PIN_MASK (1U << 7U)      /*!<@brief PORT pin mask */
+                                                          /* @} */
+
+/*! @name PORTD6 (number 63), D14-I2C1_SDA/ACCELL_SDA
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_RX_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_RX_PIN 6U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_RX_PIN_MASK (1U << 6U)      /*!<@brief PORT pin mask */
+                                                          /* @} */
+
+/*! @name PORTD5 (number 62), J1[11]/J3[2]/SDA_PTD5
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_EXTINT_GNSS_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_EXTINT_GNSS_PIN 5U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_EXTINT_GNSS_PIN_MASK (1U << 5U)      /*!<@brief PORT pin mask */
+                                                                   /* @} */
+
+/*! @name PORTD4 (number 61), PTD4/LLWU_P14/SPI1_PCS0/UART2_RX/TPM0_CH4/FXIO0_D4
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_GNSS_EN_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_GNSS_EN_PIN 4U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_GNSS_EN_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
+                                                               /* @} */
+
+/*!
+ * @brief This is a de-initialization function for 'BOARD_InitPins' function.
+ * It sets all pins features (routing, direction and electrical) to their after-reset state.
+ * It also tries to route the previous peripheral signals to their default pins.
+ *
+ */
+void BOARD_InitPins_deinit(void);
+
+/*! @name PORTD4 (number 61), J1[9]
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INIT_SLEEP_PINS_GNSS_EN_FGPIO FGPIOD             /*!<@brief FGPIO peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_GNSS_EN_GPIO GPIOD               /*!<@brief GPIO peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_GNSS_EN_INIT_GPIO_VALUE 0U       /*!<@brief GPIO output initial state */
+#define BOARD_INIT_SLEEP_PINS_GNSS_EN_GPIO_PIN_MASK (1U << 4U) /*!<@brief GPIO pin mask */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_GNSS_EN_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_GNSS_EN_PIN 4U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_GNSS_EN_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
+                                                               /* @} */
+
+/*! @name PORTE0 (number 1), J3[1]/UART1_TX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_SDA_GNSS_PORT PORTE               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_SDA_GNSS_PIN 0U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_SDA_GNSS_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
+                                                                /* @} */
+
+/*! @name PORTE1 (number 2), J3[3]/UART1_RX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_SCL_GNSS_PORT PORTE               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_SCL_GNSS_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_SCL_GNSS_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
+                                                                /* @} */
+
+/*! @name PORTA0 (number 22), SWCLK
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDCLK_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDCLK_PIN 0U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDCLK_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
+                                                                        /* @} */
+
+/*! @name PORTA1 (number 23), D0-UART0_RX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_UART_RX_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_UART_RX_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_UART_RX_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
+                                                                     /* @} */
+
+/*! @name PORTA2 (number 24), D1-UART0_TX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_UART_TX_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_UART_TX_PIN 2U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_UART_TX_PIN_MASK (1U << 2U)      /*!<@brief PORT pin mask */
+                                                                     /* @} */
+
+/*! @name PORTA3 (number 25), SWDIO
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDIO_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDIO_PIN 3U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEBUG_SWD_SWDIO_PIN_MASK (1U << 3U)      /*!<@brief PORT pin mask */
+                                                                       /* @} */
+
+/*! @name PORTA4 (number 26), J2[5]
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_SW3_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_SW3_PIN 4U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_SW3_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
+                                                           /* @} */
+
+/*! @name PORTA13 (number 29), D4-LED_BLUE/TPM1_CH1
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_LED_BLUE_PORT PORTA                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_LED_BLUE_PIN 13U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_LED_BLUE_PIN_MASK (1U << 13U)      /*!<@brief PORT pin mask */
+                                                                 /* @} */
+
+/*! @name PORTA20 (number 34), RST
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_SW1_PORT PORTA                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_SW1_PIN 20U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_SW1_PIN_MASK (1U << 20U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PORTB18 (number 41), J2[11]/LED_RED
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_LED_RED_PORT PORTB                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_LED_RED_PIN 18U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_LED_RED_PIN_MASK (1U << 18U)      /*!<@brief PORT pin mask */
+                                                                /* @} */
+
+/*! @name PORTB19 (number 42), J2[13]/LED_GREEN
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_LED_GREEN_PORT PORTB                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_LED_GREEN_PIN 19U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_LED_GREEN_PIN_MASK (1U << 19U)      /*!<@brief PORT pin mask */
+                                                                  /* @} */
+
+/*! @name PORTC3 (number 46), J2[15]
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_SDN_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_SDN_PIN 3U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_SDN_PIN_MASK (1U << 3U)      /*!<@brief PORT pin mask */
+                                                           /* @} */
+
+/*! @name PORTC4 (number 49), D10-SPI0_CS0
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_CS_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_CS_PIN 4U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_CS_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
+                                                          /* @} */
+
+/*! @name PORTC5 (number 50), D13-SPI0_SCK
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_SCLK_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_SCLK_PIN 5U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_SCLK_PIN_MASK (1U << 5U)      /*!<@brief PORT pin mask */
+                                                            /* @} */
+
+/*! @name PORTD7 (number 64), D15-I2C1_SCL/ACCELL_SCL
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_TX_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_TX_PIN 7U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_TX_PIN_MASK (1U << 7U)      /*!<@brief PORT pin mask */
+                                                          /* @} */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void BOARD_init_sleep_pins(void);
+
+/*! @name PORTD4 (number 61), J1[9]
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_GNSS_EN_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_GNSS_EN_PIN 4U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_GNSS_EN_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
+                                                                      /* @} */
+
+/*! @name PORTE0 (number 1), J3[1]/UART1_TX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SDA_GNSS_PORT PORTE               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SDA_GNSS_PIN 0U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SDA_GNSS_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
+                                                                       /* @} */
+
+/*! @name PORTE1 (number 2), J3[3]/UART1_RX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SCL_GNSS_PORT PORTE               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SCL_GNSS_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SCL_GNSS_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
+                                                                       /* @} */
+
+/*! @name PORTA0 (number 22), SWCLK
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDCLK_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDCLK_PIN 0U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDCLK_PIN_MASK (1U << 0U)      /*!<@brief PORT pin mask */
+                                                                               /* @} */
+
+/*! @name PORTA1 (number 23), D0-UART0_RX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_RX_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_RX_PIN 1U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_RX_PIN_MASK (1U << 1U)      /*!<@brief PORT pin mask */
+                                                                            /* @} */
+
+/*! @name PORTA2 (number 24), D1-UART0_TX
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_TX_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_TX_PIN 2U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_UART_TX_PIN_MASK (1U << 2U)      /*!<@brief PORT pin mask */
+                                                                            /* @} */
+
+/*! @name PORTA3 (number 25), SWDIO
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDIO_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDIO_PIN 3U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_DEBUG_SWD_SWDIO_PIN_MASK (1U << 3U)      /*!<@brief PORT pin mask */
+                                                                              /* @} */
+
+/*! @name PORTA4 (number 26), J2[5]
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SW3_PORT PORTA               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SW3_PIN 4U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SW3_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
+                                                                  /* @} */
+
+/*! @name PORTA13 (number 29), D4-LED_BLUE/TPM1_CH1
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_LED_BLUE_PORT PORTA                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_LED_BLUE_PIN 13U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_LED_BLUE_PIN_MASK (1U << 13U)      /*!<@brief PORT pin mask */
+                                                                        /* @} */
+
+/*! @name PORTA20 (number 34), RST
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SW1_PORT PORTA                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SW1_PIN 20U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SW1_PIN_MASK (1U << 20U)      /*!<@brief PORT pin mask */
+                                                                   /* @} */
+
+/*! @name PORTB18 (number 41), J2[11]/LED_RED
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_LED_RED_PORT PORTB                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_LED_RED_PIN 18U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_LED_RED_PIN_MASK (1U << 18U)      /*!<@brief PORT pin mask */
+                                                                       /* @} */
+
+/*! @name PORTB19 (number 42), J2[13]/LED_GREEN
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_LED_GREEN_PORT PORTB                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_LED_GREEN_PIN 19U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_LED_GREEN_PIN_MASK (1U << 19U)      /*!<@brief PORT pin mask */
+                                                                         /* @} */
+
+/*! @name PORTC3 (number 46), J2[15]
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SDN_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SDN_PIN 3U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SDN_PIN_MASK (1U << 3U)      /*!<@brief PORT pin mask */
+                                                                  /* @} */
+
+/*! @name PORTC4 (number 49), D10-SPI0_CS0
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_CS_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_CS_PIN 4U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_CS_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
+                                                                 /* @} */
+
+/*! @name PORTC5 (number 50), D13-SPI0_SCK
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SCLK_PORT PORTC               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SCLK_PIN 5U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_SCLK_PIN_MASK (1U << 5U)      /*!<@brief PORT pin mask */
+                                                                   /* @} */
+
+/*! @name PORTD7 (number 64), PTD7/SPI1_MISO/LPUART0_TX/I2C1_SCL/SPI1_MOSI/FXIO0_D7
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_TX_PORT PORTD               /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_TX_PIN 7U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_TX_PIN_MASK (1U << 7U)      /*!<@brief PORT pin mask */
+                                                                 /* @} */
+
+/*!
+ * @brief This is a de-initialization function for 'BOARD_init_sleep_pins' function.
+ * It sets all pins features (routing, direction and electrical) to their after-reset state.
+ * It also tries to route the previous peripheral signals to their default pins.
+ *
+ */
+void BOARD_init_sleep_pins_deinit(void);
 
 #if defined(__cplusplus)
 }
