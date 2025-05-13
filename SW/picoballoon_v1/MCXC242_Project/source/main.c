@@ -158,7 +158,7 @@ int main(void)
 	aprs_conf_t aprs_config;
 	strncpy(aprs_config.callsign, "OK4VP", sizeof(aprs_config.callsign));
 	aprs_config.ssid = 11;
-	strncpy(aprs_config.path, "WIDE-1", sizeof(aprs_config.path));
+	strncpy(aprs_config.path, "WIDE1-1,WIDE2-1", sizeof(aprs_config.path));
 	aprs_config.preamble = 0;
 
 	uint8_t buffer[128] = {0};

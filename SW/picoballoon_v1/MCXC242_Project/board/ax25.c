@@ -19,42 +19,90 @@ void ax25_init(ax25_t *packet)
 	packet->bit_count = 0;
 	packet->byte_count = 0;
 	packet->ones_in_a_row = 0;
+	packet->crc = 0xffff;
 }
 
 void ax25_send_header(ax25_t *packet, const char *callsign, uint8_t ssid, const char *path)
 {
-	uint8_t tmp[8];
-	packet->ones_in_a_row = 0;
-	packet->crc = 0xffff;
+	uint8_t tmp[16];
 
 	for(uint8_t i = 0; i < 4; i++)
 		ax25_send_flag(packet);
 
 	ax25_send_path(packet, APRS_DEST_CALLSIGN, APRS_DEST_SSID, false);
-	ax25_send_path(packet, callsign, ssid, path[0] == 0 || path == NULL);
 
-	uint16_t i, j; //path index, char index
-	for(i = 0, j = 0; (path[i - 1] != 0 || i == 0) && path != NULL; i++)
+	bool last_address = (path == NULL || path[0] == 0);
+	ax25_send_path(packet, callsign, ssid, last_address);
+
+	if(path != NULL && path[0] != 0)
 	{
-		if(path[i] == ',' || path[i] == 0)
+		uint16_t i, j = 0; // path index, buffer index
+		bool last_segment = false;
+
+		for(i = 0; i < 32; i++)
 		{
-			if(!j)
-				break;
+			if(path[i] == ',' || path[i] == 0)
+			{
+				last_segment = (path[i] == 0);
 
-			tmp[j] = 0;
-			char calls[8];
-			uint8_t calls_pos;
-			for(calls_pos = 0; i < j && tmp[j] != '-'; calls_pos++)
-				calls[calls_pos] = tmp[i];
-			calls[calls_pos] = 0;
+				if(j == 0)
+				{
+					if(last_segment)
+						break;
+					continue;
+				}
 
-			uint8_t ssid_val = ((tmp[calls_pos] == '-' ? tmp[++calls_pos] : tmp[--calls_pos]) - 48) & 0x7;
-			if(ssid_val != 0)
-				ax25_send_path(packet, calls, ssid_val, path[i] == 0);
-			j = 0;
+				tmp[j] = 0;
+
+				char digi_call[8] = {0};
+				uint8_t digi_ssid = 0;
+
+				char *dash = NULL;
+				for(uint8_t k = 0; k < j; k++)
+				{
+					if(tmp[k] == '-')
+					{
+						dash = (char*)&tmp[k];
+						break;
+					}
+				}
+
+				if(dash)
+				{
+					size_t call_len = dash - (char*)tmp;
+					if(call_len > 6)
+						call_len = 6;
+					memcpy(digi_call, tmp, call_len);
+					digi_call[call_len] = 0;
+
+					char ssid_str[3] = {0};
+					size_t ssid_len = j - call_len - 1;
+					if(ssid_len > 2)
+						ssid_len = 2;
+
+					memcpy(ssid_str, dash + 1, ssid_len);
+					digi_ssid = 0;
+					for(uint8_t d = 0; ssid_str[d] >= '0' && ssid_str[d] <= '9'; d++)
+						digi_ssid = digi_ssid * 10 + (ssid_str[d] - '0');
+					digi_ssid &= 0x0F;
+				}
+				else
+				{
+					size_t call_len = j;
+					if(call_len > 6)
+						call_len = 6;
+					memcpy(digi_call, tmp, call_len);
+					digi_call[call_len] = 0;
+				}
+				ax25_send_path(packet, digi_call, digi_ssid, last_segment);
+
+				j = 0;
+				if(last_segment)
+					break;
+			}
+			else if(j < sizeof(tmp) - 1)
+				tmp[j++] = path[i];
 		}
-		else
-			tmp[j++] = path[i];
 	}
 
 	ax25_send_byte(packet, 0x03);
@@ -78,7 +126,7 @@ void ax25_send_byte(ax25_t *packet, char byte)
 {
 	for(uint8_t i = 0; i < 8; i++)
 	{
-		update_crc(packet, (byte >> 1) & 1);
+		update_crc(packet, (byte >> i) & 1);
 		if((byte >> i) & 1)
 		{
 			if(packet->bit_count >= packet->max_size * 8)
@@ -134,10 +182,7 @@ void ax25_send_footer(ax25_t *packet)
 {
 	uint16_t crc = packet->crc;
 	ax25_send_byte_no_crc(packet, ~(crc & 0xff));
-	crc >>= 8;
-	ax25_send_byte_no_crc(packet, ~(crc & 0xff));
-
-	packet->crc = crc;
+	ax25_send_byte_no_crc(packet, ~((crc >> 8) & 0xff));
 
 	ax25_send_flag(packet);
 }

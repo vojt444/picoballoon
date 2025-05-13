@@ -46,7 +46,7 @@ typedef struct
 	char callsign[16];
 	uint8_t ssid;
 	uint16_t symbol;
-	char path[16];
+	char path[32];
 	uint16_t preamble;
 	telemetry_t tel[5];
 	bool tel_enc;
@@ -56,9 +56,6 @@ typedef struct
 
 void aprs_encode_init(ax25_t *packet, uint8_t *data, uint16_t data_size, mod_t mod);
 void aprs_encode_message(ax25_t *packet, const aprs_conf_t *config, const char *receiver, const char *text);
-
-void create_aprs_packet(uint8_t *packet, size_t *packet_len, char *src, uint8_t src_ssid, char *dst,
-						uint8_t dst_ssid, char *digipeaters[][2], int digi_count, char *payload);
 void aprs_encode_full_data_packet(ax25_t *packet, const aprs_conf_t *config, measured_data_t *data);
 void aprs_encode_test_packet(ax25_t *packet, const aprs_conf_t *config);
 

@@ -7,7 +7,7 @@
 
 #include "aprs.h"
 
-static uint16_t msg_id;
+static uint16_t msg_id = 0;
 
 void aprs_encode_init(ax25_t *packet, uint8_t *data, uint16_t data_size, mod_t mod)
 {
@@ -20,8 +20,8 @@ void aprs_encode_init(ax25_t *packet, uint8_t *data, uint16_t data_size, mod_t m
 
 void aprs_encode_full_data_packet(ax25_t *packet, const aprs_conf_t *config, measured_data_t *data)
 {
-	char tmp[32] = {0};
-	char tmp2[128] = {0};
+	char tmp[64] = {0};
+	char tmp2[64] = {0};
 
 	ax25_send_header(packet, config->callsign, config->ssid, config->path);
 	ax25_send_byte(packet, '!');
@@ -56,15 +56,18 @@ void aprs_encode_full_data_packet(ax25_t *packet, const aprs_conf_t *config, mea
 	tmp[6] = lon3 + 33;
 	tmp[7] = lon3r + 33;
 
+	tmp[8] = '/';
+	tmp[9] = 'O';
+
 	ax25_send_string(packet, tmp);
 
-	sprintf(tmp2, ">/A%.1f,T%.1f,P%.1f,H%.1f", data->position.altitude, data->temperature, data->pressure,
-			data->humidity);
+	sprintf(tmp2, "A=%.1f,T=%.1f,P=%.1f,H=%.1f,%d", data->position.altitude, data->temperature,
+			data->pressure, data->humidity, msg_id++);
 	ax25_send_string(packet, tmp2);
 
 	ax25_send_footer(packet);
 
-	while(packet->data[packet->byte_count] != 0)
+	while(packet->byte_count < packet->max_size && packet->data[packet->byte_count] != 0)
 		packet->byte_count++;
 }
 
@@ -72,7 +75,7 @@ void aprs_encode_test_packet(ax25_t *packet, const aprs_conf_t *config)
 {
 	char test_string[11] = "Test packet";
 	ax25_send_header(packet, config->callsign, config->ssid, config->path);
-	ax25_send_byte(packet, '/');
+	ax25_send_byte(packet, ':');
 	ax25_send_string(packet, test_string);
 	ax25_send_footer(packet);
 
@@ -89,7 +92,6 @@ void aprs_encode_message(ax25_t *packet, const aprs_conf_t *config, const char *
 	snprintf(tmp, sizeof(tmp), "%-9s", receiver);
 	ax25_send_string(packet, tmp);
 
-	ax25_send_byte(packet, ':');
 	ax25_send_string(packet, text);
 	ax25_send_byte(packet, '{');
 
@@ -124,43 +126,5 @@ uint16_t ax25_fcs(const uint8_t *data, size_t length)
 		}
 	}
 	return crc;
-}
-
-void create_aprs_packet(uint8_t *packet, size_t *packet_len, char *src, uint8_t src_ssid, char *dst,
-						uint8_t dst_ssid, char *digipeaters[][2], int digi_count, char *payload)
-{
-	uint8_t frame[256];
-	*packet_len = 0;
-
-	frame[(*packet_len)++] = 0x7E;
-
-	ax25_encode_callsign(dst, dst_ssid, &frame[(*packet_len)]);
-	*packet_len += 7;
-
-	ax25_encode_callsign(src, src_ssid, &frame[(*packet_len)]);
-	*packet_len += 7;
-
-	for(int i = 0; i < digi_count; i++)
-	{
-		ax25_encode_callsign(digipeaters[i][0], atoi(digipeaters[i][1]), &frame[*packet_len]);
-		if(i == digi_count - 1)
-			frame[(*packet_len) + 6] |= 0x01;
-
-		*packet_len += 7;
-	}
-
-	frame[(*packet_len)++] = 0x03;
-	frame[(*packet_len)++] = 0xF0;
-
-	strncpy((char*)&frame[*packet_len], payload, strlen(payload));
-	(*packet_len) += strlen(payload);
-
-	uint16_t crc = ax25_fcs(frame, *packet_len);
-	frame[(*packet_len)++] = crc & 0xFF;
-	frame[(*packet_len)++] = (crc >> 8) & 0xFF;
-
-	frame[(*packet_len)++] = 0x7E;
-
-	memcpy(packet, frame, *packet_len);
 }
 
