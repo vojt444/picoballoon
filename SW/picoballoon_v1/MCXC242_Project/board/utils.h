@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include "fsl_common.h"
+#include "fsl_clock.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,7 +53,7 @@ typedef struct
 	mod_t mod;
 } ax25_t;
 
-void delay(uint32_t n);
+void delay_ms(uint32_t n);
 void pad_string(char *str, size_t desired_length);
 void uint16_to_little_endian(uint16_t value, uint8_t *buffer);
 void uint32_to_little_endian(uint32_t value, uint8_t *buffer);

@@ -11,7 +11,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include "fsl_spi.h"
-#include "board.h"
+#include "clock_config.h"
+#include "fsl_gpio.h"
 #include "utils.h"
 #include "si4461_desc.h"
 #include "aprs.h"
@@ -34,6 +35,14 @@ extern "C"
 
 #define CTS_TIMEOUT					5000
 #define TIMEOUT						10000
+
+#define XO_FREQ						30000000UL
+#define OUTDIV						24U
+#define RF_DEV_HZ					1300.0f
+#define FDEV_APRS					((((uint32_t)1 << 19) * OUTDIV * RF_DEV_HZ)/(2*XO_FREQ))
+#define F_INT_2M					(2 * XO_FREQ / 24)
+#define FDIV_INTE_2M				((144800000 / F_INT_2M) - 1)
+#define FDIV_FRAC_2M				((144800000 - F_INT_2M * (int)FDIV_INTE_2M)*((uint32_t)1 << 19)) / F_INT_2M
 
 typedef struct
 {
@@ -60,13 +69,18 @@ bool Si4461_get_properties(uint16_t start_property, uint8_t length,
 bool Si4461_get_state(uint8_t *state);
 bool Si4461_set_state(uint8_t new_state);
 bool Si4461_NOP(void);
+bool Si4461_gpio_cfg(uint8_t *data);
 bool Si4461_set_tx_power(uint8_t power);
+bool Si4461_freq_offset(uint16_t offset);
+bool Si4461_deviation(uint32_t deviation);
+bool Si4461_freq_control(uint8_t inte, uint32_t frac);
 bool Si4461_set_freq(uint32_t freq);
 bool Si4461_fifo_reset(void);
 bool Si4461_fifo_info(si4461_fifo_info_t *fifo_info);
 bool Si4461_fifo_write(uint8_t *packet, size_t packet_length);
 bool Si4461_send_packet(uint8_t *packet, size_t packet_length);
-bool Si4461_TX(uint8_t *tx_data);
+bool Si4461_start_TX(uint8_t *tx_data);
+bool Si4461_stop_TX(void);
 void Si4461_shutdown(void);
 
 #ifdef __cplusplus

@@ -25,7 +25,7 @@ static bool HTU21D_soft_reset(void)
 	if(!I2C_write(HTU21D_I2C_ADDR, 0, 0, &cmd, 1))
 		return false;
 
-	delay(20);
+	delay_ms(20);
 
 	return true;
 }

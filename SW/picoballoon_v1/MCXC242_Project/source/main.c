@@ -11,7 +11,7 @@
  */
 #include <i2c_ctrl.h>
 #include <stdio.h>
-#include "board.h"
+//#include "board.h"
 #include "utils.h"
 #include "peripherals.h"
 #include "pin_mux.h"
@@ -34,7 +34,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define DEBUGING				0
+#define DEBUGING				1
 
 #define BOARD_LED_GPIO 		GPIOE
 #define BOARD_LED_PIN 		29U
@@ -85,6 +85,15 @@ int main(void)
 	SMC_SetPowerModeProtection(SMC, kSMC_AllowPowerModeAll);
 	I2C_init();
 	tpm_timer_init();
+	delay_us_init();
+
+	for(uint8_t i = 0; i < 5; i++)
+	{
+		GPIO_PortClear(BOARD_LED_GPIO, 1u << BOARD_LED_PIN);
+		delay_us(833);
+		GPIO_PortSet(BOARD_LED_GPIO, 1u << BOARD_LED_PIN);
+		delay_us(833);
+	}
 
 	//watchdog
 	cop_config_t config_cop;
@@ -113,7 +122,7 @@ int main(void)
 	//init Si4461
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
-	si4461_info_t si4461_info;
+	si4461_info_t si4461_info = {0};
 	if(Si4461_init(g_APRS_frequency))
 		si4461_inited = true;
 	Si4461_get_info(&si4461_info);
@@ -121,10 +130,10 @@ int main(void)
 //GNSS
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
-	gnss_position_t pos;
+	gnss_position_t pos = {0};
 	if(max_m10_init())
 		max_m10_inited = true;
-	delay(100);
+	delay_ms(100);
 	if(max_m10_get_pos(&pos) && si4461_inited)
 	{
 		set_APRS_freq(pos.latitude, pos.longitude);
@@ -164,7 +173,7 @@ int main(void)
 	uint8_t buffer[128] = {0};
 	packet.data = buffer;
 	packet.max_size = sizeof(buffer);
-	packet.mod = MOD_AFSK;
+	packet.mod = MOD_2GFSK;
 
 	measured_data_t all_data = {0};
 	all_data.position = pos;
@@ -178,9 +187,9 @@ int main(void)
 	ax25_init(&packet);
 	aprs_encode_full_data_packet(&packet, &aprs_config, &all_data);
 //	aprs_encode_test_packet(&packet, &aprs_config);
-	NRZI_encode(&packet);
+//	NRZI_encode(&packet);
 
-	//send APRS packet
+//send APRS packet
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
 	if(si4461_inited)
@@ -188,7 +197,10 @@ int main(void)
 		set_APRS_freq(pos.latitude, pos.longitude);
 		Si4461_set_freq(g_APRS_frequency);
 	}
-	Si4461_send_packet(packet.data, packet.byte_count);
+
+	bell202_init_timer();
+	aprs_send_packet(&packet);
+	Si4461_shutdown();
 
 	while(1)
 	{
@@ -196,9 +208,9 @@ int main(void)
 		for(uint8_t i = 0; i < 3; i++)
 		{
 			GPIO_PortClear(BOARD_LED_GPIO, 1u << BOARD_LED_PIN);
-			delay(100);
+			delay_ms(1000);
 			GPIO_PortSet(BOARD_LED_GPIO, 1u << BOARD_LED_PIN);
-			delay(100);
+			delay_ms(1000);
 		}
 
 		if(g_watchdog_enabled)
@@ -209,56 +221,45 @@ int main(void)
 			//temperature
 			if(g_watchdog_enabled)
 				COP_Refresh(SIM);
-			/*if(!MCP9802_read_temperature_oneshot(&temperature))
-			 {
-			 if(!MCP9802_read_temperature_oneshot(&temperature))
-			 {
-			 delay(5);
-			 if(g_watchdog_enabled)
-			 COP_Refresh(SIM);
-			 MCP9802_init();
-			 if(!MCP9802_read_temperature_oneshot(&temperature))
-			 temperature = 0;
-			 }
-			 }*/
+			if(!MCP9802_read_temperature_oneshot(&temperature))
+			{
+				delay_ms(5);
+				if(g_watchdog_enabled)
+					COP_Refresh(SIM);
+				MCP9802_init();
+				if(!MCP9802_read_temperature_oneshot(&temperature))
+					temperature = 0;
+			}
 			//pressure
 			if(g_watchdog_enabled)
 				COP_Refresh(SIM);
 			if(!MPL_one_shot_measurement(&mpl_data, kMPL3115A2_barometer))
 			{
+				delay_ms(5);
+				if(g_watchdog_enabled)
+					COP_Refresh(SIM);
+				MPL_init();
 				if(!MPL_one_shot_measurement(&mpl_data, kMPL3115A2_barometer))
-				{
-					delay(5);
-					if(g_watchdog_enabled)
-						COP_Refresh(SIM);
-					MPL_init();
-					if(!MPL_one_shot_measurement(&mpl_data, kMPL3115A2_barometer))
-						mpl_data.pressure = 0;
-				}
+					mpl_data.pressure = 0;
 			}
 			//humidity
 			if(!HTU21D_get_humidity(&rh))
 			{
+
+				HTU21D_init();
 				if(!HTU21D_get_humidity(&rh))
-				{
-					HTU21D_init();
-					if(!HTU21D_get_humidity(&rh))
-						rh = 0;
-				}
+					rh = 0;
 			}
 			//position
 			if(!max_m10_get_pos(&pos))
 			{
+				if(!max_m10_init())
+					max_m10_inited = false;
 				if(!max_m10_get_pos(&pos))
 				{
-					if(!max_m10_init())
-						max_m10_inited = false;
-					if(!max_m10_get_pos(&pos))
-					{
-						pos.altitude = 0;
-						pos.latitude = 0;
-						pos.longitude = 0;
-					}
+					pos.altitude = 0;
+					pos.latitude = 0;
+					pos.longitude = 0;
 				}
 			}
 			if(si4461_inited)
@@ -289,14 +290,14 @@ void enable_low_power_mode(uint32_t seconds)
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
 #if DEBUGING == 1
-	delay(seconds * 1000);
+	delay_ms(seconds * 1000);
 #elif DEBUGING == 0
 	SLEEP_enter(seconds);
 #endif
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
 	BOARD_InitPins();
-	if(Si4461_init(g_APRS_frequency))
+	if(Si4461_init(144780000))
 		si4461_inited = true;
 }
 

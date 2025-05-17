@@ -208,6 +208,21 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_GNSS_EN_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
                                                         /* @} */
 
+/*! @name PORTC10 (number 55), J2[1]
+  @{ */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_BELL202_FGPIO FGPIOC              /*!<@brief FGPIO peripheral base pointer */
+#define BOARD_INITPINS_BELL202_GPIO GPIOC                /*!<@brief GPIO peripheral base pointer */
+#define BOARD_INITPINS_BELL202_INIT_GPIO_VALUE 0U        /*!<@brief GPIO output initial state */
+#define BOARD_INITPINS_BELL202_GPIO_PIN_MASK (1U << 10U) /*!<@brief GPIO pin mask */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_BELL202_PORT PORTC                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_BELL202_PIN 10U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_BELL202_PIN_MASK (1U << 10U)      /*!<@brief PORT pin mask */
+                                                         /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
@@ -340,7 +355,7 @@ void BOARD_InitPins(void);
 #define BOARD_INITPINS_DEINIT_EXTINT_GNSS_PIN_MASK (1U << 5U)      /*!<@brief PORT pin mask */
                                                                    /* @} */
 
-/*! @name PORTD4 (number 61), PTD4/LLWU_P14/SPI1_PCS0/UART2_RX/TPM0_CH4/FXIO0_D4
+/*! @name PORTD4 (number 61), J1[9]
   @{ */
 
 /* Symbols to be used with PORT driver */

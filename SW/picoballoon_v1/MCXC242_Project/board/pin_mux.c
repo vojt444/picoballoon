@@ -15,6 +15,7 @@ processor_version: 24.12.10
 board: FRDM-MCXC242
 pin_labels:
 - {pin_num: '1', pin_signal: PTE0/CLKOUT32K/SPI1_MISO/LPUART1_TX/RTC_CLKOUT/CMP0_OUT/I2C1_SDA, label: 'J3[1]/UART1_TX', identifier: SDA_GNSS}
+- {pin_num: '54', pin_signal: CMP0_IN3/PTC9/I2C0_SDA/TPM0_CH5, label: D6-TPM0_CH5/CMP0_IN3, identifier: BELL202}
 - {pin_num: '53', pin_signal: CMP0_IN2/PTC8/I2C0_SCL/TPM0_CH4, label: D7-TPM0_CH4/CMP0_IN2, identifier: nIRQ}
 - {pin_num: '49', pin_signal: PTC4/LLWU_P8/SPI0_PCS0/LPUART1_TX/TPM0_CH3/SPI1_PCS0, label: D10-SPI0_CS0, identifier: CS}
 - {pin_num: '51', pin_signal: CMP0_IN0/PTC6/LLWU_P10/SPI0_MOSI/EXTRG_IN/SPI0_MISO, label: D11-SPI0_MOSI, identifier: MOSI}
@@ -28,6 +29,7 @@ pin_labels:
 - {pin_num: '2', pin_signal: PTE1/SPI1_MOSI/LPUART1_RX/SPI1_MISO/I2C1_SCL, label: 'J3[3]/UART1_RX', identifier: SCL_GNSS}
 - {pin_num: '61', pin_signal: PTD4/LLWU_P14/SPI1_PCS0/UART2_RX/TPM0_CH4/FXIO0_D4, label: 'J1[9]', identifier: GNSS_EN}
 - {pin_num: '62', pin_signal: ADC0_SE6b/PTD5/SPI1_SCK/UART2_TX/TPM0_CH5/FXIO0_D5, label: 'J1[11]/J3[2]/SDA_PTD5', identifier: EXTINT_GNSS}
+- {pin_num: '55', pin_signal: PTC10/I2C1_SCL, label: 'J2[1]', identifier: BELL202}
 - {pin_num: '46', pin_signal: PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT, label: 'J2[15]', identifier: SDN}
 - {pin_num: '38', pin_signal: ADC0_SE13/PTB3/I2C0_SDA/TPM2_CH1, label: 'J1[13]', identifier: SDA_TEMP}
 - {pin_num: '37', pin_signal: ADC0_SE12/PTB2/I2C0_SCL/TPM2_CH0, label: 'J1[15]', identifier: SCL_TEMP}
@@ -74,6 +76,7 @@ BOARD_InitPins:
   - {pin_num: '63', peripheral: LPUART0, signal: RX, pin_signal: ADC0_SE7b/PTD6/LLWU_P15/SPI1_MOSI/LPUART0_RX/I2C1_SDA/SPI1_MISO/FXIO0_D6}
   - {pin_num: '62', peripheral: GPIOD, signal: 'GPIO, 5', pin_signal: ADC0_SE6b/PTD5/SPI1_SCK/UART2_TX/TPM0_CH5/FXIO0_D5, direction: OUTPUT}
   - {pin_num: '61', peripheral: GPIOD, signal: 'GPIO, 4', pin_signal: PTD4/LLWU_P14/SPI1_PCS0/UART2_RX/TPM0_CH4/FXIO0_D4, direction: OUTPUT, gpio_init_state: 'false'}
+  - {pin_num: '55', peripheral: GPIOC, signal: 'GPIO, 10', pin_signal: PTC10/I2C1_SCL, direction: OUTPUT, slew_rate: fast}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -116,6 +119,13 @@ void BOARD_InitPins(void)
     /* Initialize GPIO functionality on pin PTC8 (pin 53)  */
     GPIO_PinInit(BOARD_INITPINS_nIRQ_GPIO, BOARD_INITPINS_nIRQ_PIN, &nIRQ_config);
 
+    gpio_pin_config_t BELL202_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTC10 (pin 55)  */
+    GPIO_PinInit(BOARD_INITPINS_BELL202_GPIO, BOARD_INITPINS_BELL202_PIN, &BELL202_config);
+
     gpio_pin_config_t GNSS_EN_config = {
         .pinDirection = kGPIO_DigitalOutput,
         .outputLogic = 0U
@@ -142,6 +152,17 @@ void BOARD_InitPins(void)
 
     /* PORTB1 (pin 36) is configured as I2C0_SDA */
     PORT_SetPinMux(BOARD_INITPINS_SDA_SENS_PORT, BOARD_INITPINS_SDA_SENS_PIN, kPORT_MuxAlt2);
+
+    /* PORTC10 (pin 55) is configured as PTC10 */
+    PORT_SetPinMux(BOARD_INITPINS_BELL202_PORT, BOARD_INITPINS_BELL202_PIN, kPORT_MuxAsGpio);
+
+    PORTC->PCR[10] = ((PORTC->PCR[10] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Slew Rate Enable: Fast slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_FastSlewRate));
 
     /* PORTC3 (pin 46) is configured as PTC3 */
     PORT_SetPinMux(BOARD_INITPINS_SDN_PORT, BOARD_INITPINS_SDN_PIN, kPORT_MuxAsGpio);
@@ -261,6 +282,25 @@ void BOARD_InitPins_deinit(void)
          /* Drive Strength Enable: Low drive strength is configured on the corresponding pin, if pin is
           * configured as a digital output. */
          | PORT_PCR_DSE(kPORT_LowDriveStrength));
+
+    /* PORTC10 (pin 55) is disabled */
+    PORT_SetPinMux(PORTC, 10U, kPORT_PinDisabledOrAnalog);
+
+    PORTC->PCR[10] = ((PORTC->PCR[10] &
+                       /* Mask bits to zero which are setting */
+                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
+
+                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
+                       * corresponding PE field is set. */
+                      | PORT_PCR_PS(kPORT_PullUp)
+
+                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
+                       * pin. */
+                      | PORT_PCR_PE(kPORT_PullDisable)
+
+                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
+                       * configured as a digital output. */
+                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
 
     /* PORTC3 (pin 46) is disabled */
     PORT_SetPinMux(BOARD_INITPINS_DEINIT_SDN_PORT, BOARD_INITPINS_DEINIT_SDN_PIN, kPORT_PinDisabledOrAnalog);
@@ -565,7 +605,7 @@ BOARD_init_sleep_pins:
   - {pin_num: '46', peripheral: n/a, signal: disabled, pin_signal: PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT}
   - {pin_num: '49', peripheral: n/a, signal: disabled, pin_signal: PTC4/LLWU_P8/SPI0_PCS0/LPUART1_TX/TPM0_CH3/SPI1_PCS0}
   - {pin_num: '50', peripheral: n/a, signal: disabled, pin_signal: PTC5/LLWU_P9/SPI0_SCK/LPTMR0_ALT2/CMP0_OUT}
-  - {pin_num: '55', peripheral: n/a, signal: disabled, pin_signal: PTC10/I2C1_SCL}
+  - {pin_num: '55', peripheral: n/a, signal: disabled, pin_signal: PTC10/I2C1_SCL, identifier: ''}
   - {pin_num: '56', peripheral: n/a, signal: disabled, pin_signal: PTC11/I2C1_SDA}
   - {pin_num: '57', peripheral: n/a, signal: disabled, pin_signal: PTD0/SPI0_PCS0/TPM0_CH0/FXIO0_D0}
   - {pin_num: '59', peripheral: n/a, signal: disabled, pin_signal: PTD2/SPI0_MOSI/UART2_RX/TPM0_CH2/SPI0_MISO/FXIO0_D2}

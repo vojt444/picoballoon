@@ -26,7 +26,7 @@ void ax25_send_header(ax25_t *packet, const char *callsign, uint8_t ssid, const 
 {
 	uint8_t tmp[16];
 
-	for(uint8_t i = 0; i < 4; i++)
+	for(uint8_t i = 0; i < 15; i++)
 		ax25_send_flag(packet);
 
 	ax25_send_path(packet, APRS_DEST_CALLSIGN, APRS_DEST_SSID, false);

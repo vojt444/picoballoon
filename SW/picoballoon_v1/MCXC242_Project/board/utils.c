@@ -14,7 +14,7 @@ void SysTick_Handler(void)
 		g_systick_counter--;
 }
 
-void delay(uint32_t n)
+void delay_ms(uint32_t n)
 {
 	g_systick_counter = n;
 	while(g_systick_counter != 0U);

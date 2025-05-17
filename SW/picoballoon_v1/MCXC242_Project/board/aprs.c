@@ -46,6 +46,10 @@ void aprs_encode_full_data_packet(ax25_t *packet, const aprs_conf_t *config, mea
 	uint32_t lon3 = lon2r / 91;
 	uint32_t lon3r = lon2r % 91;
 
+	uint32_t alt = logf(METER_TO_FEET(data->position.altitude)) / logf(1.002f);
+	uint32_t alt1 = alt / 91;
+	uint32_t alt1r = alt % 91;
+
 	tmp[0] = lat1 + 33;
 	tmp[1] = lat2 + 33;
 	tmp[2] = lat3 + 33;
@@ -56,13 +60,14 @@ void aprs_encode_full_data_packet(ax25_t *packet, const aprs_conf_t *config, mea
 	tmp[6] = lon3 + 33;
 	tmp[7] = lon3r + 33;
 
-	tmp[8] = '/';
-	tmp[9] = 'O';
+	tmp[8] = 'O';
+
+	tmp[9] = alt1 + 33;
+	tmp[10] = alt1r + 33;
 
 	ax25_send_string(packet, tmp);
 
-	sprintf(tmp2, "A=%.1f,T=%.1f,P=%.1f,H=%.1f,%d", data->position.altitude, data->temperature,
-			data->pressure, data->humidity, msg_id++);
+	sprintf(tmp2, "T=%.1f,P=%.1f,H=%.1f,%d", data->temperature, data->pressure, data->humidity, msg_id++);
 	ax25_send_string(packet, tmp2);
 
 	ax25_send_footer(packet);
@@ -73,9 +78,8 @@ void aprs_encode_full_data_packet(ax25_t *packet, const aprs_conf_t *config, mea
 
 void aprs_encode_test_packet(ax25_t *packet, const aprs_conf_t *config)
 {
-	char test_string[11] = "Test packet";
+	char test_string[32] = "!4913.32N/01635.72EO";
 	ax25_send_header(packet, config->callsign, config->ssid, config->path);
-	ax25_send_byte(packet, ':');
 	ax25_send_string(packet, test_string);
 	ax25_send_footer(packet);
 
@@ -126,5 +130,41 @@ uint16_t ax25_fcs(const uint8_t *data, size_t length)
 		}
 	}
 	return crc;
+}
+
+bool aprs_send_packet(ax25_t *packet)
+{
+	const uint32_t bit_duration = 833;
+
+	uint32_t nvic_iser = NVIC->ISER[0];
+	uint32_t tpm_irq_mask = (1UL << TPM1_IRQn) | (1UL << TPM2_IRQn);
+
+	uint8_t state;
+	if(!Si4461_get_state(&state))
+		return false;
+	if(state == SI4461_STATE_TX)
+		return false;
+
+	uint8_t data[4] = {0, 0x10, 0, 0};
+	if(!Si4461_start_TX(data))
+		return false;
+
+	__disable_irq();
+	NVIC->ISER[0] = tpm_irq_mask;
+	__enable_irq();
+
+	bell202_start_tones();
+	for(uint16_t i = 0; i < packet->byte_count; i++)
+		bell202_send_byte(packet->data[i], bit_duration);
+	bell202_stop_tones();
+
+	__disable_irq();
+	NVIC->ISER[0] = nvic_iser;
+	__enable_irq();
+
+	if(!Si4461_stop_TX())
+		return false;
+
+	return true;
 }
 

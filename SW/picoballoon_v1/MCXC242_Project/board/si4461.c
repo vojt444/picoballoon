@@ -163,10 +163,14 @@ static bool Si4461_write_command(uint8_t cmd, uint8_t *data, size_t data_len)
 	data_send[0] = cmd;
 	memcpy(&data_send[1], data, data_len);
 
+	uint8_t received = 0;
 	CHIP_SELECT();
-	if(!Si4461_SPI_transfer_no_rx(data_send, data_len + 1))
+	if(!Si4461_SPI_transfer(data_send, data_len + 1, &received, 1))
 		return false;
 	CHIP_DESELECT();
+
+	if(received != 0xFF)
+		return false;
 
 	return true;
 }
@@ -257,13 +261,28 @@ static bool Si4461_read_FRR(uint8_t reg, uint8_t *value)
 
 static bool Si4461_set_filter(void)
 {
-	uint8_t coeffs[9] = {0x81, 0x9f, 0xc4, 0xee, 0x18, 0x3e, 0x5c, 0x70, 0x76}; // 6dB@1200 Hz, 2400 Hz
+	uint8_t coeffs[9] = {0x1d, 0xe5, 0xb8, 0xaa, 0xc0, 0xf5, 0x36, 0x6b, 0x7f}; // 6dB@1200 Hz, 2400 Hz
 
-	if(!Si4461_set_properties(0x200f, sizeof(coeffs), coeffs))
+	if(!Si4461_set_properties(0x200f, 0x01, &coeffs[8]))
+		return false;
+	if(!Si4461_set_properties(0x2010, 0x01, &coeffs[7]))
+		return false;
+	if(!Si4461_set_properties(0x2011, 0x01, &coeffs[6]))
+		return false;
+	if(!Si4461_set_properties(0x2012, 0x01, &coeffs[5]))
+		return false;
+	if(!Si4461_set_properties(0x2013, 0x01, &coeffs[4]))
+		return false;
+	if(!Si4461_set_properties(0x2014, 0x01, &coeffs[3]))
+		return false;
+	if(!Si4461_set_properties(0x2015, 0x01, &coeffs[2]))
+		return false;
+	if(!Si4461_set_properties(0x2016, 0x01, &coeffs[1]))
+		return false;
+	if(!Si4461_set_properties(0x2017, 0x01, &coeffs[0]))
 		return false;
 
 	return true;
-
 }
 
 bool Si4461_init(uint32_t frequency)
@@ -282,19 +301,43 @@ bool Si4461_init(uint32_t frequency)
 	NVIC_EnableIRQ(SPI0_IRQn);
 
 	//reset device
-	uint8_t power_up[] = {RF_POWER_UP};
 	GPIO_PortSet(SI4461_SDN_GPIO, SI4461_SDN_PIN_MASK);
-	delay(100);
+	delay_ms(100);
 	GPIO_PortClear(SI4461_SDN_GPIO, SI4461_SDN_PIN_MASK);
-	delay(50);
+	delay_ms(50);
 
+	//startup
+	uint8_t power_up[] = {RF_POWER_UP};
+	uint8_t cts = 0;
 	CHIP_SELECT();
-	Si4461_SPI_transfer_no_rx(power_up, sizeof(power_up));
+	if(!Si4461_SPI_transfer(power_up, 7, &cts, 1))
+		return false;
 	CHIP_DESELECT();
-	delay(200);
+	if(cts != 0xff)
+		return false;
+	delay_ms(200);
 
 	//apply startup config
 	if(!Si4461_set_config(Si4461_startup_config, sizeof(Si4461_startup_config)))
+		return false;
+
+	//set power
+	if(!Si4461_set_tx_power(0x10))
+		return false;
+
+/*	if(!Si4461_freq_offset(0))
+		return false;
+
+	if(!Si4461_deviation((uint32_t)(2*FDEV_APRS)))
+		return false;
+
+	if(!Si4461_freq_control((uint8_t)FDIV_INTE_2M, (uint32_t)FDIV_FRAC_2M))
+		return false;*/
+
+	//set frequency
+	if(!Si4461_set_freq(frequency))
+		return false;
+	if(!Si4461_set_filter())
 		return false;
 
 	//reset fifo
@@ -303,36 +346,16 @@ bool Si4461_init(uint32_t frequency)
 	if(!Si4461_fifo_unreset())
 		return false;
 
-	//set power
-	if(!Si4461_set_tx_power(127))
-		return false;
-	//set frequency
-	if(!Si4461_set_freq(frequency))
-		return false;
-	//read pending interrupts and clear them
-//	if(!Si4461_interrupts())
-//		return false;
-//	if(!Si4461_set_filter())
-//		return false;
-	//state
-//	if(!Si4461_set_state(SI4461_STATE_SLEEP))
-//		return false;
-	uint8_t state;
-	if(!Si4461_get_state(&state))
-		return false;
-
 	//test device
+	uint8_t state;
+	Si4461_get_state(&state);
+
 	si4461_info_t info;
 	if(!Si4461_get_info(&info))
 		return false;
 
 	if(info.chip_rev != 0x22 && info.part != 0x4461)
 		return false;
-
-	//get state via FRR
-//	uint8_t reg_B = 99;
-//	if(!Si4461_read_FRR(SI4461_CMD_READ_FRR_B, &reg_B))
-//		return false;
 
 	return true;
 }
@@ -356,14 +379,13 @@ bool Si4461_get_info(si4461_info_t *info)
 
 bool Si4461_set_properties(uint16_t start_property, uint8_t length, uint8_t *params)
 {
-//	if(!Si4461_wait_for_CTS())
-//		return false;
-
 	uint8_t buff[4];
 	buff[0] = SI4461_CMD_SET_PROPERTY;
 	buff[1] = start_property >> 8;
 	buff[2] = length;
 	buff[3] = (uint8_t)(start_property && 0xFF);
+
+	uint8_t received = 0;
 
 	CHIP_SELECT();
 	if(!Si4461_SPI_transfer_no_rx(buff, 4))
@@ -371,13 +393,16 @@ bool Si4461_set_properties(uint16_t start_property, uint8_t length, uint8_t *par
 		CHIP_DESELECT();
 		return false;
 	}
-	if(!Si4461_SPI_transfer_no_rx(params, length))
+	if(!Si4461_SPI_transfer(params, length, &received, 1))
 	{
 		CHIP_DESELECT();
 		return false;
 	}
-
 	CHIP_DESELECT();
+
+	if(received != 0xFF)
+		return false;
+
 	return true;
 }
 
@@ -412,6 +437,20 @@ bool Si4461_get_properties(uint16_t start_property, uint8_t length, uint8_t *par
 	}
 
 	if(!Si4461_SPI_transfer_no_tx(params, length))
+	{
+		CHIP_DESELECT();
+		return false;
+	}
+
+	CHIP_DESELECT();
+	return true;
+}
+
+bool Si4461_gpio_cfg(uint8_t *data)
+{
+	uint8_t gpio_cfg[] = {0x13, 0x00, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00};
+	CHIP_SELECT();
+	if(!Si4461_SPI_transfer_no_rx(gpio_cfg, 8))
 	{
 		CHIP_DESELECT();
 		return false;
@@ -477,7 +516,7 @@ bool Si4461_send_packet(uint8_t *packet, size_t packet_length)
 
 	uint8_t data[4] = {0, 0x10, (uint8_t)((packet_length >> 8) & 0x1F), (uint8_t)(packet_length & 0xFF)};
 
-	if(!Si4461_TX(data))
+	if(!Si4461_start_TX(data))
 		return false;
 
 	do
@@ -505,10 +544,17 @@ bool Si4461_get_state(uint8_t *state)
 
 bool Si4461_set_state(uint8_t new_state)
 {
-	uint8_t data[2] = {SI4461_CMD_CHANGE_STATE, new_state};
+//	uint8_t data[2] = {SI4461_CMD_CHANGE_STATE, new_state};
+//	uint8_t cts = 0;
+//
+//	if(!Si4461_SPI_transfer(data, 2, &cts, 1))
+//		return false;
 
-	if(!Si4461_SPI_transfer_no_rx(data, 2))
+	if(!Si4461_write_command(SI4461_CMD_CHANGE_STATE, &new_state, 1))
 		return false;
+
+//	if(cts != 0xff)
+//		return false;
 
 	return true;
 }
@@ -528,10 +574,35 @@ bool Si4461_set_tx_power(uint8_t power)
 	if(power > 127)
 		power = 127;
 
-	uint8_t buff[4] = {0x20, 0x00, 0x00, 0x1D};
-	buff[1] = power;
+	return Si4461_set_properties(SI4461_PA_PWR_LVL, 1, &power);
+}
 
-	return Si4461_set_properties(SI4463_PROPERTY_PA_MODE, sizeof(buff), buff);
+bool Si4461_freq_offset(uint16_t offset)
+{
+	uint8_t data[2] = {(uint8_t)(offset >> 8), (uint8_t)(offset & 0x0F)};
+
+	return Si4461_set_properties(SI4461_MODEM_FREQ_OFFSET, 2, data);
+}
+
+bool Si4461_deviation(uint32_t deviation)
+{
+	uint32_t deviation_val = deviation & 0x1FFFF;
+	uint8_t data[3] = {(uint8_t)(deviation_val >> 16), (uint8_t)((deviation_val >> 8) & 0xFF), (uint8_t)((deviation_val) & 0xFF)};
+
+	return Si4461_set_properties(SI4461_MODEM_FREQ_DEV, 3, data);
+}
+
+bool Si4461_freq_control(uint8_t inte, uint32_t frac)
+{
+	uint8_t inte_data = inte & 0x7F;
+	if(!Si4461_set_properties(SI4461_FREQ_CONTROL_INTE, 1, &inte_data))
+		return false;
+
+	uint8_t frac_data[3] = {(uint8_t)((frac >> 16) & 0x0F), (uint8_t)((frac >> 8) & 0xFF), (uint8_t)(frac & 0xFF)};
+	if(!Si4461_set_properties(SI4461_FREQ_CONTROL_FRAC, 3, frac_data))
+		return false;
+
+	return true;
 }
 
 bool Si4461_set_freq(uint32_t freq)
@@ -569,24 +640,34 @@ bool Si4461_set_freq(uint32_t freq)
 	float ratio = (float)freq / (float)f_pfd;
 	float rest = ratio - (float)n;
 	uint32_t m = (uint32_t)(rest * 524288UL);
-	uint32_t m2 = m / 0x10000;
-	uint32_t m1 = (m - m2 * 0x10000) / 0x100;
-	uint32_t m0 = (m - m2 * 0x10000 - m1 * 0x100);
+	uint32_t m2 = m >> 16;
+	uint32_t m1 = (m - m2 * 0x10000) >> 8;
+	uint32_t m0 = (m - m2 * 0x10000 - (m1 << 8));
 
-	uint8_t buf[1] = {0b1000 + band};
-	if(!Si4461_set_properties(0x2051, sizeof(buf), buf))
+	uint8_t buf = 8 + band;
+	if(!Si4461_set_properties(SI4461_MODEM_CLKGEN_BAND, 1, &buf))
 		return false;
 
 	uint8_t buf2[4] = {n, m2, m1, m0};
-	if(!Si4461_set_properties(0x4000, sizeof(buf2), buf2))
+	if(!Si4461_set_properties(SI4461_FREQ_CONTROL_INTE, sizeof(buf2), buf2))
 		return false;
 
 	return true;
 }
 
-bool Si4461_TX(uint8_t *tx_data)
+bool Si4461_start_TX(uint8_t *tx_data)
 {
 	if(!Si4461_write_command(SI4461_CMD_START_TX, tx_data, 4))
+		return false;
+
+	return true;
+}
+
+bool Si4461_stop_TX(void)
+{
+	if(!Si4461_set_state(SI4461_STATE_TX_TUNE))
+		return false;
+	if(!Si4461_set_state(SI4461_STATE_READY))
 		return false;
 
 	return true;

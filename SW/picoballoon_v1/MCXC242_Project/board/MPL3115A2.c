@@ -135,7 +135,7 @@ static bool MPL3115A2_soft_reset(void)
 	reg_value = 0;
 	do
 	{
-		delay(1);
+		delay_ms(1);
 
 		if(!I2C_read(MPL_ADDRESS, MPL3115A2_CTRL_REG1, 1, &reg_value, 1))
 			return false;
@@ -146,7 +146,7 @@ static bool MPL3115A2_soft_reset(void)
 
 	} while(reg_value & MPL3115A2_CTRL_REG1_RST);
 
-	delay(10);
+	delay_ms(10);
 	return true;
 }
 

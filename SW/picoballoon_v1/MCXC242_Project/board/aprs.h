@@ -13,9 +13,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <math.h>
 #include "ublox_max_m10m.h"
 #include "ax25.h"
 #include "utils.h"
+#include "bell202.h"
+#include "si4461.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -58,6 +61,7 @@ void aprs_encode_init(ax25_t *packet, uint8_t *data, uint16_t data_size, mod_t m
 void aprs_encode_message(ax25_t *packet, const aprs_conf_t *config, const char *receiver, const char *text);
 void aprs_encode_full_data_packet(ax25_t *packet, const aprs_conf_t *config, measured_data_t *data);
 void aprs_encode_test_packet(ax25_t *packet, const aprs_conf_t *config);
+bool aprs_send_packet(ax25_t *packet);
 
 #ifdef __cplusplus
 }

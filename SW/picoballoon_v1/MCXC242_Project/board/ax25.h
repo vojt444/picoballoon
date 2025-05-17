@@ -8,6 +8,8 @@
 #ifndef AX25_H_
 #define AX25_H_
 
+#include <string.h>
+#include "utils.h"
 #include "aprs.h"
 
 #ifdef __cplusplus
