@@ -37,21 +37,6 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_VOLTAGE_PIN_MASK (1U << 20U)      /*!<@brief PORT pin mask */
                                                          /* @} */
 
-/*! @name PORTE29 (number 17), LED
-  @{ */
-
-/* Symbols to be used with GPIO driver */
-#define BOARD_INITPINS_LED_FGPIO FGPIOE              /*!<@brief FGPIO peripheral base pointer */
-#define BOARD_INITPINS_LED_GPIO GPIOE                /*!<@brief GPIO peripheral base pointer */
-#define BOARD_INITPINS_LED_INIT_GPIO_VALUE 0U        /*!<@brief GPIO output initial state */
-#define BOARD_INITPINS_LED_GPIO_PIN_MASK (1U << 29U) /*!<@brief GPIO pin mask */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_INITPINS_LED_PORT PORTE                /*!<@brief PORT peripheral base pointer */
-#define BOARD_INITPINS_LED_PIN 29U                   /*!<@brief PORT pin number */
-#define BOARD_INITPINS_LED_PIN_MASK (1U << 29U)      /*!<@brief PORT pin mask */
-                                                     /* @} */
-
 /*! @name PORTB0 (number 35), A5-I2C0_SCL/ADC0_SE8
   @{ */
 
@@ -229,24 +214,6 @@ void BOARD_InitBootPins(void);
  */
 void BOARD_InitPins(void);
 
-/*! @name PORTE29 (number 17), LED
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_INITPINS_DEINIT_LED_PORT PORTE                /*!<@brief PORT peripheral base pointer */
-#define BOARD_INITPINS_DEINIT_LED_PIN 29U                   /*!<@brief PORT pin number */
-#define BOARD_INITPINS_DEINIT_LED_PIN_MASK (1U << 29U)      /*!<@brief PORT pin mask */
-                                                            /* @} */
-
-/*! @name PORTE29 (number 17), LED
-  @{ */
-
-/* Symbols to be used with PORT driver */
-#define BOARD_INITPINS_DEINIT_LED_PORT PORTE                /*!<@brief PORT peripheral base pointer */
-#define BOARD_INITPINS_DEINIT_LED_PIN 29U                   /*!<@brief PORT pin number */
-#define BOARD_INITPINS_DEINIT_LED_PIN_MASK (1U << 29U)      /*!<@brief PORT pin mask */
-                                                            /* @} */
-
 /*! @name PORTB1 (number 36), A4-I2C0_SDA/ADC0_SE9
   @{ */
 
@@ -363,6 +330,15 @@ void BOARD_InitPins(void);
 #define BOARD_INITPINS_DEINIT_GNSS_EN_PIN 4U                   /*!<@brief PORT pin number */
 #define BOARD_INITPINS_DEINIT_GNSS_EN_PIN_MASK (1U << 4U)      /*!<@brief PORT pin mask */
                                                                /* @} */
+
+/*! @name PORTC10 (number 55), J2[1]
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INITPINS_DEINIT_BELL202_PORT PORTC                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INITPINS_DEINIT_BELL202_PIN 10U                   /*!<@brief PORT pin number */
+#define BOARD_INITPINS_DEINIT_BELL202_PIN_MASK (1U << 10U)      /*!<@brief PORT pin mask */
+                                                                /* @} */
 
 /*!
  * @brief This is a de-initialization function for 'BOARD_InitPins' function.
@@ -662,6 +638,15 @@ void BOARD_init_sleep_pins(void);
 #define BOARD_INIT_SLEEP_PINS_DEINIT_SCLK_PIN 5U                   /*!<@brief PORT pin number */
 #define BOARD_INIT_SLEEP_PINS_DEINIT_SCLK_PIN_MASK (1U << 5U)      /*!<@brief PORT pin mask */
                                                                    /* @} */
+
+/*! @name PORTC10 (number 55), J2[1]
+  @{ */
+
+/* Symbols to be used with PORT driver */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_BELL202_PORT PORTC                /*!<@brief PORT peripheral base pointer */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_BELL202_PIN 10U                   /*!<@brief PORT pin number */
+#define BOARD_INIT_SLEEP_PINS_DEINIT_BELL202_PIN_MASK (1U << 10U)      /*!<@brief PORT pin mask */
+                                                                       /* @} */
 
 /*! @name PORTD7 (number 64), PTD7/SPI1_MISO/LPUART0_TX/I2C1_SCL/SPI1_MOSI/FXIO0_D7
   @{ */

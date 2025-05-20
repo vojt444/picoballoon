@@ -23,7 +23,7 @@ bool MPL_init(void)
 	if(!MPL3115A2_soft_reset())
 		return false;
 
-	if(!MPL3115A2_set_oversample_ratio(kMPL3115A2_OS_128))
+	if(!MPL3115A2_set_oversample_ratio(kMPL3115A2_OS_16))
 		return false;
 
 	return true;

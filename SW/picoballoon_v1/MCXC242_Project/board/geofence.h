@@ -5,8 +5,8 @@
  *      Author: vojtech
  */
 
-#ifndef GEOFERENCE_H_
-#define GEOFERENCE_H_
+#ifndef GEOFENCE_H_
+#define GEOFENCE_H_
 
 #define APRS_DEFAULT_FREQ 	144800000
 
@@ -28,4 +28,4 @@ void set_APRS_freq(float latitude, float longitude);
 }
 #endif
 
-#endif /* GEOFERENCE_H_ */
+#endif /* GEOFENCE_H_ */

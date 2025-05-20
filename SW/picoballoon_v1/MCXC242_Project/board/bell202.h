@@ -14,9 +14,6 @@
 #include "tpm_timer.h"
 #include "si4461.h"
 
-//#define BELL202_GPIO_PIN			29U
-//#define BELL202_GPIO_PORT			GPIOE
-
 #define BELL202_GPIO_PIN			10U
 #define BELL202_GPIO_PORT			GPIOC
 

@@ -1,17 +1,5 @@
-/*
- * Copyright 2016-2025 NXP
- * All rights reserved.
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
-
-/**
- * @file    MCXC242_Project.c
- * @brief   Application entry point.
- */
 #include <i2c_ctrl.h>
 #include <stdio.h>
-//#include "board.h"
 #include "utils.h"
 #include "peripherals.h"
 #include "pin_mux.h"
@@ -21,6 +9,7 @@
 #include "fsl_clock.h"
 #include "fsl_cop.h"
 
+#include "geofence.h"
 #include "i2c_ctrl.h"
 #include "ublox_max_m10m.h"
 #include "tpm_timer.h"
@@ -30,11 +19,10 @@
 #include "si4461.h"
 #include "aprs.h"
 #include "sleep.h"
-#include "geoference.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define DEBUGING				1
+#define DEBUGING			0
 
 #define BOARD_LED_GPIO 		GPIOE
 #define BOARD_LED_PIN 		29U
@@ -46,8 +34,8 @@
 #define ADC_REF_VOLTAGE 	3.3F
 #define ADC_RESOLUTION 		(1U << 12)
 
-#define SLEEP_TIME			30U //30 minutes
-#define VOLTAGE_THRESHOLD	0.5
+#define SLEEP_TIME			1800U //30 min = 1800 sec
+#define VOLTAGE_THRESHOLD	0
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
@@ -87,14 +75,6 @@ int main(void)
 	tpm_timer_init();
 	delay_us_init();
 
-	for(uint8_t i = 0; i < 5; i++)
-	{
-		GPIO_PortClear(BOARD_LED_GPIO, 1u << BOARD_LED_PIN);
-		delay_us(833);
-		GPIO_PortSet(BOARD_LED_GPIO, 1u << BOARD_LED_PIN);
-		delay_us(833);
-	}
-
 	//watchdog
 	cop_config_t config_cop;
 	COP_GetDefaultConfig(&config_cop);
@@ -127,7 +107,7 @@ int main(void)
 		si4461_inited = true;
 	Si4461_get_info(&si4461_info);
 
-//GNSS
+	//GNSS
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
 	gnss_position_t pos = {0};
@@ -139,21 +119,21 @@ int main(void)
 		set_APRS_freq(pos.latitude, pos.longitude);
 		Si4461_set_freq(g_APRS_frequency);
 	}
-//humidity
+	//humidity
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
 	float rh = 0;
 	HTU21D_init();
 	HTU21D_get_humidity(&rh);
 
-//temperature
+	//temperature
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
 	float temperature = 0;
 	MCP9802_init();
 	MCP9802_read_temperature_oneshot(&temperature);
 
-//pressure
+	//pressure
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
 	mpl3115a2_data_t mpl_data;
@@ -190,28 +170,24 @@ int main(void)
 //	NRZI_encode(&packet);
 
 //send APRS packet
-	if(g_watchdog_enabled)
-		COP_Refresh(SIM);
-	if(si4461_inited)
+	voltage = ADC_measure();
+	if(voltage > VOLTAGE_THRESHOLD)
 	{
-		set_APRS_freq(pos.latitude, pos.longitude);
-		Si4461_set_freq(g_APRS_frequency);
-	}
+		if(g_watchdog_enabled)
+			COP_Refresh(SIM);
+		if(si4461_inited)
+		{
+			set_APRS_freq(pos.latitude, pos.longitude);
+			Si4461_set_freq(g_APRS_frequency);
+		}
 
-	bell202_init_timer();
-	aprs_send_packet(&packet);
-	Si4461_shutdown();
+		bell202_init_timer();
+		aprs_send_packet(&packet);
+	}
 
 	while(1)
 	{
-		//enable_low_power_mode(SLEEP_TIME);
-		for(uint8_t i = 0; i < 3; i++)
-		{
-			GPIO_PortClear(BOARD_LED_GPIO, 1u << BOARD_LED_PIN);
-			delay_ms(1000);
-			GPIO_PortSet(BOARD_LED_GPIO, 1u << BOARD_LED_PIN);
-			delay_ms(1000);
-		}
+		enable_low_power_mode(SLEEP_TIME);
 
 		if(g_watchdog_enabled)
 			COP_Refresh(SIM);
@@ -223,7 +199,7 @@ int main(void)
 				COP_Refresh(SIM);
 			if(!MCP9802_read_temperature_oneshot(&temperature))
 			{
-				delay_ms(5);
+				delay_ms(2);
 				if(g_watchdog_enabled)
 					COP_Refresh(SIM);
 				MCP9802_init();
@@ -235,7 +211,7 @@ int main(void)
 				COP_Refresh(SIM);
 			if(!MPL_one_shot_measurement(&mpl_data, kMPL3115A2_barometer))
 			{
-				delay_ms(5);
+				delay_ms(2);
 				if(g_watchdog_enabled)
 					COP_Refresh(SIM);
 				MPL_init();
@@ -245,7 +221,9 @@ int main(void)
 			//humidity
 			if(!HTU21D_get_humidity(&rh))
 			{
-
+				delay_ms(2);
+				if(g_watchdog_enabled)
+					COP_Refresh(SIM);
 				HTU21D_init();
 				if(!HTU21D_get_humidity(&rh))
 					rh = 0;
@@ -253,6 +231,7 @@ int main(void)
 			//position
 			if(!max_m10_get_pos(&pos))
 			{
+				delay_ms(2);
 				if(!max_m10_init())
 					max_m10_inited = false;
 				if(!max_m10_get_pos(&pos))
@@ -267,17 +246,16 @@ int main(void)
 				set_APRS_freq(pos.latitude, pos.longitude);
 				Si4461_set_freq(g_APRS_frequency);
 			}
+			all_data.humidity = rh;
+			all_data.position = pos;
+			all_data.pressure = mpl_data.pressure;
+			all_data.temperature = temperature;
+			ax25_init(&packet);
+			aprs_encode_full_data_packet(&packet, &aprs_config, &all_data);
+			//NRZI_encode(&packet);
+			bell202_init_timer();
+			aprs_send_packet(&packet);
 		}
-		all_data.humidity = rh;
-		all_data.position = pos;
-		all_data.pressure = mpl_data.pressure;
-		all_data.temperature = temperature;
-		ax25_init(&packet);
-		aprs_encode_full_data_packet(&packet, &aprs_config, &all_data);
-		NRZI_encode(&packet);
-		voltage = ADC_measure();
-		/*if(voltage > VOLTAGE_THRESHOLD)
-		 Si4461_send_packet(packet.data, packet.byte_count);*/
 	}
 }
 
@@ -297,7 +275,8 @@ void enable_low_power_mode(uint32_t seconds)
 	if(g_watchdog_enabled)
 		COP_Refresh(SIM);
 	BOARD_InitPins();
-	if(Si4461_init(144780000))
+	max_m10_set_mode(MAX_M10_MODE_FULL);
+	if(Si4461_init(g_APRS_frequency))
 		si4461_inited = true;
 }
 

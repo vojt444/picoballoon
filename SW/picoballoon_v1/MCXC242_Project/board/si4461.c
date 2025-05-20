@@ -322,7 +322,7 @@ bool Si4461_init(uint32_t frequency)
 		return false;
 
 	//set power
-	if(!Si4461_set_tx_power(0x10))
+	if(!Si4461_set_tx_power(0x7F))
 		return false;
 
 /*	if(!Si4461_freq_offset(0))

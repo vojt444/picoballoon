@@ -5,7 +5,7 @@
  *      Author: vojtech
  */
 
-#include "geoference.h"
+#include <geofence.h>
 
 /*
  FREQUENCIES:

@@ -61,7 +61,6 @@ BOARD_InitPins:
 - options: {createDeInit: 'true', callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
   - {pin_num: '9', peripheral: ADC0, signal: 'SE, 0', pin_signal: ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/LPUART0_TX/FXIO0_D4, identifier: VOLTAGE}
-  - {pin_num: '17', peripheral: GPIOE, signal: 'GPIO, 29', pin_signal: CMP0_IN5/ADC0_SE4b/PTE29/TPM0_CH2/TPM_CLKIN0, direction: OUTPUT}
   - {pin_num: '35', peripheral: I2C0, signal: SCL, pin_signal: ADC0_SE8/PTB0/LLWU_P5/I2C0_SCL/TPM1_CH0/SPI1_MOSI/SPI1_MISO, identifier: SCL_SENS}
   - {pin_num: '36', peripheral: I2C0, signal: SDA, pin_signal: ADC0_SE9/PTB1/I2C0_SDA/TPM1_CH1/SPI1_MISO/SPI1_MOSI}
   - {pin_num: '46', peripheral: GPIOC, signal: 'GPIO, 3', pin_signal: PTC3/LLWU_P7/SPI1_SCK/LPUART1_RX/TPM0_CH2/CLKOUT, direction: OUTPUT}
@@ -140,13 +139,6 @@ void BOARD_InitPins(void)
     /* Initialize GPIO functionality on pin PTD5 (pin 62)  */
     GPIO_PinInit(BOARD_INITPINS_EXTINT_GNSS_GPIO, BOARD_INITPINS_EXTINT_GNSS_PIN, &EXTINT_GNSS_config);
 
-    gpio_pin_config_t LED_config = {
-        .pinDirection = kGPIO_DigitalOutput,
-        .outputLogic = 0U
-    };
-    /* Initialize GPIO functionality on pin PTE29 (pin 17)  */
-    GPIO_PinInit(BOARD_INITPINS_LED_GPIO, BOARD_INITPINS_LED_PIN, &LED_config);
-
     /* PORTB0 (pin 35) is configured as I2C0_SCL */
     PORT_SetPinMux(BOARD_INITPINS_SCL_SENS_PORT, BOARD_INITPINS_SCL_SENS_PIN, kPORT_MuxAlt2);
 
@@ -202,9 +194,6 @@ void BOARD_InitPins(void)
 
     /* PORTE20 (pin 9) is configured as ADC0_SE0 */
     PORT_SetPinMux(BOARD_INITPINS_VOLTAGE_PORT, BOARD_INITPINS_VOLTAGE_PIN, kPORT_PinDisabledOrAnalog);
-
-    /* PORTE29 (pin 17) is configured as PTE29 */
-    PORT_SetPinMux(BOARD_INITPINS_LED_PORT, BOARD_INITPINS_LED_PIN, kPORT_MuxAsGpio);
 
     SIM->SOPT5 = ((SIM->SOPT5 &
                    /* Mask bits to zero which are setting */
@@ -284,7 +273,7 @@ void BOARD_InitPins_deinit(void)
          | PORT_PCR_DSE(kPORT_LowDriveStrength));
 
     /* PORTC10 (pin 55) is disabled */
-    PORT_SetPinMux(PORTC, 10U, kPORT_PinDisabledOrAnalog);
+    PORT_SetPinMux(BOARD_INITPINS_DEINIT_BELL202_PORT, BOARD_INITPINS_DEINIT_BELL202_PIN, kPORT_PinDisabledOrAnalog);
 
     PORTC->PCR[10] = ((PORTC->PCR[10] &
                        /* Mask bits to zero which are setting */
@@ -542,25 +531,6 @@ void BOARD_InitPins_deinit(void)
     PORT_SetPinMux(PORTE, 20U, kPORT_PinDisabledOrAnalog);
 
     PORTE->PCR[20] = ((PORTE->PCR[20] &
-                       /* Mask bits to zero which are setting */
-                       (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
-
-                      /* Pull Select: Internal pullup resistor is enabled on the corresponding pin, if the
-                       * corresponding PE field is set. */
-                      | PORT_PCR_PS(kPORT_PullUp)
-
-                      /* Pull Enable: Internal pullup or pulldown resistor is not enabled on the corresponding
-                       * pin. */
-                      | PORT_PCR_PE(kPORT_PullDisable)
-
-                      /* Slew Rate Enable: Slow slew rate is configured on the corresponding pin, if the pin is
-                       * configured as a digital output. */
-                      | PORT_PCR_SRE(kPORT_SlowSlewRate));
-
-    /* PORTE29 (pin 17) is configured as ADC0_SE4b, CMP0_IN5 */
-    PORT_SetPinMux(BOARD_INITPINS_DEINIT_LED_PORT, BOARD_INITPINS_DEINIT_LED_PIN, kPORT_PinDisabledOrAnalog);
-
-    PORTE->PCR[29] = ((PORTE->PCR[29] &
                        /* Mask bits to zero which are setting */
                        (~(PORT_PCR_PS_MASK | PORT_PCR_PE_MASK | PORT_PCR_SRE_MASK | PORT_PCR_ISF_MASK)))
 
@@ -1001,7 +971,7 @@ void BOARD_init_sleep_pins_deinit(void)
                       | PORT_PCR_SRE(kPORT_SlowSlewRate));
 
     /* PORTC10 (pin 55) is disabled */
-    PORT_SetPinMux(PORTC, 10U, kPORT_PinDisabledOrAnalog);
+    PORT_SetPinMux(BOARD_INIT_SLEEP_PINS_DEINIT_BELL202_PORT, BOARD_INIT_SLEEP_PINS_DEINIT_BELL202_PIN, kPORT_PinDisabledOrAnalog);
 
     PORTC->PCR[10] = ((PORTC->PCR[10] &
                        /* Mask bits to zero which are setting */

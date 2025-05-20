@@ -139,6 +139,7 @@ bool max_m10_get_pos(gnss_position_t *position)
 	if(!max_m10_send_ubx_message(UBX_CLASS_NAV, UBX_NAV_POSLLH, NULL, 0))
 		return false;
 
+	tpm_timer_start();
 	uint32_t start_time = get_time_ms();
 
 	while((get_time_ms() - start_time) < 3000)

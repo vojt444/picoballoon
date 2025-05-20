@@ -9,7 +9,8 @@
 #define MCP9802_H_
 
 #include <i2c_ctrl.h>
-#include "board.h"
+#include "clock_config.h"
+#include "fsl_gpio.h"
 
 #ifdef __cplusplus
 extern "C" {

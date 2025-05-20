@@ -8,7 +8,8 @@
 #ifndef I2C_CTRL_H_
 #define I2C_CTRL_H_
 
-#include "board.h"
+#include "clock_config.h"
+#include "fsl_gpio.h"
 #include "utils.h"
 #include "fsl_i2c.h"
 

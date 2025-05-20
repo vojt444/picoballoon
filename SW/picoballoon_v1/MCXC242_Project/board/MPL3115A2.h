@@ -8,7 +8,8 @@
 #ifndef MPL3115A2_H_
 #define MPL3115A2_H_
 
-#include "board.h"
+#include "clock_config.h"
+#include "fsl_gpio.h"
 #include "utils.h"
 #include "i2c_ctrl.h"
 
